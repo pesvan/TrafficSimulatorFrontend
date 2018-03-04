@@ -1,0 +1,43 @@
+
+{
+	"intersectionList": {
+		"id": "2",
+		"coordinates": {
+			"x": "-1000",
+			"y": "0",
+			"hx": "-500",
+			"hy": "0"
+		},
+		"legList": {
+			"id": "2-3",
+			"coordinates": {
+				"x": "-1200",
+				"y": "0",
+				"hx": "-1100",
+				"hy": "0"
+			},
+			"outputLanesCount": 1,
+			"laneList": {
+				"id": "0",
+				"left": true,
+				"right": true,
+				"straight": true
+			}
+		}
+	}],
+	"connectionLegs": {
+		"id": "con1-2",
+		"coordinates1": {
+			"x": "-673,2051",
+			"y": "100",
+			"hx": "-586,6025",
+			"hy": "50"
+		},
+		"coordinates2": {
+			"x": "-800",
+			"y": "0",
+			"hx": "-900",
+			"hy": "0"
+		}
+	}
+}
