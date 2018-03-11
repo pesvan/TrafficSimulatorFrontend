@@ -1,0 +1,12 @@
+/*
+ * Tooltip.js styles
+ */
+
+#tooltip {
+	height: 50px;
+	width: 100%;
+}
+
+#tooltip.alt-tooltip {
+	background:#490B22;
+}

@@ -7,4 +7,9 @@ class Lane
         this.right = right;
         this.straight = straight;
     }
+
+    toString()
+    {
+        return "Lane "+this.id;
+    }
 }

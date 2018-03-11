@@ -1,0 +1,7 @@
+{
+  "name": "dp-web",
+  "version": "0.0.1",
+  "dependencies": {
+    "json-formatter-js": "^2.2.0"
+  }
+}

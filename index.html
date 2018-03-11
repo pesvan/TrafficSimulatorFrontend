@@ -3,22 +3,26 @@
 		<title>CommDemo</title>
 		<script type="text/javascript" src="./lib/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="./lib/svg.js"></script>
-		<script type="text/javascript" src="classes/dto/Coordinates.js"></script>
+		<script type="text/javascript" src="classes/dto/Coords.js"></script>
 		<script type="text/javascript" src="classes/dto/Intersection.js"></script>
 		<script type="text/javascript" src="classes/dto/ConnectingLeg.js"></script>
 		<script type="text/javascript" src="classes/dto/Leg.js"></script>
 		<script type="text/javascript" src="classes/dto/Lane.js"></script>
 		<script type="text/javascript" src="classes/Constants.js"></script>
+        <script type="text/javascript" src="classes/Drawer.js"></script>
+        <script type="text/javascript" src="classes/CoordinatesHelper.js"></script>
 
-	</head>
+        <link rel="stylesheet" href="css/tooltip.css" type="text/css"/>
+
+    </head>
 	<body>
 		<div id="buttons">
 			<button id="buto">GetMapData</button>
 			<button id="sendConf">SendConfiguration</button>
 			<button id="stopButton">StopSimulation</button>
 		</div>
-		<div id="response">
-		</div>
+
+        <div id="tooltip"></div>
 		<div id="canvas" style="background-color: green">
 		
 		</div>
@@ -30,12 +34,10 @@
 			<h3>Contents of the file:</h3>
 			<div id="file-content"></div>
 		</div>
+        <pre id="response">
+        </pre>
 	</body>
-	<script type="text/javascript" src="demo.js">
+	<script type="text/javascript" src="demo.js"></script>
 	
-	</script>
-	
-	<script type="text/javascript" src="canvas.js">
-	
-	</script>
+	<script type="text/javascript" src="canvas.js"></script>
 </html>

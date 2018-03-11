@@ -1,7 +1,6 @@
-
-var readFile;
-var angle;
-var canvas;
+let readFile;
+let angle;
+let canvas;
 
 
 let situation;
@@ -85,73 +84,12 @@ $('#buto').on("click", getMapData);
 $('#sendConf').on("click", postConfiguration);
 $('#stopButton').on("click", postStopSimulation);
 
-
-function drawCanvas(json)
+function test(situation)
 {
-	canvas = SVG('canvas').size(5000, 5000)
-	
+    let drawer = new Drawer(xOffset, yOffset);
 
-	 
-	console.log(json);
-	drawArrowStraight();
-	drawArrowRight();
-	drawArrowLeft();
+    drawer.drawIntersection(situation[0]);
 }
-
-
-function drawLane(coordinatesStart, coordinatesEnd, offset, order)
-{
-    let xSin = parseFloat(coordinatesEnd.xsin);
-    let yCos = parseFloat(coordinatesEnd.ycos);
-
-    let l1x = parseFloat(coordinatesStart.x) + xOffset + (offset * (order));
-    let l1y = parseFloat(coordinatesStart.y) + yOffset + (offset * (order));
-
-    let l2x = parseFloat(coordinatesEnd.x) + xOffset + (offset * (order));
-    let l2y = parseFloat(coordinatesEnd.y) + yOffset + (offset * (order));
-	
-	
-	var l1xo = parseFloat(coordinatesStart.x) + xOffset + (offset * (xSin) * (order+1));
-	var l1yo = parseFloat(coordinatesStart.y) + yOffset + (offset * (yCos) * (order+1));
-	var l2xo = parseFloat(coordinatesEnd.x) + xOffset + (offset * (xSin) * (order+1));
-	var l2yo = parseFloat(coordinatesEnd.y) + yOffset + (offset * (yCos) * (order+1));
-	/*
-	var l1xo = parseFloat(coordinatesStart.x) + (offset * xSin * (order+1)) + xOffset;
-	var l1yo = parseFloat(coordinatesStart.y) + (offset * yCos * (order+1)) + yOffset;
-	var l2xo = parseFloat(coordinatesEnd.x) + (offset * xSin * (order+1)) + xOffset;
-	var l2yo = parseFloat(coordinatesEnd.y) + (offset * yCos * (order+1)) + yOffset;*/
-	
-	var polyString = l1x+","+l1y+" "+l2x+","+l2y+" "+l2xo+","+l2yo+" "+l1xo+","+l1yo;
-	
-	canvas.polygon(polyString).stroke({color:'#ffffff', width: 1}).fill({color:'#000000'});
-	
-	
-	
-	console.log(polyString);
-}
-
-function drawArrowStraight()
-{
-	canvas.line(50, 75, 75, 75).stroke({ width: 2}).stroke({color:'#ffffff'});
-	canvas.polygon('0,0 15,5 0,10').move(75,70).stroke({ width: 1}).fill({color:'#ffffff'}).stroke({color:'#ffffff'});
-}
-
-function drawArrowRight()
-{
-	canvas.line(50, 75, 62, 75).stroke({ width: 2}).stroke({color:'#ffffff'});
-	canvas.line(62, 75, 75, 88).stroke({ width: 2}).stroke({color:'#ffffff'});
-
-	canvas.polygon('7,0 14,14 0,7').move(70,84).stroke({ width: 1}).fill({color:'#ffffff'}).stroke({color:'#ffffff'});
-}
-
-function drawArrowLeft()
-{
-	canvas.line(50, 75, 62, 75).stroke({ width: 2}).stroke({color:'#ffffff'});
-	canvas.line(62, 75, 75, 62).stroke({ width: 2}).stroke({color:'#ffffff'});
-
-	canvas.polygon('7,14 14,0 0,7').move(70,53).stroke({ width: 1}).fill({color:'#ffffff'}).stroke({color:'#ffffff'});
-}
-
 
 function jsonToDtos(json)
 {
@@ -161,17 +99,17 @@ function jsonToDtos(json)
         let jsonIntersection = json.intersectionList[i];
         let legList = [];
         let intersectionId = jsonIntersection.id;
-        let intersectionCoordinates = new Coordinates(
-			jsonIntersection.coordinates.x, jsonIntersection.coordinates.y,
-			jsonIntersection.coordinates.ycos, jsonIntersection.coordinates.xsin);
+        let intersectionCoordinates = new Coords(
+			jsonIntersection.coordinates.x, jsonIntersection.coordinates.y);
+        let angle = jsonIntersection.angle;
 
         for(let l = 0; l < jsonIntersection.legList.length; l++)
         {
             let jsonLeg = jsonIntersection.legList[l];
             let legId = jsonLeg.id;
-            let legCoordinates = new Coordinates(
-                jsonLeg.coordinates.x, jsonLeg.coordinates.y,
-                jsonLeg.coordinates.ycos, jsonLeg.coordinates.xsin);
+            let legAngle = jsonLeg.angle;
+            let legCoordinates = new Coords(
+                jsonLeg.coordinates.x, jsonLeg.coordinates.y);
             let outputLanesCount = jsonLeg.outputLanesCount;
             let laneList = [];
 
@@ -183,17 +121,17 @@ function jsonToDtos(json)
                     jsonLane.left, jsonLane.right, jsonLane.straight);
             }
 
-			legList[l] = new Leg(legId, outputLanesCount, legCoordinates, laneList);
+			legList[l] = new Leg(legId, legAngle, outputLanesCount, legCoordinates, laneList);
         }
 
-        intersectionList[i] = new Intersection(intersectionId, intersectionCoordinates, legList)
+        intersectionList[i] = new Intersection(intersectionId, intersectionCoordinates, legList, angle)
     }
 
     let connectionList = [];
 
-    for(var i = 0; i < json.connectionLegs.length; i++)
+    for(let i = 0; i < json.connectionLegs.length; i++)
     {
-        var jsonConnection = json.connectionLegs[i];
+        let jsonConnection = json.connectionLegs[i];
 
         connectionList[i] = new ConnectingLeg(jsonConnection.id,
             getLegById(jsonConnection.leg1Id, intersectionList),
@@ -203,7 +141,8 @@ function jsonToDtos(json)
 
     situation = [intersectionList, connectionList];
 
-    console.log(situation);
+
+    test(situation);
 }
 
 function getLegById(id, intersectionList)
