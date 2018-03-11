@@ -11,8 +11,14 @@ class Leg
 
     setIntersectionBorderCoords(left, right)
     {
-        this.leftIntersectionMost = left;
-        this.rightIntersectionMost = right;
+        this.leftIntersectionPoint = left;
+        this.rightIntersectionPoint = right;
+    }
+
+    setEndBorderCoords(left, right)
+    {
+        this.leftEndPoint = left;
+        this.rightEndPoint = right;
     }
 
     toString(laneId)

@@ -89,6 +89,7 @@ function test(situation)
     let drawer = new Drawer(xOffset, yOffset);
 
     drawer.drawIntersection(situation[0]);
+    drawer.drawConnections(situation[1]);
 }
 
 function jsonToDtos(json)
