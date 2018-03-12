@@ -22,8 +22,20 @@ function getMapData()
 		})
 		  .done(function( msg ) {
 		    $('#response').html(JSON.stringify(msg, null, 2));
-		    jsonToDtos(msg);
+		    jsonToMapDtos(msg);
 		  });
+}
+
+function getSimulationData()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/getData",
+        dataType: "json"
+    })
+        .done(function( msg ) {
+            $('#response').html(JSON.stringify(msg, null, 2));
+        });
 }
 
 function postConfiguration()
@@ -80,7 +92,7 @@ function displayContents(contents) {
   element.textContent = contents;
 }
 
-$('#buto').on("click", getMapData);
+$('#getSimData').on("click", getSimulationData);
 $('#sendConf').on("click", postConfiguration);
 $('#stopButton').on("click", postStopSimulation);
 
@@ -92,7 +104,7 @@ function test(situation)
     drawer.drawConnections(situation[1]);
 }
 
-function jsonToDtos(json)
+function jsonToMapDtos(json)
 {
 	let intersectionList = [];
     for(let i = 0; i < json.intersectionList.length; i++)
