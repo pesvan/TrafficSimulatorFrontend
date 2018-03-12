@@ -36,6 +36,14 @@ function getDistance1D(point1, point2)
     );
 }
 
+function findMiddlePoint(point1, point2)
+{
+    return new Coords(
+        ((point1.x + point2.x)/2),
+        ((point1.y + point2.y)/2)
+    );
+}
+
 function degreesToRadians(degrees)
 {
     return degrees * Math.PI / 180;

@@ -9,12 +9,12 @@ class Drawer
 
     __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id)
     {
-        this.moveToOffset(coordinatesList);
+        let movedCoordinates = this.moveToOffset(coordinatesList);
 
         let polyString = "";
-        for ( let i = 0; i < coordinatesList.length; i++)
+        for ( let i = 0; i < movedCoordinates.length; i++)
         {
-            polyString += coordinatesList[i].toPolyString() + " ";
+            polyString += movedCoordinates[i].toPolyString() + " ";
         }
         return this.canvas.polygon(polyString)
             .stroke({
@@ -54,10 +54,6 @@ class Drawer
 
     drawConnectingLane(leg1, leg2, id)
     {
-
-        let leg1c = leg1.coordinates;
-        let leg2c = leg2.coordinates;
-
         let triangleEdge = new Coords(leg1.leftEndPoint.x, leg2.rightEndPoint.y);
 
         let adjacentLength = getDistance2D(leg2.rightEndPoint, triangleEdge);
@@ -71,7 +67,6 @@ class Drawer
 
         let newPoint = moveCoordinatesByOffset(leg2.leftEndPoint, angle + 90, leg2size);
 
-
         let triangleEdge2 = new Coords(leg2.rightEndPoint.x, leg1.rightEndPoint.y);
         let adjacentLength2 = getDistance2D(leg1.leftEndPoint, triangleEdge2);
         let hypotenuseLength2 = getDistance2D(leg1.leftEndPoint, leg2.rightEndPoint);
@@ -79,31 +74,73 @@ class Drawer
         let angle2 = radiansToDegrees(radians2);
         let leg1size = getDistance2D(leg1.leftEndPoint, leg1.rightEndPoint);
 
-        let newPoint2 = moveCoordinatesByOffset(leg1.leftEndPoint, angle2 - 90, leg2size);
+        let newPoint2 = moveCoordinatesByOffset(leg1.leftEndPoint, angle2 - 90, leg1size);
 
 
-        console.log(leg2c, leg1c, triangleEdge, triangleEdge2,  radians, angle, angle2 , newPoint);
 
-        let coordinatesList =
+        let corner1 =
             [
                 leg1.leftEndPoint,
                 leg1.rightEndPoint,
-                newPoint2,
-                leg2.leftEndPoint,
-                leg2.rightEndPoint,
-                newPoint
-
-
-
+                newPoint2
 
             ];
 
+        let corner2 =
+            [
+                leg2.leftEndPoint,
+                leg2.rightEndPoint,
+                newPoint
+            ];
 
-        let svg = this.__drawPolygon(coordinatesList, whiteColor, 1, blackColor, id);
+        console.log(corner1);
 
-        let point = this._drawPoint(newPoint2);
+        let midPoint1 = findMiddlePoint(leg1.leftEndPoint, newPoint2);
+        let midPoint2 = findMiddlePoint(leg2.leftEndPoint, newPoint);
 
-        return svg;
+        this._drawPoint(midPoint1);
+        this._drawPoint(midPoint2);
+
+        this.__drawPolygon(corner1, whiteColor, 1, yellowColor, id);
+        this.__drawPolygon(corner2, whiteColor, 1, yellowColor, id);
+
+        let lane1 =
+            [
+                leg1.leftEndPoint,
+                midPoint1,
+                midPoint2,
+                newPoint
+            ];
+        let laneSvg1 = this.__drawPolygon(lane1, whiteColor, 1, blackColor, id);
+
+        laneSvg1.on("mouseover", function() {
+            this.style("cursor", "pointer");
+            $('#tooltip').html(leg2.id + " -> " + leg1.id);
+            this.fill({ color: selectedColor })
+        });
+        laneSvg1.on("mouseout", function() {
+            $('#tooltip').html("");
+            this.fill({ color: '#000' })
+        });
+
+        let lane2 =
+            [
+                leg2.leftEndPoint,
+                newPoint2,
+                midPoint1,
+                midPoint2
+            ];
+        let laneSvg2 = this.__drawPolygon(lane2, whiteColor, 1, blackColor, id);
+
+        laneSvg2.on("mouseover", function() {
+            this.style("cursor", "pointer");
+            $('#tooltip').html(leg1.id + " -> " + leg2.id);
+            this.fill({ color: selectedColor })
+        });
+        laneSvg2.on("mouseout", function() {
+            $('#tooltip').html("");
+            this.fill({ color: '#000' })
+        });
     }
 
     drawCenter(intersectionBorders, id)
@@ -198,26 +235,24 @@ class Drawer
 
             let svg = this.drawConnectingLane(leg1, leg2, id);
 
-            svg.on("mouseover", function() {
-                this.style("cursor", "pointer");
-                $('#tooltip').html(connection.toString());
-                this.fill({ color: selectedColor })
-            });
-            svg.on("mouseout", function() {
-                $('#tooltip').html("");
-                this.fill({ color: '#000' })
-            });
+
 
         }
     }
 
     moveToOffset(coordinatesList)
     {
+        let newCoordinatesList = [];
+
         for (let i = 0; i < coordinatesList.length; i++)
         {
-            coordinatesList[i].__x += this.xOffset;
-            coordinatesList[i].__y += this.yOffset;
+            newCoordinatesList[i] = new Coords(
+                coordinatesList[i].__x + this.xOffset,
+                coordinatesList[i].__y + this.yOffset
+            );
         }
+
+        return newCoordinatesList;
     }
 
     drawArrowStraight()
