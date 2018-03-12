@@ -2,6 +2,7 @@ let readFile;
 let angle;
 let canvas;
 
+let drawer;
 
 let situation;
 
@@ -35,6 +36,7 @@ function getSimulationData()
     })
         .done(function( msg ) {
             $('#response').html(JSON.stringify(msg, null, 2));
+            jsonToSimulationDtos(msg);
         });
 }
 
@@ -98,11 +100,44 @@ $('#stopButton').on("click", postStopSimulation);
 
 function test(situation)
 {
-    let drawer = new Drawer(xOffset, yOffset);
+    drawer = new Drawer(xOffset, yOffset);
 
     drawer.drawIntersection(situation[0]);
     drawer.drawConnections(situation[1]);
 }
+
+function jsonToSimulationDtos(json)
+{
+    let vehicleStates = [];
+
+    console.log(json);
+
+    let iterator = 0;
+
+    for (let i = 0; i < json.length; i++)
+    {
+        let jsonVehicles = json[i].vehicleState;
+        for (let v = 0; v < jsonVehicles.length; v++)
+        {
+            let jsonVehicleState = jsonVehicles[v];
+            let id = jsonVehicleState.id;
+            let coords = new Coords(
+                jsonVehicleState.coords.x,
+                jsonVehicleState.coords.y
+            );
+            let angle = jsonVehicleState.angle;
+            let signaling = jsonVehicleState.signaling;
+            vehicleStates[iterator] = new VehicleState(id, coords, angle, signaling);
+            iterator++;
+        }
+    }
+
+    console.log(vehicleStates);
+
+    drawer.drawVehicle(vehicleStates);
+}
+
+
 
 function jsonToMapDtos(json)
 {

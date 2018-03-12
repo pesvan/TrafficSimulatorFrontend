@@ -31,11 +31,13 @@ class Drawer
 
     _drawPoint(coordinates)
     {
-        this.canvas.circle(2)
+        this.canvas.circle(100)
             .move(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset)
             .fill({
                     color: redColor
              });
+
+        console.log(coordinates.__x, coordinates.__y);
     }
 
     drawLane(intersectionCoordinates, leg, offset, order)
@@ -146,6 +148,16 @@ class Drawer
     drawCenter(intersectionBorders, id)
     {
         return this.__drawPolygon(intersectionBorders, redColor, 1, blackColor, id);
+    }
+
+    drawVehicle(vehicleStates)
+    {
+        for (let i = 0; i < vehicleStates.length; i++)
+        {
+            console.log(vehicleStates[i]);
+            this._drawPoint(vehicleStates[i].coords);
+
+        }
     }
 
     drawIntersection(intersectionList)
