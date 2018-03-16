@@ -9,7 +9,7 @@ class Drawer
 
     __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id)
     {
-        let movedCoordinates = this.moveToOffset(coordinatesList);
+        let movedCoordinates = this.moveListToOffset(coordinatesList);
 
         let polyString = "";
         for ( let i = 0; i < movedCoordinates.length; i++)
@@ -29,15 +29,37 @@ class Drawer
             .attr("title", "test");
     }
 
+    __drawPolyline(coordinatesList, borderColor, borderWidth, fillColor, id)
+    {
+        let movedCoordinates = this.moveListToOffset(coordinatesList);
+
+        let polyString = "";
+        for ( let i = 0; i < movedCoordinates.length; i++)
+        {
+            polyString += movedCoordinates[i].toPolyString() + " ";
+        }
+        return this.canvas.polyline(polyString)
+            .stroke({
+                color: borderColor,
+                width: borderWidth
+            })
+            .fill({
+                color: fillColor
+            })
+            .addClass(id)
+            .attr("data-tooltip", "")
+            .attr("title", "test");
+    }
+
     _drawPoint(coordinates)
     {
-        this.canvas.circle(100)
-            .move(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset)
+        return this.canvas.circle(2)
+            .move(coordinates.__x, coordinates.__y)
             .fill({
                     color: redColor
              });
 
-        console.log(coordinates.__x, coordinates.__y);
+
     }
 
     drawLane(intersectionCoordinates, leg, offset, order)
@@ -95,13 +117,9 @@ class Drawer
                 newPoint
             ];
 
-        console.log(corner1);
 
         let midPoint1 = findMiddlePoint(leg1.leftEndPoint, newPoint2);
         let midPoint2 = findMiddlePoint(leg2.leftEndPoint, newPoint);
-
-        this._drawPoint(midPoint1);
-        this._drawPoint(midPoint2);
 
         this.__drawPolygon(corner1, whiteColor, 1, yellowColor, id);
         this.__drawPolygon(corner2, whiteColor, 1, yellowColor, id);
@@ -152,11 +170,36 @@ class Drawer
 
     drawVehicle(vehicleStates)
     {
-        for (let i = 0; i < vehicleStates.length; i++)
-        {
-            console.log(vehicleStates[i]);
-            this._drawPoint(vehicleStates[i].coords);
+        let coordinatesList = [];
 
+        //get first
+
+        let coords = this.moveToOffset(vehicleStates[0].coords);
+        coords.__x -= 1500;
+        coords.__y += 250;
+        let svg = this._drawPoint(coords);
+
+        for (let i = 1; i < vehicleStates.length; i++)
+        {
+            let coords = this.moveToOffset(vehicleStates[i].coords);
+            coords.__x -= 1500;
+            coords.__y += 250;
+            coordinatesList[i-1] = coords;
+        }
+
+        this.__animate(coordinatesList, svg);
+        // this.__drawPolyline(coordinatesList, redColor, 2, null, 0);
+    }
+
+    __animate(coordinatesList, svg)
+    {
+        for (let i = 0; i < coordinatesList.length; i++)
+        {
+            let coords = coordinatesList[i];
+            svg.animate({
+                ease: '-',
+                duration: 500
+            }).move(coords.__x, coords.__y).play();
         }
     }
 
@@ -252,19 +295,21 @@ class Drawer
         }
     }
 
-    moveToOffset(coordinatesList)
+    moveListToOffset(coordinatesList)
     {
         let newCoordinatesList = [];
 
         for (let i = 0; i < coordinatesList.length; i++)
         {
-            newCoordinatesList[i] = new Coords(
-                coordinatesList[i].__x + this.xOffset,
-                coordinatesList[i].__y + this.yOffset
-            );
+            newCoordinatesList[i] = this.moveToOffset(coordinatesList[i]);
         }
 
         return newCoordinatesList;
+    }
+
+    moveToOffset(coordinates)
+    {
+        return new Coords(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset);
     }
 
     drawArrowStraight()

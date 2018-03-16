@@ -110,7 +110,6 @@ function jsonToSimulationDtos(json)
 {
     let vehicleStates = [];
 
-    console.log(json);
 
     let iterator = 0;
 
@@ -132,7 +131,6 @@ function jsonToSimulationDtos(json)
         }
     }
 
-    console.log(vehicleStates);
 
     drawer.drawVehicle(vehicleStates);
 }
