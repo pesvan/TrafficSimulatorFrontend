@@ -2,9 +2,11 @@ class Drawer
 {
     constructor(xOffset, yOffset)
     {
+        $('#canvas').empty();
         this.canvas = SVG('canvas').size(1920, 500);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
+        this.selectedIntersection = null;
     }
 
     __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id)
@@ -263,19 +265,39 @@ class Drawer
                 leg.setIntersectionBorderCoords(leftIntersectionPoint, rightIntersectionPoint);
                 leg.setEndBorderCoords(leftEndPoint, rightEndPoint);
             }
-
-
+            let click = function()
+            {
+                this.setSelectedIntersection(intersection.id);
+            };
             let intersectionCenter = this.drawCenter(intersectionBorders, intersection.id);
-            intersectionCenter.on("mouseover", function() {
-                this.style("cursor", "pointer");
-                $('#tooltip').html(intersection.toString());
-                this.fill({ color: '#f06' })
-            });
-            intersectionCenter.on("mouseout", function() {
-                $('#tooltip').html("");
-                this.fill({ color: '#000' })
-            });
+            intersectionCenter.on("click", click, this);
+            if(this.selectedIntersection !== intersection.id)
+            {
+                intersectionCenter.on("mouseover", function() {
+                    this.style("cursor", "pointer");
+                    $('#tooltip').html(intersection.toString());
+                    this.fill({ color: '#f06' })
+                });
+
+
+
+
+                intersectionCenter.on("mouseout", function() {
+                    $('#tooltip').html("");
+                    this.fill({ color: '#000' })
+                });
+            }
+
+
+
         }
+    }
+
+    setSelectedIntersection(id)
+    {
+        this.selectedIntersection = id;
+        console.log(this.selectedIntersection);
+        $('#selectedIntersection').html("Selected intersection: " + id);
     }
 
     drawConnections(connectionList)

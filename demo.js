@@ -1,6 +1,7 @@
 let readFile;
 let angle;
 let canvas;
+let position = "left";
 
 let drawer;
 
@@ -13,6 +14,9 @@ document.getElementById('file-input')
 
 document.getElementById('angle-input')
 .addEventListener('change', readAngle, false);
+
+document.getElementById('position-input')
+    .addEventListener('change', readPosition, false);
 
 function getMapData()
 {
@@ -46,14 +50,23 @@ function postConfiguration()
 		  method: "POST",
 		  url: "http://localhost:8080/sendConfiguration",
 		  dataType: "json",
-		  data: {
-			  angle: angle,
-				conf:  readFile + "qqq"
-		  	}			  
+
+		  data: JSON.stringify({
+              firstIntersection: situation[0].length === 0,
+              selectedIntersectionId: drawer.selectedIntersection,
+		      conf:  readFile,
+              angle: angle,
+              position: position,
+              endMark: "qqq"
+		  	})
 		})
 		  .done(function( msg ) {
-		    alert(msg);
-		  });
+              getMapData();
+		  })
+        .fail(function(msg){
+            alert( JSON.stringify(msg));
+            getMapData();
+        });
 }
 
 function postStopSimulation()
@@ -87,6 +100,11 @@ function readSingleFile(e) {
 
 function readAngle(e) {
 	angle = e.target.value;
+}
+
+function readPosition(e)
+{
+    position = e.target.value;
 }
 
 function displayContents(contents) {

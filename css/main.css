@@ -1,0 +1,11 @@
+body {
+    font-family: -apple-system,BlinkMacSystemFont,San Francisco,Helvetica Neue,Helvetica,Ubuntu,Roboto,Noto,Segoe UI,Arial,sans-serif;
+}
+
+#selectedIntersection {
+    height: 50px;
+}
+
+#tooltip {
+    height: 50px;
+}
