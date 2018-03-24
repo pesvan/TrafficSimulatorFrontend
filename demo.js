@@ -69,17 +69,20 @@ function postConfiguration()
         });
 }
 
-function postStopSimulation()
+function portStopSimulation()
 {
 	$.ajax({
 		  method: "POST",
-		  url: "http://localhost:8080/stopSimulation",
+		  url: "http://localhost:8080/resetSimulation",
 		  dataType: "json",
-			  
 		})
 		  .done(function( msg ) {
 		    alert(msg);
-		  });
+		  })
+        .fail(function(msg)
+        {
+            getMapData();
+        });
 }
 
 function readSingleFile(e) {
@@ -114,7 +117,7 @@ function displayContents(contents) {
 
 $('#getSimData').on("click", getSimulationData);
 $('#sendConf').on("click", postConfiguration);
-$('#stopButton').on("click", postStopSimulation);
+$('#resetButton').on("click", portStopSimulation);
 
 function test(situation)
 {
