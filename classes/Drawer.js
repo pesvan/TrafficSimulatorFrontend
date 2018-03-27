@@ -3,7 +3,7 @@ class Drawer
     constructor(xOffset, yOffset)
     {
         $('#canvas').empty();
-        this.canvas = SVG('canvas').size(1920, 500);
+        this.canvas = SVG('canvas').size(2000, 1800);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.selectedIntersection = null;
@@ -66,11 +66,7 @@ class Drawer
             .fill({
                     color: color
              });
-
-
     }
-
-
 
     drawLane(intersectionCoordinates, leg, offset, order)
     {
