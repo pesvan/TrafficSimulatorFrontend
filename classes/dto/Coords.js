@@ -21,5 +21,10 @@ class Coords
         return this.__y;
     }
 
+    equals(otherCoords)
+    {
+        return this.__x === otherCoords.__x && this.__y === otherCoords.__y;
+    }
+
 
 }

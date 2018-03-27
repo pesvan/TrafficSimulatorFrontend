@@ -9,6 +9,12 @@ class Drawer
         this.selectedIntersection = null;
     }
 
+    _drawLine(coordinatesList){
+        let movedCoordinates = this.moveListToOffset(coordinatesList);
+        this.canvas.line(movedCoordinates[0].__x, movedCoordinates[0].__y,
+            movedCoordinates[1].__x, movedCoordinates[1].__y).stroke({ width: 3, color: selectedColor });
+    }
+
     __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id)
     {
         let movedCoordinates = this.moveListToOffset(coordinatesList);
@@ -53,16 +59,18 @@ class Drawer
             .attr("title", "test");
     }
 
-    _drawPoint(coordinates)
+    _drawPoint(coordinates, color)
     {
-        return this.canvas.circle(2)
-            .move(coordinates.__x, coordinates.__y)
+        return this.canvas.circle(10)
+            .move(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset)
             .fill({
-                    color: redColor
+                    color: color
              });
 
 
     }
+
+
 
     drawLane(intersectionCoordinates, leg, offset, order)
     {
@@ -77,67 +85,101 @@ class Drawer
 
         return this.__drawPolygon(coordinatesList, whiteColor, 1, blackColor, leg.id);
     }
+    
+    getTrianglePointPosition(leg, closestPointToOtherLeg, distanceBetweenClosestPoints, index)
+    {
+        if(index===0)
+        {
+            let legSize = getDistance2D(leg.leftEndPoint, leg.rightEndPoint);
+
+            //angle between the
+            let cosine = legSize / distanceBetweenClosestPoints;
+            let angle = (cosine * 180/Math.PI) + 180  + leg.angle;
+            return moveCoordinatesByOffset(closestPointToOtherLeg, angle, legSize);
+        }
+        else if(index===1)
+        {
+            if(closestPointToOtherLeg.equals(leg.leftEndPoint))
+            {
+                console.log("asasd");
+            }
+            let legSize = getDistance2D(leg.leftEndPoint, leg.rightEndPoint);
+
+            //angle between the
+            let cosine = legSize / distanceBetweenClosestPoints;
+            let angle = (cosine * 180/Math.PI) + 90   + leg.angle;
+            console.log(angle);
+            let newPoint = moveCoordinatesByOffset(closestPointToOtherLeg, angle, legSize);
+            console.log(closestPointToOtherLeg);
+            console.log(newPoint);
+            return newPoint;
+        }
+
+    }
 
     drawConnectingLane(leg1, leg2, id)
     {
-        let triangleEdge = new Coords(leg1.leftEndPoint.x, leg2.rightEndPoint.y);
+        console.log(leg1.leftEndPoint, leg1.rightEndPoint, leg2.leftEndPoint, leg2.rightEndPoint);
 
-        let adjacentLength = getDistance2D(leg2.rightEndPoint, triangleEdge);
-        let hypotenuseLength = getDistance2D(leg2.rightEndPoint, leg1.leftEndPoint);
+        let closestPoints = this.getClosestPoints(leg1, leg2);
 
-        let radians = adjacentLength / hypotenuseLength;
+        console.log(closestPoints);
 
-        let angle = radiansToDegrees(radians);
+        let distance = closestPoints[0];
+        let point1 = closestPoints[1];
+        let point2 = closestPoints[2];
+        let index = closestPoints[3];
 
-        let leg2size = getDistance2D(leg2.leftEndPoint, leg2.rightEndPoint);
+        let newPoint, newPoint2;
+        if(index!==2)
+        {
+            newPoint = this.getTrianglePointPosition(leg1, point1, distance, index);
 
-        let newPoint = moveCoordinatesByOffset(leg2.leftEndPoint, angle + 90, leg2size);
+            let corner1 =
+                [
+                    leg1.leftEndPoint,
+                    leg1.rightEndPoint,
+                    newPoint
 
-        let triangleEdge2 = new Coords(leg2.rightEndPoint.x, leg1.rightEndPoint.y);
-        let adjacentLength2 = getDistance2D(leg1.leftEndPoint, triangleEdge2);
-        let hypotenuseLength2 = getDistance2D(leg1.leftEndPoint, leg2.rightEndPoint);
-        let radians2 = adjacentLength2 / hypotenuseLength2;
-        let angle2 = radiansToDegrees(radians2);
-        let leg1size = getDistance2D(leg1.leftEndPoint, leg1.rightEndPoint);
+                ];
+            this.__drawPolygon(corner1, whiteColor, 1, yellowColor, id);
 
-        let newPoint2 = moveCoordinatesByOffset(leg1.leftEndPoint, angle2 - 90, leg1size);
-
-
-
-        let corner1 =
-            [
-                leg1.leftEndPoint,
-                leg1.rightEndPoint,
-                newPoint2
-
-            ];
-
-        let corner2 =
-            [
-                leg2.leftEndPoint,
-                leg2.rightEndPoint,
-                newPoint
-            ];
+            newPoint2 = this.getTrianglePointPosition(leg2, point2, distance, index);
 
 
-        let midPoint1 = findMiddlePoint(leg1.leftEndPoint, newPoint2);
-        let midPoint2 = findMiddlePoint(leg2.leftEndPoint, newPoint);
+            let corner2 =
+                [
+                    leg2.leftEndPoint,
+                    leg2.rightEndPoint,
+                    newPoint2
 
-        this.__drawPolygon(corner1, whiteColor, 1, yellowColor, id);
-        this.__drawPolygon(corner2, whiteColor, 1, yellowColor, id);
+                ];
+
+            this.__drawPolygon(corner2, whiteColor, 1, yellowColor, id);
+
+        }
+        else
+        {
+            newPoint = leg1.rightEndPoint;
+            newPoint2 = leg2.rightEndPoint;
+        }
+
+
+        let midPoint1 = findMiddlePoint(point1, newPoint);
+        let midPoint2 = findMiddlePoint(point2, newPoint2);
 
         let lane1 =
             [
-                leg1.leftEndPoint,
+                point1,
                 midPoint1,
                 midPoint2,
-                newPoint
+                newPoint2
             ];
         let laneSvg1 = this.__drawPolygon(lane1, whiteColor, 1, blackColor, id);
 
         laneSvg1.on("mouseover", function() {
             this.style("cursor", "pointer");
-            $('#tooltip').html(leg2.id + " -> " + leg1.id);
+            $('#tooltip').html(index!==1 ? leg2.id + " -> " + leg1.id : leg1.id + " -> " + leg2.id);
             this.fill({ color: selectedColor })
         });
         laneSvg1.on("mouseout", function() {
@@ -147,8 +189,8 @@ class Drawer
 
         let lane2 =
             [
-                leg2.leftEndPoint,
-                newPoint2,
+                point2,
+                newPoint,
                 midPoint1,
                 midPoint2
             ];
@@ -156,14 +198,31 @@ class Drawer
 
         laneSvg2.on("mouseover", function() {
             this.style("cursor", "pointer");
-            $('#tooltip').html(leg1.id + " -> " + leg2.id);
+            $('#tooltip').html(index!==1 ? leg1.id + " -> " + leg2.id : leg2.id + " -> " + leg1.id);
             this.fill({ color: selectedColor })
         });
         laneSvg2.on("mouseout", function() {
             $('#tooltip').html("");
             this.fill({ color: '#000' })
         });
+
+
     }
+
+    getClosestPoints(leg1, leg2){
+
+        let leftsLength = getDistance2D(leg1.leftEndPoint, leg2.leftEndPoint);
+        let rightsLength = getDistance2D(leg1.rightEndPoint, leg2.rightEndPoint);
+
+        if(leftsLength < rightsLength){
+            return [leftsLength, leg1.leftEndPoint, leg2.leftEndPoint, 0];
+        } else if(rightsLength < leftsLength){
+            return [rightsLength, leg1.rightEndPoint, leg2.rightEndPoint, 1];
+        } else if(leftsLength === rightsLength){
+            return [leftsLength, leg1.leftEndPoint, leg2.leftEndPoint, 2];
+        }
+    }
+
 
     drawCenter(intersectionBorders, id)
     {
@@ -254,6 +313,8 @@ class Drawer
 
                 let leftIntersectionPoint = moveCoordinatesByOffset(movedIntersectionCoords, angle + 90, offset * leg.laneList.length);
                 let rightIntersectionPoint = moveCoordinatesByOffset(movedIntersectionCoords, angle + 90, offset * (-1) * leg.outputLanesCount);
+
+
 
                 intersectionBorders[cnt] = rightIntersectionPoint;
                 cnt++;
