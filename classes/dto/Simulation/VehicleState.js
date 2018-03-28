@@ -1,10 +1,16 @@
 class VehicleState
 {
-    constructor(id, coords, angle, signal)
+    constructor(coords, angle, signal)
     {
-        this.id = id;
         this.coords = coords;
         this.angle = angle;
         this.signal = signal;
+        this.vehicle = null;
+
+    }
+
+    setVehicle(vehicle)
+    {
+        this.vehicle = vehicle;
     }
 }

@@ -7,6 +7,7 @@ class Drawer
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.selectedIntersection = null;
+        this.waiting = false;
     }
 
     _drawLine(coordinatesList){
@@ -225,40 +226,53 @@ class Drawer
         return this.__drawPolygon(intersectionBorders, redColor, 1, blackColor, id);
     }
 
-    drawVehicle(vehicleStates)
+    drawVehicles(simulationSteps)
     {
-        let coordinatesList = [];
-
-        //get first
-
-        let coords = this.moveToOffset(vehicleStates[0].coords);
-        coords.__x -= 1500;
-        coords.__y += 250;
-        let svg = this._drawPoint(coords);
-
-        for (let i = 1; i < vehicleStates.length; i++)
-        {
-            let coords = this.moveToOffset(vehicleStates[i].coords);
-            coords.__x -= 1500;
-            coords.__y += 250;
-            coordinatesList[i-1] = coords;
-        }
-
-        this.__animate(coordinatesList, svg);
-        // this.__drawPolyline(coordinatesList, redColor, 2, null, 0);
+        this.timeout(simulationSteps, simulationSteps.length, this.simulateSimulationStep, this);
     }
 
-    __animate(coordinatesList, svg)
+    timeout(steps, size, callback, context)
     {
-        for (let i = 0; i < coordinatesList.length; i++)
+        let i = 0;
+        callback(steps[i], context);
+        loop();
+        function loop()
         {
-            let coords = coordinatesList[i];
-            svg.animate({
-                ease: '-',
-                duration: 500
-            }).move(coords.__x, coords.__y).play();
+            setTimeout(function ()
+            {
+                i++;
+                if (i < size){
+                    callback(steps[i], context);
+                    loop();
+                }
+            }, 500);
         }
     }
+
+    simulateSimulationStep(step, context)
+    {
+        let vehicleStates = step.vehicleStates;
+        for(let vs = 0; vs < vehicleStates.length; vs++)
+        {
+            let vehicleState = vehicleStates[vs];
+            if (vehicleState.vehicle.vehicleIsSet())
+            {
+                vehicleState.vehicle.svg.animate({
+                    ease: '-',
+                    duration: 500
+                }).move(vehicleState.coords.__x + context.xOffset - 255, vehicleState.coords.__y + context.yOffset + 245).play();
+            }
+            else
+            {
+                let coords = context.moveToOffset(vehicleState.coords);
+                coords.__x -= 1155;
+                coords.__y -= 655;
+                let svg = context._drawPoint(coords, redColor);
+                vehicleState.vehicle.setSvg(svg);
+            }
+        }
+    }
+
 
     drawIntersection(intersectionList)
     {

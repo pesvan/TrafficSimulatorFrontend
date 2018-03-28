@@ -85,6 +85,22 @@ function portStopSimulation()
         });
 }
 
+function postRunSimulation()
+{
+    $.ajax({
+        method: "POST",
+        url: "http://localhost:8080/runSimulation",
+        dataType: "json",
+    })
+        .done(function( msg ) {
+            alert(msg);
+        })
+        .fail(function(msg)
+        {
+
+        });
+}
+
 function readSingleFile(e) {
 	  var file = e.target.files[0];
 	  if (!file) {
@@ -118,6 +134,8 @@ function displayContents(contents) {
 $('#getSimData').on("click", getSimulationData);
 $('#sendConf').on("click", postConfiguration);
 $('#resetButton').on("click", portStopSimulation);
+$('#runSimulation').on("click", postRunSimulation);
+
 
 function test(situation)
 {
@@ -129,31 +147,72 @@ function test(situation)
 
 function jsonToSimulationDtos(json)
 {
-    let vehicleStates = [];
 
+    /**
+     * iterate the simulation steps just like in json
+     * go through the vehicle states;
+     *      if the vehicle in vehicle state exists, move its svg
+     *      else init the vehicle (create svg, set it to init position and save svg to vehicles)
+     *
+     */
 
-    let iterator = 0;
+    let vehicles = [];
+
+    let simulationSteps = [];
 
     for (let i = 0; i < json.length; i++)
     {
-        let jsonVehicles = json[i].vehicleState;
-        for (let v = 0; v < jsonVehicles.length; v++)
+        let simulationStep = json[i].simulationStep;
+
+        let simTimeDto = new SimulationTime(simulationStep);
+
+        let jsonVehiclesInTime = json[i].vehicleState;
+        for (let v = 0; v < jsonVehiclesInTime.length; v++)
         {
-            let jsonVehicleState = jsonVehicles[v];
-            let id = jsonVehicleState.id;
+
+            let jsonVehicleStateInTime = jsonVehiclesInTime[v];
+            let id = jsonVehicleStateInTime.id;
             let coords = new Coords(
-                jsonVehicleState.coords.x,
-                jsonVehicleState.coords.y
+                jsonVehicleStateInTime.coords.x,
+                jsonVehicleStateInTime.coords.y
             );
-            let angle = jsonVehicleState.angle;
-            let signaling = jsonVehicleState.signaling;
-            vehicleStates[iterator] = new VehicleState(id, coords, angle, signaling);
-            iterator++;
+            let angle = jsonVehicleStateInTime.angle;
+            let signaling = jsonVehicleStateInTime.signaling;
+            let vehicleState = new VehicleState(coords, angle, signaling);
+
+            let existingVehicle = findVehicleById(vehicles, id);
+            if (existingVehicle == null)
+            {
+                let newVehicle = new Vehicle(id);
+                vehicleState.setVehicle(newVehicle);
+                vehicles.push(newVehicle);
+            }
+            else
+            {
+                vehicleState.setVehicle(existingVehicle);
+            }
+
+            simTimeDto.addVehicleState(vehicleState);
+
         }
+
+        simulationSteps.push(simTimeDto);
     }
 
 
-    drawer.drawVehicle(vehicleStates);
+    drawer.drawVehicles(simulationSteps);
+}
+
+function findVehicleById(vehicles, id)
+{
+    for(let i = 0; i < vehicles.length; i++)
+    {
+        if(id===vehicles[i].id)
+        {
+            return vehicles[i];
+        }
+    }
+    return null;
 }
 
 
