@@ -1,13 +1,14 @@
 class Drawer
 {
-    constructor(xOffset, yOffset)
+    constructor(xOffset, yOffset, selectedIntersectionPersistent)
     {
         $('#canvas').empty();
         this.canvas = SVG('canvas').size(2000, 1800);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
-        this.selectedIntersection = null;
+        this.selectedIntersection = selectedIntersectionPersistent;
         this.waiting = false;
+        console.log("reload selected intersection:" + this.selectedIntersection);
     }
 
     _drawLine(coordinatesList){
@@ -260,12 +261,12 @@ class Drawer
                 vehicleState.vehicle.svg.animate({
                     ease: '-',
                     duration: 500
-                }).move(vehicleState.coords.__x + context.xOffset - 255, vehicleState.coords.__y + context.yOffset + 245).play();
+                }).move(vehicleState.coords.__x + context.xOffset - 880, vehicleState.coords.__y + context.yOffset + 245).play();
             }
             else
             {
                 let coords = context.moveToOffset(vehicleState.coords);
-                coords.__x -= 1155;
+                coords.__x -= 1780;
                 coords.__y -= 655;
                 let svg = context._drawPoint(coords, redColor);
                 vehicleState.vehicle.setSvg(svg);
@@ -336,39 +337,58 @@ class Drawer
                 leg.setIntersectionBorderCoords(leftIntersectionPoint, rightIntersectionPoint);
                 leg.setEndBorderCoords(leftEndPoint, rightEndPoint);
             }
+
+            let intersectionCenter = this.drawCenter(intersectionBorders, intersection.id);
+            intersection.setSvg(intersectionCenter);
             let click = function()
             {
-                this.setSelectedIntersection(intersection.id);
+                this.setSelectedIntersection(intersection);
             };
-            let intersectionCenter = this.drawCenter(intersectionBorders, intersection.id);
-            intersectionCenter.on("click", click, this);
-            if(this.selectedIntersection !== intersection.id)
+
+            let mouseover = function()
             {
-                intersectionCenter.on("mouseover", function() {
-                    this.style("cursor", "pointer");
+                if(this.selectedIntersection.id !== intersection.id)
+                {
+                    intersectionCenter.style("cursor", "pointer");
                     $('#tooltip').html(intersection.toString());
-                    this.fill({ color: '#f06' })
-                });
+                    intersectionCenter.fill({ color: selectedColor })
+                }
+            };
 
-
-
-
-                intersectionCenter.on("mouseout", function() {
+            let mouseout = function()
+            {
+                if(this.selectedIntersection.id !== intersection.id)
+                {
                     $('#tooltip').html("");
-                    this.fill({ color: '#000' })
-                });
-            }
+                    intersectionCenter.fill({ color: blackColor })
+                }
+            };
 
+            intersectionCenter.on("click", click, this);
 
+            intersectionCenter.on("mouseover", mouseover, this);
 
+            intersectionCenter.on("mouseout", mouseout, this);
         }
     }
 
-    setSelectedIntersection(id)
+    isSelectedIntersection()
     {
-        this.selectedIntersection = id;
-        console.log(this.selectedIntersection);
-        $('#selectedIntersection').html("Selected intersection: " + id);
+        return this.selectedIntersection !== null && this.selectedIntersection !== undefined;
+    }
+
+    setSelectedIntersection(intersection)
+    {
+        //graphically unselect previously selected intersection
+        if(this.isSelectedIntersection())
+        {
+            this.selectedIntersection.svg.fill({color:blackColor});
+        }
+
+        //set as selected new one
+        intersection.svg.fill({color: redColor});
+        this.selectedIntersection = intersection;
+        $('#selectedIntersection').html("Selected intersection: " + intersection.id);
     }
 
     drawConnections(connectionList)

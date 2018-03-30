@@ -7,6 +7,12 @@ class Intersection
         this.coordinates = coordinates;
         this.legList = legList;
         this.angle = angle;
+        this.svg = null;
+    }
+
+    setSvg(svg)
+    {
+        this.svg = svg;
     }
 
     toString()

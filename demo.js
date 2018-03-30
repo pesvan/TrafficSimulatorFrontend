@@ -7,6 +7,8 @@ let drawer;
 
 let situation;
 
+let selectedIntersectionPersistent;
+
 getMapData();
 
 document.getElementById('file-input')
@@ -139,7 +141,11 @@ $('#runSimulation').on("click", postRunSimulation);
 
 function test(situation)
 {
-    drawer = new Drawer(xOffset, yOffset);
+    if(drawer !== null && drawer !== undefined)
+    {
+        selectedIntersectionPersistent = drawer.selectedIntersection;
+    }
+    drawer = new Drawer(xOffset, yOffset, selectedIntersectionPersistent);
 
     drawer.drawIntersection(situation[0]);
     drawer.drawConnections(situation[1]);
