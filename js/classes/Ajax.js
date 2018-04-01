@@ -40,7 +40,7 @@ function postConfiguration()
             position: position
         })
     })
-        .done(function( msg ) {
+        .done(function(){
             getMapData();
         })
         .fail(function(msg){
