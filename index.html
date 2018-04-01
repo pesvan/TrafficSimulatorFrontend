@@ -23,32 +23,37 @@
 	<body>
 	<div id="page">
         <div id="header">
-            <h1>Traffic Simulator</h1>
-        </div>
-        <div id="buttons">
-            <button id="buto">GetMapData</button>
-            <button id="getSimData">GetSimulationData</button>
-            <button id="sendConf">SendConfiguration</button>
-            <button id="resetButton">ResetMap</button>
-            <button id="runSimulation">RunSimulation</button>
+            <div id="title">TRAFFIC SIMULATOR</div>
+            <div id="buttons">
+                <div id="addIntersectionButton">
+                    <img src="img/buttons/add.png"/>
+                </div>
+            </div>
         </div>
 
+        <div id="modalAddIntersection" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Add intersection</h3>
+                <label>Set angle:</label>
+                <input type="text" id="angle-input" placeholder="Angle"/><br>
+                <label>Position relative to selected intersection: </label>
+                <select id="position-input">
+                    <option value="left">left</option>
+                    <option value="right">right</option>
+                    <option value="up">up</option>
+                    <option value="down">down</option>
+                </select><br>
+                <label>XML file with configuration: </label>
+                <input type="file" id="file-input" />
+                <br>
+                <button id="sendConfiguration">Upload configuration</button>
+            </div>
+        </div>
 
 
         <div>
-            <h3>Add intersection</h3>
-            <label>Set angle:</label>
-            <input type="text" id="angle-input" placeholder="Angle"/><br>
-            <label>Position relative to selected intersection: </label>
-            <select id="position-input">
-                <option value="left">left</option>
-                <option value="right">right</option>
-                <option value="up">up</option>
-                <option value="down">down</option>
-            </select><br>
-            <label>XML file with configuration: </label>
 
-            <input type="file" id="file-input" />
             <div id="selectedIntersection"></div>
             <div id="tooltip"></div>
             <div id="canvas" style="background-color: green">

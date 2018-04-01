@@ -2,7 +2,8 @@ let readFile;
 let angle;
 let canvas;
 let position = "left";
-
+let header = document.getElementById("header");
+let sticky = header.offsetTop;
 let drawer;
 
 let situation;
@@ -20,7 +21,44 @@ document.getElementById('angle-input')
 document.getElementById('position-input')
     .addEventListener('change', readPosition, false);
 
+window.onscroll = function() {
+    stickToTheTop()
+};
 
+
+
+function stickToTheTop() {
+    if (window.pageYOffset >= sticky) {
+        header.classList.add("sticky");
+    } else {
+        header.classList.remove("sticky");
+    }
+}
+
+let modal = document.getElementById('modalAddIntersection');
+
+// Get the button that opens the modal
+let btn = document.getElementById("addIntersectionButton");
+
+// Get the <span> element that closes the modal
+let span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+};
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+};
 
 function readSingleFile(e) {
 	  let file = e.target.files[0];
@@ -45,7 +83,7 @@ function readPosition(e)
 }
 
 $('#getSimData').on("click", getSimulationData);
-$('#sendConf').on("click", postConfiguration);
+$('#sendConfiguration').on("click", postConfiguration);
 $('#resetButton').on("click", portStopSimulation);
 $('#runSimulation').on("click", postRunSimulation);
 
