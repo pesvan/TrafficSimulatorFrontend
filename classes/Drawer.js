@@ -6,9 +6,11 @@ class Drawer
         this.canvas = SVG('canvas').size(2000, 1800);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
-        this.selectedIntersection = selectedIntersectionPersistent;
+        if(selectedIntersectionPersistent !== undefined)
+        {
+            this.setSelectedIntersection(selectedIntersectionPersistent);
+        }
         this.waiting = false;
-        console.log("reload selected intersection:" + this.selectedIntersection);
     }
 
     _drawLine(coordinatesList){
@@ -347,7 +349,7 @@ class Drawer
 
             let mouseover = function()
             {
-                if(this.selectedIntersection.id !== intersection.id)
+                if(!this.isSelectedIntersection() || this.selectedIntersection.id !== intersection.id)
                 {
                     intersectionCenter.style("cursor", "pointer");
                     $('#tooltip').html(intersection.toString());
@@ -357,7 +359,7 @@ class Drawer
 
             let mouseout = function()
             {
-                if(this.selectedIntersection.id !== intersection.id)
+                if(!this.isSelectedIntersection() || this.selectedIntersection.id !== intersection.id)
                 {
                     $('#tooltip').html("");
                     intersectionCenter.fill({ color: blackColor })

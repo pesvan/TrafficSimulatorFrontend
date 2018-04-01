@@ -20,100 +20,16 @@ document.getElementById('angle-input')
 document.getElementById('position-input')
     .addEventListener('change', readPosition, false);
 
-function getMapData()
-{
-	$.ajax({
-		  method: "GET",
-		  url: "http://localhost:8080/getMap",
-		  dataType: "json"
-		})
-		  .done(function( msg ) {
-		    $('#response').html(JSON.stringify(msg, null, 2));
-		    jsonToMapDtos(msg);
-		  });
-}
 
-function getSimulationData()
-{
-    $.ajax({
-        method: "GET",
-        url: "http://localhost:8080/getData",
-        dataType: "json"
-    })
-        .done(function( msg ) {
-            $('#response').html(JSON.stringify(msg, null, 2));
-            jsonToSimulationDtos(msg);
-        });
-}
-
-function postConfiguration()
-{
-	$.ajax({
-		  method: "POST",
-		  url: "http://localhost:8080/sendConfiguration",
-		  dataType: "json",
-
-		  data: JSON.stringify({
-              firstIntersection: situation[0].length === 0,
-              selectedIntersectionId: drawer.selectedIntersection,
-		      conf:  readFile,
-              angle: angle,
-              position: position,
-              endMark: "qqq"
-		  	})
-		})
-		  .done(function( msg ) {
-              getMapData();
-		  })
-        .fail(function(msg){
-            alert( JSON.stringify(msg));
-            getMapData();
-        });
-}
-
-function portStopSimulation()
-{
-	$.ajax({
-		  method: "POST",
-		  url: "http://localhost:8080/resetSimulation",
-		  dataType: "json",
-		})
-		  .done(function( msg ) {
-		    alert(msg);
-		  })
-        .fail(function(msg)
-        {
-            getMapData();
-        });
-}
-
-function postRunSimulation()
-{
-    $.ajax({
-        method: "POST",
-        url: "http://localhost:8080/runSimulation",
-        dataType: "json",
-    })
-        .done(function( msg ) {
-            alert(msg);
-        })
-        .fail(function(msg)
-        {
-
-        });
-}
 
 function readSingleFile(e) {
-	  var file = e.target.files[0];
+	  let file = e.target.files[0];
 	  if (!file) {
 	    return;
 	  }
-	  var reader = new FileReader();
+	  let reader = new FileReader();
 	  reader.onload = function(e) {
-	    var contents = e.target.result;
-	    displayContents(contents);
-	    readFile = contents;
-	    //postConfiguration(contents+"qqq");
+          readFile = e.target.result;
 	  };
 	  reader.readAsText(file);
 	  
@@ -126,11 +42,6 @@ function readAngle(e) {
 function readPosition(e)
 {
     position = e.target.value;
-}
-
-function displayContents(contents) {
-  var element = document.getElementById('file-content');
-  element.textContent = contents;
 }
 
 $('#getSimData').on("click", getSimulationData);
@@ -233,6 +144,8 @@ function jsonToMapDtos(json)
         let intersectionId = jsonIntersection.id;
         let intersectionCoordinates = new Coords(
 			jsonIntersection.coordinates.x, jsonIntersection.coordinates.y);
+        let intersectionGrid = new GridPos(
+            jsonIntersection.gridPosition.x, jsonIntersection.gridPosition.y);
         let angle = jsonIntersection.angle;
 
         for(let l = 0; l < jsonIntersection.legList.length; l++)
@@ -256,7 +169,7 @@ function jsonToMapDtos(json)
 			legList[l] = new Leg(legId, legAngle, outputLanesCount, legCoordinates, laneList);
         }
 
-        intersectionList[i] = new Intersection(intersectionId, intersectionCoordinates, legList, angle)
+        intersectionList[i] = new Intersection(intersectionId, intersectionCoordinates, intersectionGrid, legList, angle)
     }
 
     let connectionList = [];
