@@ -390,7 +390,7 @@ class Drawer
         //set as selected new one
         intersection.svg.fill({color: redColor});
         this.selectedIntersection = intersection;
-        $('#selectedIntersection').html("Selected intersection: " + intersection.id);
+        $('#selectedIntersection').html("selected intersection<br>" + intersection.id + " " + intersection.grid.toPolyString());
     }
 
     drawConnections(connectionList)

@@ -26,10 +26,15 @@ body {
     padding: 12px 18px;
     font-weight: bolder;
     float: left;
+    border-right: 2px black solid;
+    overflow: hidden;
 }
 
 #selectedIntersection {
-    height: 50px;
+    padding: 5px 18px;
+    text-align: center;
+    font-size: smaller;
+    float: left;
 }
 
 /* The Modal (background) */
