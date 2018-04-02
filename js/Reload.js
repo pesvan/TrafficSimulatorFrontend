@@ -1,0 +1,1 @@
+$('#resetAllButton').on("click", resetAll);

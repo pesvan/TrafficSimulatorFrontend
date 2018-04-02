@@ -50,10 +50,10 @@ function postConfiguration()
     });
 }
 
-function portStopSimulation()
+function resetAll()
 {
     $.ajax({
-        method: "POST",
+        method: "GET",
         url: "http://localhost:8080/resetSimulation",
         dataType: "json",
     })
@@ -62,7 +62,7 @@ function portStopSimulation()
     })
     .fail(function(msg)
     {
-        loadSituationLayout();
+        loadAndDrawLayout();
     });
 }
 
