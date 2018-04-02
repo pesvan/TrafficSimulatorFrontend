@@ -1,30 +1,27 @@
-let canvas;
-let header = document.getElementById("header");
-let sticky = header.offsetTop;
-let drawer;
+/**
+ *
+ *
+ */
 
-let situation = [[],[]];
+// instance of a layout
+let situation = new Situation();
 
-let selectedIntersectionPersistent;
+// instance of a drawer
+let drawer = new Drawer(situation);
+loadAndDrawLayout();
 
-getMapData();
-
-
-$('#getSimData').on("click", getSimulationData);
-$('#resetButton').on("click", portStopSimulation);
-$('#runSimulation').on("click", postRunSimulation);
-
-
-function test(situation)
+function loadAndDrawLayout()
 {
-    if(drawer !== null && drawer !== undefined)
-    {
-        selectedIntersectionPersistent = drawer.selectedIntersection;
-    }
-    drawer = new Drawer(xOffset, yOffset, selectedIntersectionPersistent);
+    loadSituationLayout();
+    situation.initCanvas();
+    drawer.setOffset();
+    drawSituationLayout();
+}
 
-    drawer.drawIntersection(situation[0]);
-    drawer.drawConnections(situation[1]);
+function drawSituationLayout()
+{
+    drawer.drawIntersection(situation.intersectionList);
+    drawer.drawConnections(situation.connections);
 }
 
 function jsonToSimulationDtos(json)
@@ -101,7 +98,23 @@ function findVehicleById(vehicles, id)
 
 function jsonToMapDtos(json)
 {
-	let intersectionList = [];
+    let jsonMetadata = json.metadata;
+
+    let intersectionCount = jsonMetadata.intersectionCount;
+    let routesCount = jsonMetadata.routesCount;
+    let distanceBetweenLegEnds = jsonMetadata.distanceBetweenLegEnds;
+    let distanceBetweenIntersections = jsonMetadata.distanceBetweenIntersections;
+
+    let gridDimensions = new GridDimensions(
+        jsonMetadata.gridDimensions.minimumX,
+        jsonMetadata.gridDimensions.minimumY,
+        jsonMetadata.gridDimensions.maximumX,
+        jsonMetadata.gridDimensions.maximumY,
+    );
+
+    situation.setMetadata(
+        distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount, routesCount, gridDimensions);
+
     for(let i = 0; i < json.intersectionList.length; i++)
     {
         let jsonIntersection = json.intersectionList[i];
@@ -134,25 +147,21 @@ function jsonToMapDtos(json)
 			legList[l] = new Leg(legId, legAngle, outputLanesCount, legCoordinates, laneList);
         }
 
-        intersectionList[i] = new Intersection(intersectionId, intersectionCoordinates, intersectionGrid, legList, angle)
+        situation.addIntersection(
+            new Intersection(intersectionId, intersectionCoordinates, intersectionGrid, legList, angle));
     }
-
-    let connectionList = [];
 
     for(let i = 0; i < json.connectionLegs.length; i++)
     {
         let jsonConnection = json.connectionLegs[i];
 
-        connectionList[i] = new ConnectingLeg(jsonConnection.id,
-            getLegById(jsonConnection.leg1Id, intersectionList),
-            getLegById(jsonConnection.leg2Id, intersectionList));
-
+        situation.addConnection(new ConnectingLeg(jsonConnection.id,
+            getLegById(jsonConnection.leg1Id, situation.intersectionList),
+            getLegById(jsonConnection.leg2Id, situation.intersectionList)));
     }
 
-    situation = [intersectionList, connectionList];
 
 
-    test(situation);
 }
 
 function getLegById(id, intersectionList)

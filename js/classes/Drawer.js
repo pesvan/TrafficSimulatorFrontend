@@ -1,21 +1,20 @@
 class Drawer
 {
-    constructor(xOffset, yOffset, selectedIntersectionPersistent)
+    constructor(situation)
     {
-        $('#canvas').empty();
-        this.canvas = SVG('canvas').size(2000, 1800);
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
-        if(selectedIntersectionPersistent !== undefined)
-        {
-            this.setSelectedIntersection(selectedIntersectionPersistent);
-        }
-        this.waiting = false;
+        this.situation = situation;
+    }
+
+    setOffset()
+    {
+        this.xOffset = this.situation.getOffsetX() - this.situation.distanceBetweenLegEnds * 5;
+        this.yOffset = this.situation.getOffsetY() - this.situation.distanceBetweenLegEnds * 5;
+        console.log("Offset is set: ", this.xOffset, this.yOffset);
     }
 
     _drawLine(coordinatesList){
         let movedCoordinates = this.moveListToOffset(coordinatesList);
-        this.canvas.line(movedCoordinates[0].__x, movedCoordinates[0].__y,
+        this.situation.canvas.line(movedCoordinates[0].__x, movedCoordinates[0].__y,
             movedCoordinates[1].__x, movedCoordinates[1].__y).stroke({ width: 3, color: selectedColor });
     }
 
@@ -28,7 +27,7 @@ class Drawer
         {
             polyString += movedCoordinates[i].toPolyString() + " ";
         }
-        return this.canvas.polygon(polyString)
+        return this.situation.canvas.polygon(polyString)
             .stroke({
                 color: borderColor,
                 width: borderWidth
@@ -50,7 +49,7 @@ class Drawer
         {
             polyString += movedCoordinates[i].toPolyString() + " ";
         }
-        return this.canvas.polyline(polyString)
+        return this.situation.canvas.polyline(polyString)
             .stroke({
                 color: borderColor,
                 width: borderWidth
@@ -65,7 +64,7 @@ class Drawer
 
     _drawPoint(coordinates, color)
     {
-        return this.canvas.circle(10)
+        return this.situation.canvas.circle(10)
             .move(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset)
             .fill({
                     color: color
@@ -344,12 +343,12 @@ class Drawer
             intersection.setSvg(intersectionCenter);
             let click = function()
             {
-                this.setSelectedIntersection(intersection);
+                this.situation.setSelectedIntersection(intersection);
             };
 
             let mouseover = function()
             {
-                if(!this.isSelectedIntersection() || this.selectedIntersection.id !== intersection.id)
+                if(!this.situation.isSelectedIntersection() || this.situation.selectedIntersection.id !== intersection.id)
                 {
                     intersectionCenter.style("cursor", "pointer");
                     $('#tooltip').html(intersection.toString());
@@ -359,7 +358,7 @@ class Drawer
 
             let mouseout = function()
             {
-                if(!this.isSelectedIntersection() || this.selectedIntersection.id !== intersection.id)
+                if(!this.situation.isSelectedIntersection() || this.situation.selectedIntersection.id !== intersection.id)
                 {
                     $('#tooltip').html("");
                     intersectionCenter.fill({ color: blackColor })
@@ -374,24 +373,7 @@ class Drawer
         }
     }
 
-    isSelectedIntersection()
-    {
-        return this.selectedIntersection !== null && this.selectedIntersection !== undefined;
-    }
 
-    setSelectedIntersection(intersection)
-    {
-        //graphically unselect previously selected intersection
-        if(this.isSelectedIntersection())
-        {
-            this.selectedIntersection.svg.fill({color:blackColor});
-        }
-
-        //set as selected new one
-        intersection.svg.fill({color: redColor});
-        this.selectedIntersection = intersection;
-        $('#selectedIntersection').html("selected intersection<br>" + intersection.id + " " + intersection.grid.toPolyString());
-    }
 
     drawConnections(connectionList)
     {
@@ -404,9 +386,6 @@ class Drawer
             let id = connection.id;
 
             let svg = this.drawConnectingLane(leg1, leg2, id);
-
-
-
         }
     }
 
@@ -427,25 +406,4 @@ class Drawer
         return new Coords(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset);
     }
 
-    drawArrowStraight()
-    {
-        canvas.line(50, 75, 75, 75).stroke({ width: 2}).stroke({color:'#ffffff'});
-        canvas.polygon('0,0 15,5 0,10').move(75,70).stroke({ width: 1}).fill({color:'#ffffff'}).stroke({color:'#ffffff'});
-    }
-
-    drawArrowRight()
-    {
-        canvas.line(50, 75, 62, 75).stroke({ width: 2}).stroke({color:'#ffffff'});
-        canvas.line(62, 75, 75, 88).stroke({ width: 2}).stroke({color:'#ffffff'});
-
-        canvas.polygon('7,0 14,14 0,7').move(70,84).stroke({ width: 1}).fill({color:'#ffffff'}).stroke({color:'#ffffff'});
-    }
-
-    drawArrowLeft()
-    {
-        canvas.line(50, 75, 62, 75).stroke({ width: 2}).stroke({color:'#ffffff'});
-        canvas.line(62, 75, 75, 62).stroke({ width: 2}).stroke({color:'#ffffff'});
-
-        canvas.polygon('7,14 14,0 0,7').move(70,53).stroke({ width: 1}).fill({color:'#ffffff'}).stroke({color:'#ffffff'});
-    }
 }
