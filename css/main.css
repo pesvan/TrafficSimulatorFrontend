@@ -41,6 +41,13 @@ body {
 #buttons > div
 {
     float: left;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+#buttons > div:hover
+{
+    background-color: #333;
 }
 
 #tooltip {
