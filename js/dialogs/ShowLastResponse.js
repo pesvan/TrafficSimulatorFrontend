@@ -10,11 +10,3 @@ let showLastResponseButton = document.getElementById("showLastResponseButton");
 showLastResponseButton.onclick = function() {
     modalShowLastResponse.style.display = "block";
 };
-
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target === modalShowLastResponse) {
-        modalShowLastResponse.style.display = "none";
-    }
-};

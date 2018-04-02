@@ -42,11 +42,11 @@ function postConfiguration()
         })
     })
     .done(function(){
-        loadSituationLayout();
+        loadAndDrawLayout();
     })
     .fail(function(msg){
         alert( JSON.stringify(msg));
-        loadSituationLayout();
+        loadAndDrawLayout();
     });
 }
 

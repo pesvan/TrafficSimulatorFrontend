@@ -26,12 +26,6 @@ addIntersectionButton.onclick = function() {
 };
 
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target === modalAddIntersection) {
-        modalAddIntersection.style.display = "none";
-    }
-};
 
 function readSingleFile(e) {
     let file = e.target.files[0];
@@ -56,4 +50,8 @@ function readPosition(e)
 }
 
 $('#sendConfiguration')
-    .on("click", postConfiguration);
+    .on("click", function()
+    {
+        modalAddIntersection.style.display
+        postConfiguration();
+    });
