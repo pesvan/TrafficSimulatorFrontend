@@ -66,7 +66,7 @@ function resetAll()
     });
 }
 
-function postRunSimulation()
+function runSimulation()
 {
     $.ajax({
         method: "GET",
