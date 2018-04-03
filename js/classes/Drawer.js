@@ -65,7 +65,7 @@ class Drawer
     _drawPoint(coordinates, color)
     {
         return this.situation.canvas.circle(10)
-            .move(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset)
+            .move(coordinates.__x, coordinates.__y)
             .fill({
                     color: color
              });
@@ -257,19 +257,32 @@ class Drawer
         for(let vs = 0; vs < vehicleStates.length; vs++)
         {
             let vehicleState = vehicleStates[vs];
+
             if (vehicleState.vehicle.vehicleIsSet())
             {
+                console.log("vehicle moved to", vehicleState.vehicle.id, vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x,
+                    vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y);
                 vehicleState.vehicle.svg.animate({
                     ease: '-',
                     duration: 500
-                }).move(vehicleState.coords.__x + context.xOffset - 880, vehicleState.coords.__y + context.yOffset + 245).play();
+                }).move(
+                    vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x,
+                    vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y).play();
+                if(!vehicleState.vehicle.svg.visible())
+                {
+                    vehicleState.vehicle.svg.show();
+                }
             }
             else
             {
-                let coords = context.moveToOffset(vehicleState.coords);
-                coords.__x -= 1780;
-                coords.__y -= 655;
+                let coords = vehicleState.coords;
+
+                coords.__x = vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x;
+                coords.__y = vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y;
+
+                console.log("init vehicle", vehicleState.vehicle.id, coords);
                 let svg = context._drawPoint(coords, redColor);
+                svg.hide();
                 vehicleState.vehicle.setSvg(svg);
             }
         }

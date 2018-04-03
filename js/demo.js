@@ -112,8 +112,13 @@ function jsonToMapDtos(json)
         jsonMetadata.gridDimensions.maximumY,
     );
 
+    let vehicleBase = new Coords(
+        jsonMetadata.vehicleCoordinatesStart.x,
+        jsonMetadata.vehicleCoordinatesStart.y);
+
     situation.setMetadata(
-        distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount, routesCount, gridDimensions);
+        distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount,
+        routesCount, gridDimensions, vehicleBase);
 
     for(let i = 0; i < json.intersectionList.length; i++)
     {

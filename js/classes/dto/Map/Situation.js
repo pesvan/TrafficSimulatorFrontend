@@ -13,9 +13,11 @@ class Situation
         this.connections = [];
         this.selectedIntersection = undefined;
         this.canvas = undefined;
+        this.vehicleBase = undefined;
     }
 
-    setMetadata(distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount, routesCount, gridDimensions)
+    setMetadata(
+        distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount, routesCount, gridDimensions, vehicleBase)
     {
         this.distanceBetweenLegEnds = distanceBetweenLegEnds;
         this.distanceBetweenIntersections = distanceBetweenIntersections;
@@ -29,6 +31,7 @@ class Situation
         console.log("Canvas size:", this.xSize, this.ySize);
         this.intersectionCount = intersectionCount;
         this.routesCount = routesCount;
+        this.vehicleBase = vehicleBase;
     }
 
     getOffsetX()
