@@ -70,7 +70,7 @@ function runSimulation()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/runSimulation",
+        url: "http://localhost:8080/initSimulation",
         dataType: "json",
     })
     .done(function( msg ) {
@@ -78,6 +78,28 @@ function runSimulation()
     })
     .fail(function(msg)
     {
-
+        simulation.startAcquisition();
     });
+}
+
+function doSimulationStep()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/getDataMultipleStep?noOfSteps=5",
+        dataType: "json",
+    })
+        .done(function( msg ) {
+            //jsonToSimulationDtos(msg);
+            console.log(msg)
+        })
+        .fail(function(msg)
+        {
+            console.log(msg);
+        });
+}
+
+function stopAcquisition()
+{
+    simulation.stopAcquisition();
 }

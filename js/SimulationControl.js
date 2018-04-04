@@ -1,2 +1,2 @@
 $('#runSimulationButton').on("click", runSimulation);
-$('#stopSimulationButton').on("click", getSimulationData);
+$('#stopSimulationButton').on("click", stopAcquisition);

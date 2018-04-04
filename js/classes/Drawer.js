@@ -228,23 +228,23 @@ class Drawer
         return this.__drawPolygon(intersectionBorders, redColor, 1, blackColor, id);
     }
 
-    drawVehicles(simulationSteps)
+    drawVehicles(simulationStep)
     {
-        this.timeout(simulationSteps, simulationSteps.length, this.simulateSimulationStep, this);
+        this.timeout(simulationStep, this.simulateSimulationStep, this);
     }
 
-    timeout(steps, size, callback, context)
+    timeout(step, callback, context)
     {
         let i = 0;
-        callback(steps[i], context);
+        callback(step, context);
         loop();
         function loop()
         {
             setTimeout(function ()
             {
                 i++;
-                if (i < size){
-                    callback(steps[i], context);
+                if (i < 1){
+                    callback(step, context);
                     loop();
                 }
             }, 500);
@@ -268,10 +268,6 @@ class Drawer
                 }).move(
                     vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x,
                     vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y).play();
-                if(!vehicleState.vehicle.svg.visible())
-                {
-                    vehicleState.vehicle.svg.show();
-                }
             }
             else
             {
@@ -282,7 +278,6 @@ class Drawer
 
                 console.log("init vehicle", vehicleState.vehicle.id, coords);
                 let svg = context._drawPoint(coords, redColor);
-                svg.hide();
                 vehicleState.vehicle.setSvg(svg);
             }
         }
