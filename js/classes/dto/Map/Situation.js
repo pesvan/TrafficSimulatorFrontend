@@ -59,8 +59,12 @@ class Situation
     initCanvas()
     {
         $('#canvas').empty();
-        console.log("Creating canvas:", this.xSize, this.ySize);
-        this.canvas = SVG('canvas').size(this.xSize, this.ySize);
+        if(this.intersectionCount > 0)
+        {
+            console.log("Creating canvas:", this.xSize, this.ySize);
+            this.canvas = SVG('canvas').size(this.xSize, this.ySize);
+        }
+
     }
 
     isSelectedIntersection()
