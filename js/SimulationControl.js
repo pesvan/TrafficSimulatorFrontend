@@ -6,7 +6,7 @@ $('#pauseSimulationButton').on("click", function () {
     simulation.pauseVisualisation();
 });
 $('#stopSimulationButton').on("click", function () {
-    simulation = new Simulation();
+    simulation.stopVisualisation();
 });
 
 $('#myRange').on("change", readRange);

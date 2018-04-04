@@ -5,7 +5,6 @@ class Simulation
         this.visualizationRunning = false;
         this.activeVehicles = [];
         this.simulationStepsToDraw = [];
-        this.lastDownloadedSimTime = undefined;
         this.firstToDrawSimTime = undefined;
         this.density = undefined;
     }
@@ -24,6 +23,10 @@ class Simulation
     {
         this.visualizationRunning = false;
         this.removeAllVehicles();
+        this.simulationStepsToDraw = [];
+        this.firstToDrawSimTime = 0;
+        this.updateStatsInfo();
+        stopSimulation();
     }
 
     runningVisualisation()
@@ -34,7 +37,6 @@ class Simulation
     addSimulationStep(simulationStep)
     {
         this.simulationStepsToDraw.push(simulationStep);
-        this.lastDownloadedSimStep = this.simulationStepsToDraw[this.simulationStepsToDraw.length-1].time;
     }
 
     setDensity(density)
@@ -94,15 +96,20 @@ class Simulation
 
     updateStatsInfo()
     {
-        let simState = this.runningVisualisation() ? "Running" : "Paused";
+        let simState = "";
+        if(!this.runningVisualisation() && this.firstToDrawSimTime === 0)
+        {
+            simState = "Stopped";
+        } else if (this.firstToDrawSimTime > 0)
+        {
+            simState = this.runningVisualisation() ? "Running" : "Paused";
+        }
+
         $('#simState').html(simState);
 
         $('#simTime').html(this.firstToDrawSimTime);
 
         $('#vehCount').html(this.activeVehicles.length);
     }
-
-
-
 
 }

@@ -107,3 +107,16 @@ function doSimulationStep(noOfSteps)
         console.log(msg);
     });
 }
+
+function stopSimulation()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/stopSimulation",
+        dataType: "json",
+    })
+        .fail(function(msg)
+        {
+            console.log(msg);
+        });
+}
