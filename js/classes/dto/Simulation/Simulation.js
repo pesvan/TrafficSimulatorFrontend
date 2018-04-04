@@ -7,6 +7,7 @@ class Simulation
         this.simulationStepsToDraw = [];
         this.lastDownloadedSimTime = undefined;
         this.firstToDrawSimTime = undefined;
+        this.density = undefined;
     }
 
     startVisualisation()
@@ -28,6 +29,12 @@ class Simulation
     {
         this.simulationStepsToDraw.push(simulationStep);
         this.lastDownloadedSimStep = this.simulationStepsToDraw[this.simulationStepsToDraw.length-1].time;
+    }
+
+    setDensity(density)
+    {
+        this.density = 20 - parseInt(density);
+        setTrafficDensity(this.density);
     }
 
     getFirstToDraw()

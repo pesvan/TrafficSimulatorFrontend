@@ -54,6 +54,19 @@ function resetAll()
     });
 }
 
+function setTrafficDensity(density)
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/setTrafficDensity?density=" + density,
+        dataType: "json",
+    })
+    .fail(function(msg)
+    {
+        console.log(msg);
+    });
+}
+
 function runSimulation()
 {
     $.ajax({
@@ -63,8 +76,15 @@ function runSimulation()
         async: false
     })
     .done(function( msg ) {
-        doSimulationStep(5);
-        simulation.startVisualisation();
+        let status = msg.status;
+
+        if (status===0)
+        {
+            doSimulationStep(5);
+            simulation.startVisualisation();
+        }
+
+
     })
     .fail(function(msg)
     {
