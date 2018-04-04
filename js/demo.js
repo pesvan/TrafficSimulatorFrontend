@@ -27,6 +27,25 @@ function drawSituationLayout()
     drawer.drawConnections(situation.connections);
 }
 
+setInterval(visualization, 500);
+
+function visualization()
+{
+    if(simulation.visualizationRunning)
+    {
+        if(simulation.simulationStepsToDraw.length < 3)
+        {
+            doSimulationStep(5);
+        }
+
+        let stepToDo = simulation.getFirstToDraw();
+        drawer.simulateSimulationStep(stepToDo, drawer);
+    }
+    else{
+        //do nothing
+    }
+}
+
 function jsonToSimulationDtos(json)
 {
 

@@ -2,26 +2,26 @@ class Simulation
 {
     constructor()
     {
-        this.acquisitionActive = false;
+        this.visualizationRunning = false;
         this.activeVehicles = [];
         this.simulationStepsToDraw = [];
         this.lastDownloadedSimTime = undefined;
         this.firstToDrawSimTime = undefined;
     }
 
-    startAcquisition()
+    startVisualisation()
     {
-        this.acquisitionActive = true;
+        this.visualizationRunning = true;
     }
 
-    stopAcquisition()
+    pauseVisualisation()
     {
-        this.acquisitionActive = false;
+        this.visualizationRunning = false;
     }
 
-    isAcquisitionActive()
+    runningVisualisation()
     {
-        return this.acquisitionActive;
+        return this.visualizationRunning;
     }
 
     addSimulationStep(simulationStep)

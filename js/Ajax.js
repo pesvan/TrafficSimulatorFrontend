@@ -74,8 +74,8 @@ function runSimulation()
         dataType: "json",
     })
     .done(function( msg ) {
-        simulation.startAcquisition();
-        doSimulationStep(2);
+        doSimulationStep(5);
+        simulation.startVisualisation();
     })
     .fail(function(msg)
     {
@@ -97,9 +97,4 @@ function doSimulationStep(noOfSteps)
     {
         console.log(msg);
     });
-}
-
-function stopAcquisition()
-{
-    simulation.stopAcquisition();
 }
