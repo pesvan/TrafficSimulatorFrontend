@@ -20,6 +20,12 @@ class Simulation
         this.visualizationRunning = false;
     }
 
+    stopVisualisation()
+    {
+        this.visualizationRunning = false;
+        this.removeAllVehicles();
+    }
+
     runningVisualisation()
     {
         return this.visualizationRunning;
@@ -43,30 +49,47 @@ class Simulation
         return this.simulationStepsToDraw.shift();
     }
 
-    addVehicles(vehicles)
-    {
-        let mergedArray = this.activeVehicles.concat(vehicles);
-        let filteredArray = [];
-        let len = mergedArray.length;
-        const assoc = {};
-
-        while(len--) {
-            const item = mergedArray[len];
-
-            if(!assoc[item])
-            {
-                filteredArray.unshift(item);
-                assoc[item] = true;
-            }
-        }
-
-        this.activeVehicles = filteredArray;
-
-    }
-
     removeInactiveVehicles()
     {
-        //go through the active vehicles and check which are not present in the last packet
+        let setVehicles = [];
+        for(let i = 0; i < this.activeVehicles.length; i++)
+        {
+            if(this.activeVehicles[i].vehicleIsSet())
+            {
+                setVehicles.push(this.activeVehicles[i]);
+            }
+        }
+        let vehiclesInCurrentStep = [];
+        for(let i = 0; i < this.simulationStepsToDraw[0].vehicleStates.length; i++)
+        {
+            vehiclesInCurrentStep.push(this.simulationStepsToDraw[0].vehicleStates[i].vehicle);
+        }
+
+        for(let i = 0; i < setVehicles.length; i++)
+        {
+            let vehicle = findVehicleById(vehiclesInCurrentStep, setVehicles[i].id);
+            if(vehicle===null)
+            {
+                setVehicles[i].svg.remove();
+                let index = this.activeVehicles.indexOf(setVehicles[i]);
+                if(index > -1)
+                {
+                    this.activeVehicles.splice(index, 1);
+                }
+            }
+        }
+    }
+
+    removeAllVehicles()
+    {
+        for(let i = 0; i < this.activeVehicles.length; i++)
+        {
+            if(this.activeVehicles[i].vehicleIsSet())
+            {
+                this.activeVehicles[i].svg.remove();
+            }
+        }
+        this.activeVehicles = [];
     }
 
     updateStatsInfo()
