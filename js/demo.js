@@ -40,41 +40,42 @@ function jsonToSimulationDtos(json)
 
     json = json.payload;
 
-    let vehicles = [];
+    for(let i = 0; i < json.length; i++)
+    {
+        let simulationStep = json[i].simulationStep;
 
-    let simulationStep = json.simulationStep;
+        let simTimeDto = new SimulationTime(simulationStep);
 
-    let simTimeDto = new SimulationTime(simulationStep);
+        let jsonVehiclesInTime = json[i].vehicleState;
+        for (let v = 0; v < jsonVehiclesInTime.length; v++) {
 
-    let jsonVehiclesInTime = json.vehicleState;
-    for (let v = 0; v < jsonVehiclesInTime.length; v++) {
+            let jsonVehicleStateInTime = jsonVehiclesInTime[v];
+            let id = jsonVehicleStateInTime.id;
+            let coords = new Coords(
+                jsonVehicleStateInTime.coords.x,
+                jsonVehicleStateInTime.coords.y
+            );
+            let angle = jsonVehicleStateInTime.angle;
+            let signaling = jsonVehicleStateInTime.signaling;
+            let vehicleState = new VehicleState(coords, angle, signaling);
 
-        let jsonVehicleStateInTime = jsonVehiclesInTime[v];
-        let id = jsonVehicleStateInTime.id;
-        let coords = new Coords(
-            jsonVehicleStateInTime.coords.x,
-            jsonVehicleStateInTime.coords.y
-        );
-        let angle = jsonVehicleStateInTime.angle;
-        let signaling = jsonVehicleStateInTime.signaling;
-        let vehicleState = new VehicleState(coords, angle, signaling);
+            let existingVehicle = findVehicleById(simulation.activeVehicles, id);
+            if (existingVehicle == null) {
+                let newVehicle = new Vehicle(id);
+                vehicleState.setVehicle(newVehicle);
+                simulation.activeVehicles.push(newVehicle);
+            }
+            else
+            {
+                vehicleState.setVehicle(existingVehicle);
+            }
 
-        let existingVehicle = findVehicleById(vehicles, id);
-        if (existingVehicle == null) {
-            let newVehicle = new Vehicle(id);
-            vehicleState.setVehicle(newVehicle);
-            vehicles.push(newVehicle);
+            simTimeDto.addVehicleState(vehicleState);
         }
-        else {
-            vehicleState.setVehicle(existingVehicle);
-        }
 
-        simTimeDto.addVehicleState(vehicleState);
+        simulation.addSimulationStep(simTimeDto);
     }
 
-    simulation.addSimulationStep(simTimeDto);
-
-    drawer.drawVehicles(simulation.getFirstToDraw());
 }
 
 function findVehicleById(vehicles, id)

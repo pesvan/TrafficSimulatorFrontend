@@ -36,9 +36,25 @@ class Simulation
         return this.simulationStepsToDraw.shift();
     }
 
-    addVehicles()
+    addVehicles(vehicles)
     {
-        //add vehicles
+        let mergedArray = this.activeVehicles.concat(vehicles);
+        let filteredArray = [];
+        let len = mergedArray.length;
+        const assoc = {};
+
+        while(len--) {
+            const item = mergedArray[len];
+
+            if(!assoc[item])
+            {
+                filteredArray.unshift(item);
+                assoc[item] = true;
+            }
+        }
+
+        this.activeVehicles = filteredArray;
+
     }
 
     removeInactiveVehicles()

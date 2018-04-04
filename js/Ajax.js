@@ -58,11 +58,11 @@ function resetAll()
         dataType: "json",
     })
     .done(function( msg ) {
-        alert(msg);
+        loadAndDrawLayout();
     })
     .fail(function(msg)
     {
-        loadAndDrawLayout();
+        console.log(msg);
     });
 }
 
@@ -74,29 +74,29 @@ function runSimulation()
         dataType: "json",
     })
     .done(function( msg ) {
-        alert(msg);
+        simulation.startAcquisition();
+        doSimulationStep(2);
     })
     .fail(function(msg)
     {
-        simulation.startAcquisition();
+        console.log(msg);
     });
 }
 
-function doSimulationStep()
+function doSimulationStep(noOfSteps)
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/getDataMultipleStep?noOfSteps=5",
+        url: "http://localhost:8080/getDataMultipleStep?noOfSteps=" + noOfSteps,
         dataType: "json",
     })
-        .done(function( msg ) {
-            //jsonToSimulationDtos(msg);
-            console.log(msg)
-        })
-        .fail(function(msg)
-        {
-            console.log(msg);
-        });
+    .done(function( msg ) {
+        jsonToSimulationDtos(msg);
+    })
+    .fail(function(msg)
+    {
+        console.log(msg);
+    });
 }
 
 function stopAcquisition()
