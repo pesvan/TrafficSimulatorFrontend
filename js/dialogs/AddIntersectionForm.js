@@ -49,6 +49,11 @@ function readPosition(e)
     position = e.target.value;
 }
 
+function closeAddIntersectionForm()
+{
+    modalAddIntersection.style.display = "none";
+}
+
 $('#sendConfiguration')
     .on("click", function()
     {

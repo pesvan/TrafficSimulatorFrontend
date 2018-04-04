@@ -42,10 +42,11 @@ function postConfiguration()
         })
     })
     .done(function(){
+        closeAddIntersectionForm();
         loadAndDrawLayout();
     })
     .fail(function(msg){
-        loadAndDrawLayout();
+        console.log(msg);
     });
 }
 
