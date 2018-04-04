@@ -38,6 +38,8 @@ function jsonToSimulationDtos(json)
      *
      */
 
+    json = json.payload;
+
     let vehicles = [];
 
     let simulationStep = json.simulationStep;
@@ -91,6 +93,8 @@ function findVehicleById(vehicles, id)
 
 function jsonToMapDtos(json)
 {
+    json = json.payload;
+
     let jsonMetadata = json.metadata;
 
     let intersectionCount = jsonMetadata.intersectionCount;

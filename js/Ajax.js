@@ -45,7 +45,6 @@ function postConfiguration()
         loadAndDrawLayout();
     })
     .fail(function(msg){
-        alert( JSON.stringify(msg));
         loadAndDrawLayout();
     });
 }
