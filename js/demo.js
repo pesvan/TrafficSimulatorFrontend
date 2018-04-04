@@ -31,6 +31,8 @@ setInterval(visualization, 500);
 
 function visualization()
 {
+    simulation.updateStatsInfo();
+
     if(simulation.visualizationRunning)
     {
         if(simulation.simulationStepsToDraw.length < 3)

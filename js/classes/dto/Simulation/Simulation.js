@@ -28,11 +28,11 @@ class Simulation
     {
         this.simulationStepsToDraw.push(simulationStep);
         this.lastDownloadedSimStep = this.simulationStepsToDraw[this.simulationStepsToDraw.length-1].time;
-        this.firstToDrawSimStep = this.simulationStepsToDraw[0].time;
     }
 
     getFirstToDraw()
     {
+        this.firstToDrawSimTime = this.simulationStepsToDraw[0].time;
         return this.simulationStepsToDraw.shift();
     }
 
@@ -60,6 +60,16 @@ class Simulation
     removeInactiveVehicles()
     {
         //go through the active vehicles and check which are not present in the last packet
+    }
+
+    updateStatsInfo()
+    {
+        let simState = this.runningVisualisation() ? "Running" : "Paused";
+        $('#simState').html(simState);
+
+        $('#simTime').html(this.firstToDrawSimTime);
+
+        $('#vehCount').html(this.activeVehicles.length);
     }
 
 

@@ -54,6 +54,23 @@ body {
     padding: 12px 18px;
     font-size: smaller;
     float: left;
+    width: 250px;
+    border-right: 1px black solid;
+    height: 18px;
+}
+
+#stats
+{
+    float: left;
+}
+
+#stats > div
+{
+    float: left;
+    height: 31px;
+    border-right: 1px black solid;
+    font-size: smaller;
+    padding: 5px 18px;
 }
 
 svg

@@ -1,30 +1,18 @@
-function loadSituationLayout()
-{
+function loadSituationLayout() {
     $.ajax({
         method: "GET",
         url: "http://localhost:8080/getMap",
         dataType: "json",
         async: false
     })
-    .done(function( msg ) {
-        $('#response').html(JSON.stringify(msg, null, 2));
-        jsonToMapDtos(msg);
-    });
+        .done(function (msg) {
+            $('#response').html(JSON.stringify(msg, null, 2));
+            jsonToMapDtos(msg);
+        })
+        .fail(function () {
+            $('#selectedIntersection').html("Cannot connect to the backend!")
+        });
 }
-
-function getSimulationData()
-{
-    $.ajax({
-        method: "GET",
-        url: "http://localhost:8080/getData",
-        dataType: "json"
-    })
-    .done(function( msg ) {
-        $('#response').html(JSON.stringify(msg, null, 2));
-        jsonToSimulationDtos(msg);
-    });
-}
-
 function postConfiguration()
 {
     $.ajax({
@@ -72,6 +60,7 @@ function runSimulation()
         method: "GET",
         url: "http://localhost:8080/initSimulation",
         dataType: "json",
+        async: false
     })
     .done(function( msg ) {
         doSimulationStep(5);
