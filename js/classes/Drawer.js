@@ -62,16 +62,16 @@ class Drawer
             .attr("title", "test");
     }
 
-    _drawPoint(coordinates, color)
+    _drawPoint(coordinates, color = redColor, size = 10)
     {
-        return this.situation.canvas.circle(10)
+        return this.situation.canvas.circle(size)
             .move(coordinates.__x, coordinates.__y)
             .fill({
                     color: color
              });
     }
 
-    drawLane(intersectionCoordinates, leg, offset, order)
+    drawLane(intersectionCoordinates, leg, offset, order, lane)
     {
         let coordinatesList = [];
 
@@ -82,9 +82,36 @@ class Drawer
         coordinatesList[2] = moveCoordinatesByOffset(leg.coordinates, angle, offset * (order + 1));
         coordinatesList[3] = moveCoordinatesByOffset(leg.coordinates, angle, offset * order);
 
-        return this.__drawPolygon(coordinatesList, whiteColor, 1, blackColor, leg.id);
+
+        let semaphoreWidth = 7;
+
+        //points which are on the lane outer border
+        let outside1 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 75);
+        let outside2 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 80);
+        let outside3 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 85);
+        let outside4 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 90);
+
+        //points inside the lane
+        let inner1 = moveCoordinatesByOffset(outside1, leg.angle - 90, semaphoreWidth);
+        let inner2 = moveCoordinatesByOffset(outside2, leg.angle - 90, semaphoreWidth);
+        let inner3 = moveCoordinatesByOffset(outside3, leg.angle - 90, semaphoreWidth);
+        let inner4 = moveCoordinatesByOffset(outside4, leg.angle - 90, semaphoreWidth);
+
+        let laneSvg = this.__drawPolygon(coordinatesList, whiteColor, 1, blackColor, leg.id);
+
+        if(lane.isInputLane)
+        {
+            let redSvg = this.__drawPolygon([outside1, outside2, inner2, inner1], whiteColor, 1, blackColor, leg.id);
+            let yellowSvg = this.__drawPolygon([outside2, outside3, inner3, inner2], whiteColor, 1, blackColor, leg.id);
+            let greenSvg = this.__drawPolygon([outside3, outside4, inner4, inner3], whiteColor, 1, blackColor, leg.id);
+
+            let semaphore = new Semaphore(greenSvg, yellowSvg, redSvg);
+            lane.setSemaphore(semaphore);
+        }
+
+        return laneSvg;
     }
-    
+        
     getTrianglePointPosition(leg, closestPointToOtherLeg, distanceBetweenClosestPoints, index)
     {
         if(index===0)
@@ -303,7 +330,7 @@ class Drawer
 
                 for(let k = 0; k < leg.laneList.length; k++)
                 {
-                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k);
+                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, true);
 
                     laneSvg.on("mouseover", function() {
                         this.style("cursor", "pointer");
@@ -318,7 +345,7 @@ class Drawer
 
                 for(let k = leg.outputLanesCount * (-1); k < 0; k++)
                 {
-                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k);
+                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, false);
 
                     laneSvg.on("mouseover", function() {
                         this.style("cursor", "pointer");
