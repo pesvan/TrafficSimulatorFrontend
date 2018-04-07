@@ -64,4 +64,11 @@ class Semaphore
     {
         this.redSvg.fill({ color: blackColor });
     }
+
+    turnOff()
+    {
+        this.setGreenOff();
+        this.setYellowOff();
+        this.setRedOff();
+    }
 }

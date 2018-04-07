@@ -1,12 +1,11 @@
 class Lane
 {
-    constructor(id, left, right, straight, isInputLane)
+    constructor(id, left, right, straight)
     {
         this.id = id;
         this.left = left;
         this.right = right;
         this.straight = straight;
-        this.isInputLane = isInputLane;
         this.semaphore = undefined;
     }
 

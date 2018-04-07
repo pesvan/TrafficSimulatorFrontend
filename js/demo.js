@@ -95,6 +95,20 @@ function jsonToSimulationDtos(json)
             simTimeDto.addVehicleState(vehicleState);
         }
 
+        let jsonTlStates = json[i].tlState;
+
+        for (let t = 0; t <jsonTlStates.length; t++)
+        {
+            let jsonTlStateInTime = jsonTlStates[t];
+            let laneId = jsonTlStateInTime.laneId;
+            let lane = getLaneById(laneId, situation.intersectionList);
+            let state  = jsonTlStateInTime.laneState;
+
+            let tlState = new TlState(lane, state);
+
+            simTimeDto.addTlState(tlState);
+        }
+
         simulation.addSimulationStep(simTimeDto);
     }
 
@@ -185,8 +199,6 @@ function jsonToMapDtos(json)
             getLegById(jsonConnection.leg2Id, situation.intersectionList)));
     }
 
-
-
 }
 
 function getLegById(id, intersectionList)
@@ -200,6 +212,26 @@ function getLegById(id, intersectionList)
             if(leg.id === id)
             {
                 return leg;
+            }
+        }
+    }
+    return undefined;
+}
+
+function getLaneById(id, intersectionList)
+{
+    for (let i = 0; i < intersectionList.length; i++)
+    {
+        let intersection = intersectionList[i];
+        for (let l = 0; l < intersection.legList.length; l++)
+        {
+            let leg = intersection.legList[l];
+            for (let k = 0; k < leg.laneList.length; k++)
+            {
+                if(id == leg.laneList[k].id)
+                {
+                    return leg.laneList[k];
+                }
             }
         }
     }

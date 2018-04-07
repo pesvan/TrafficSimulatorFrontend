@@ -71,7 +71,7 @@ class Drawer
              });
     }
 
-    drawLane(intersectionCoordinates, leg, offset, order, lane)
+    drawLane(intersectionCoordinates, leg, offset, order, lane = undefined)
     {
         let coordinatesList = [];
 
@@ -99,7 +99,7 @@ class Drawer
 
         let laneSvg = this.__drawPolygon(coordinatesList, whiteColor, 1, blackColor, leg.id);
 
-        if(lane.isInputLane)
+        if(lane !== undefined)
         {
             let redSvg = this.__drawPolygon([outside1, outside2, inner2, inner1], whiteColor, 1, blackColor, leg.id);
             let yellowSvg = this.__drawPolygon([outside2, outside3, inner3, inner2], whiteColor, 1, blackColor, leg.id);
@@ -295,6 +295,7 @@ class Drawer
                 }).move(
                     vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x,
                     vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y).play();
+
             }
             else
             {
@@ -307,6 +308,11 @@ class Drawer
                 let svg = context._drawPoint(coords, redColor);
                 vehicleState.vehicle.setSvg(svg);
             }
+        }
+        let tlStates = step.tlStates;
+        for (let ts = 0; ts < tlStates.length; ts++)
+        {
+            tlStates[ts].setSemaphoreState();
         }
     }
 
@@ -330,7 +336,7 @@ class Drawer
 
                 for(let k = 0; k < leg.laneList.length; k++)
                 {
-                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, true);
+                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, leg.laneList[k]);
 
                     laneSvg.on("mouseover", function() {
                         this.style("cursor", "pointer");
@@ -345,7 +351,7 @@ class Drawer
 
                 for(let k = leg.outputLanesCount * (-1); k < 0; k++)
                 {
-                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, false);
+                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k);
 
                     laneSvg.on("mouseover", function() {
                         this.style("cursor", "pointer");
