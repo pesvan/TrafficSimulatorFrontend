@@ -18,9 +18,9 @@ class Drawer
             movedCoordinates[1].__x, movedCoordinates[1].__y).stroke({ width: 3, color: selectedColor });
     }
 
-    __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id)
+    __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id, isVehicle)
     {
-        let movedCoordinates = this.moveListToOffset(coordinatesList);
+        let movedCoordinates = this.moveListToOffset(coordinatesList, isVehicle);
 
         let polyString = "";
         for ( let i = 0; i < movedCoordinates.length; i++)
@@ -280,6 +280,12 @@ class Drawer
 
     simulateSimulationStep(step, context)
     {
+        let tlStates = step.tlStates;
+        for (let ts = 0; ts < tlStates.length; ts++)
+        {
+            tlStates[ts].setSemaphoreState();
+        }
+
         let vehicleStates = step.vehicleStates;
         for(let vs = 0; vs < vehicleStates.length; vs++)
         {
@@ -287,33 +293,81 @@ class Drawer
 
             if (vehicleState.vehicle.vehicleIsSet())
             {
-                console.log("vehicle moved to", vehicleState.vehicle.id, vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x,
-                    vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y);
+                console.log("vehicle", vehicleState.vehicle.id," moved to", vehicleState.polygonCoordinates.getPointsArray());
+
+                let coords = vehicleState.polygonCoordinates.getPointsArray();
+
+                let movedCoords = this.moveListToOffset(coords, true);
+
                 vehicleState.vehicle.svg.animate({
                     ease: '-',
                     duration: 500
-                }).move(
-                    vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x,
-                    vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y).play();
+                }).plot(
+                    [
+                        [movedCoords[0].__x, movedCoords[0].__y],
+                        [movedCoords[1].__x, movedCoords[1].__y],
+                        [movedCoords[2].__x, movedCoords[2].__y],
+                        [movedCoords[3].__x, movedCoords[3].__y]
+                    ]);
+
+                vehicleState.vehicle.leftBlinkerSvg.animate({ease: '-',duration: 500}).move(movedCoords[0].__x, movedCoords[0].__y);
+                vehicleState.vehicle.leftBrakeSvg.animate({ease: '-',duration: 500}).move(movedCoords[1].__x, movedCoords[1].__y);
+
+                vehicleState.vehicle.rightBrakeSvg.animate({ease: '-',duration: 500}).move(movedCoords[2].__x, movedCoords[2].__y);
+                vehicleState.vehicle.rightBlinkerSvg.animate({ease: '-',duration: 500}).move(movedCoords[3].__x, movedCoords[3].__y);
+
+                if(vehicleState.isBraking())
+                {
+                    vehicleState.vehicle.leftBrakeSvg.fill({color: redColor}).show();
+                    vehicleState.vehicle.rightBrakeSvg.fill({color: redColor}).show();
+                }
+                else
+                {
+                    vehicleState.vehicle.leftBrakeSvg.fill({color: whiteColor}).hide();
+                    vehicleState.vehicle.rightBrakeSvg.fill({color: whiteColor}).hide();
+                }
+
+                if(vehicleState.isSignallingLeft())
+                {
+                    vehicleState.vehicle.leftBlinkerSvg.fill({color: orangeColor}).show();
+                }
+                else
+                {
+                    vehicleState.vehicle.leftBlinkerSvg.fill({color: whiteColor}).hide();
+                }
+
+                if(vehicleState.isSignallingRight())
+                {
+                    vehicleState.vehicle.rightBlinkerSvg.fill({color: orangeColor}).show();
+                }
+                else
+                {
+                    vehicleState.vehicle.rightBlinkerSvg.fill({color: whiteColor}).hide();
+                }
+
 
             }
             else
             {
-                let coords = vehicleState.coords;
-
-                coords.__x = vehicleState.coords.__x + context.xOffset + context.situation.vehicleBase.__x;
-                coords.__y = vehicleState.coords.__y + context.yOffset - context.situation.vehicleBase.__y;
+                let coords = vehicleState.polygonCoordinates.getPointsArray();
 
                 console.log("init vehicle", vehicleState.vehicle.id, coords);
-                let svg = context._drawPoint(coords, redColor);
+                let svg = context.__drawPolygon(coords, vehicleState.color, 1, vehicleState.color, vehicleState.vehicle.id, true);
+
                 vehicleState.vehicle.setSvg(svg);
+
+                vehicleState.vehicle.setBlinkers(
+                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.frontLeft), whiteColor, 3).hide(),
+                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.frontRight), whiteColor, 3).hide()
+                );
+
+                vehicleState.vehicle.setBrakes(
+                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.backLeft), whiteColor, 3).hide(),
+                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.backRight), whiteColor, 3).hide()
+                );
             }
         }
-        let tlStates = step.tlStates;
-        for (let ts = 0; ts < tlStates.length; ts++)
-        {
-            tlStates[ts].setSemaphoreState();
-        }
+
     }
 
 
@@ -430,13 +484,20 @@ class Drawer
         }
     }
 
-    moveListToOffset(coordinatesList)
+    moveListToOffset(coordinatesList, isVehicle = false)
     {
         let newCoordinatesList = [];
 
         for (let i = 0; i < coordinatesList.length; i++)
         {
-            newCoordinatesList[i] = this.moveToOffset(coordinatesList[i]);
+            if(isVehicle)
+            {
+                newCoordinatesList[i] = this.moveToVehicleOffset(coordinatesList[i]);
+            }
+            else
+            {
+                newCoordinatesList[i] = this.moveToOffset(coordinatesList[i]);
+            }
         }
 
         return newCoordinatesList;
@@ -445,6 +506,13 @@ class Drawer
     moveToOffset(coordinates)
     {
         return new Coords(coordinates.__x + this.xOffset, coordinates.__y + this.yOffset);
+    }
+
+    moveToVehicleOffset(coordinates)
+    {
+        return new Coords(
+            coordinates.__x + this.xOffset + this.situation.vehicleBase.__x,
+            coordinates.__y + this.yOffset - this.situation.vehicleBase.__y);
     }
 
 }

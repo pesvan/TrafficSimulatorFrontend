@@ -79,7 +79,13 @@ function jsonToSimulationDtos(json)
             );
             let angle = jsonVehicleStateInTime.angle;
             let signaling = jsonVehicleStateInTime.signaling;
-            let vehicleState = new VehicleState(coords, angle, signaling);
+
+            let length = jsonVehicleStateInTime.vehLength;
+            let width = jsonVehicleStateInTime.vehWidth;
+            let color = jsonVehicleStateInTime.hexColor;
+
+            let vehicleState = new VehicleState(coords, angle, signaling, length, width, color);
+
 
             let existingVehicle = findVehicleById(simulation.activeVehicles, id);
             if (existingVehicle == null) {

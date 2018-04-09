@@ -72,7 +72,7 @@ class Simulation
             let vehicle = findVehicleById(vehiclesInCurrentStep, setVehicles[i].id);
             if(vehicle===null)
             {
-                setVehicles[i].svg.remove();
+                setVehicles[i].removeSvg();
                 let index = this.activeVehicles.indexOf(setVehicles[i]);
                 if(index > -1)
                 {
@@ -88,7 +88,7 @@ class Simulation
         {
             if(this.activeVehicles[i].vehicleIsSet())
             {
-                this.activeVehicles[i].svg.remove();
+                this.activeVehicles[i].removeSvg();
             }
         }
         this.activeVehicles = [];
