@@ -4,17 +4,20 @@
  */
 
 // instance of a layout
-let situation = new Situation();
+let situation;
 
 //instance of a simulation
-let simulation = new Simulation();
+let simulation;
 
 // instance of a drawer
-let drawer = new Drawer(situation);
+let drawer;
 loadAndDrawLayout();
 
 function loadAndDrawLayout()
 {
+    situation = new Situation();
+    simulation = new Simulation();
+    drawer = new Drawer(situation);
     loadSituationLayout();
     situation.initCanvas();
     drawer.setOffset();
