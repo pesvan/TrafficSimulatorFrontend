@@ -86,10 +86,10 @@ class Drawer
         let semaphoreWidth = 7;
 
         //points which are on the lane outer border
-        let outside1 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 75);
-        let outside2 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 80);
-        let outside3 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 85);
-        let outside4 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 90);
+        let outside1 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 5);
+        let outside2 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 10);
+        let outside3 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 15);
+        let outside4 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 20);
 
         //points inside the lane
         let inner1 = moveCoordinatesByOffset(outside1, leg.angle - 90, semaphoreWidth);
