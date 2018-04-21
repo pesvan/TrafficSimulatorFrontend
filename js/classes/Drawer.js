@@ -386,7 +386,17 @@ class Drawer
 
                 let angle = leg.angle;
 
-                let movedIntersectionCoords = moveCoordinatesByOffset(intersection.coordinates, angle , offset*-1);
+                let movedIntersectionCoords;
+
+                if (intersection.is2Legs180())
+                {
+                    movedIntersectionCoords =  moveCoordinatesByOffset(intersection.coordinates, angle , (offset/5)*-1);
+                }
+                else
+                {
+                    movedIntersectionCoords = moveCoordinatesByOffset(intersection.coordinates, angle , offset*-1);
+                }
+
 
                 for(let k = 0; k < leg.laneList.length; k++)
                 {
@@ -434,7 +444,7 @@ class Drawer
                 leg.setEndBorderCoords(leftEndPoint, rightEndPoint);
             }
 
-       /*     let intersectionCenter = this.drawCenter(intersectionBorders, intersection.id);
+            let intersectionCenter = this.drawCenter(intersectionBorders, intersection.id);
             intersection.setSvg(intersectionCenter);
             let click = function()
             {
@@ -464,7 +474,7 @@ class Drawer
 
             intersectionCenter.on("mouseover", mouseover, this);
 
-            intersectionCenter.on("mouseout", mouseout, this);*/
+            intersectionCenter.on("mouseout", mouseout, this);
         }
     }
 
