@@ -9,6 +9,7 @@ for (let i = 0; i < modalCloseButtons.length; i++)
         modalAddIntersection.style.display = "none";
         modalShowLastResponse.style.display = "none";
         modalAddLane.style.display = "none";
+        modalChangeLane.style.display = "none";
     };
 }
 
@@ -22,5 +23,8 @@ window.onclick = function(event) {
     }
     if (event.target === modalAddLane) {
         modalAddLane.style.display = "none";
+    }
+    if (event.target === modalChangeLane) {
+        modalChangeLane.style.display = "none";
     }
 };

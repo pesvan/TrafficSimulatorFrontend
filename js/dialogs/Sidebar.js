@@ -36,6 +36,16 @@ function updateSituationSidebar(situation)
         $('#selectedLane').show();
         $('#selectedLaneText').html(
             situation.selectedLane.toSelectedString());
+
+        let changeLaneLeftCheckbox = $("#changeLaneLeft");
+        let changeLaneRightCheckbox = $("#changeLaneRight");
+        let changeLaneStraightCheckbox = $("#changeLaneStraight");
+
+
+        situation.selectedLane.left ? changeLaneLeftCheckbox.prop('checked', true) : changeLaneLeftCheckbox.prop('checked', false);
+        situation.selectedLane.right ? changeLaneRightCheckbox.prop('checked', true) : changeLaneRightCheckbox.prop('checked', false);
+        situation.selectedLane.straight ? changeLaneStraightCheckbox.prop('checked', true) : changeLaneStraightCheckbox.prop('checked', false);
+
     }
     else
     {

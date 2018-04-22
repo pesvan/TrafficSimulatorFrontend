@@ -1,16 +1,6 @@
-let addLaneLeft;
-let addLaneRight;
-let addLaneStraight;
-
-
-document.getElementById('addLaneLeft')
-    .addEventListener('change', readDirectionLeft, false);
-
-document.getElementById('addLaneRight')
-    .addEventListener('change', readDirectionRight, false);
-
-document.getElementById('addLaneStraight')
-    .addEventListener('change', readDirectionStraight, false);
+let addLaneLeft = document.getElementById('addLaneLeft');
+let addLaneRight = document.getElementById('addLaneRight');
+let addLaneStraight = document.getElementById('addLaneStraight');
 
 
 let modalAddLane = document.getElementById('modalAddLane');
@@ -26,18 +16,6 @@ addLaneButton.onclick = openAddLaneDialog;
 function openAddLaneDialog()
 {
     modalAddLane.style.display = "block";
-}
-
-function readDirectionLeft(e) {
-    addLaneLeft = e.target.value;
-}
-
-function readDirectionRight(e) {
-    addLaneRight = e.target.value;
-}
-
-function readDirectionStraight(e) {
-    addLaneStraight = e.target.value;
 }
 
 function closeAddLaneForm()
