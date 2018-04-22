@@ -64,3 +64,9 @@ $('#sendConfiguration')
         modalAddIntersection.style.display
         postConfiguration();
     });
+
+$('#deleteIntersectionButton')
+    .on("click", function()
+    {
+        deleteIntersection();
+    });

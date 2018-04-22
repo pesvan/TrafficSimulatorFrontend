@@ -13,6 +13,7 @@ function loadSituationLayout() {
             $('#selectedIntersection').html("Cannot connect to the backend!")
         });
 }
+
 function postConfiguration()
 {
     $.ajax({
@@ -34,6 +35,22 @@ function postConfiguration()
         loadAndDrawLayout();
     })
     .fail(function(msg){
+        console.log(msg);
+    });
+}
+
+function deleteIntersection()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/deleteIntersection?intersectionId=" + situation.selectedIntersection.id,
+        dataType: "json",
+    })
+    .done(function(){
+        loadAndDrawLayout();
+    })
+    .fail(function(msg)
+    {
         console.log(msg);
     });
 }
