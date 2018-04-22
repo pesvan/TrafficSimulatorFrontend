@@ -34,7 +34,7 @@ function updateSituationSidebar(situation)
     if(situation.isSelectedLane())
     {
         $('#selectedLane').show();
-        $('#selectedLaneText').html(
+        $('#selectedLaneValue').html(
             situation.selectedLane.toSelectedString());
 
         let changeLaneLeftCheckbox = $("#changeLaneLeft");
