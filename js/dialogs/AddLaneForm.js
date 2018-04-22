@@ -28,3 +28,9 @@ $('#addLaneFinalButton')
     {
         addLane();
     });
+
+$('#deleteLaneButton')
+    .on("click", function()
+    {
+        deleteLane();
+    });

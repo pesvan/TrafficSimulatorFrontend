@@ -95,6 +95,30 @@ function changeLane()
         });
 }
 
+function deleteLane()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/laneOperation",
+        dataType: "json",
+        contentType: "application/json",
+
+        data:
+            {
+                legId: situation.selectedLane.legId,
+                intersectionId: situation.selectedLane.intersectionId,
+                laneId: situation.selectedLane.id,
+                operation: "delete"
+            }
+    })
+        .done(function(){
+            loadAndDrawLayout();
+        })
+        .fail(function(msg){
+            console.log(msg);
+        });
+}
+
 function deleteIntersection()
 {
     $.ajax({
