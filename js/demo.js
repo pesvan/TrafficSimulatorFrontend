@@ -189,7 +189,7 @@ function jsonToMapDtos(json)
                 let jsonLane = jsonLeg.laneList[k];
                 let laneId = jsonLane.id;
                 laneList[k] = new Lane(laneId,
-                    jsonLane.left, jsonLane.right, jsonLane.straight);
+                    jsonLane.left, jsonLane.right, jsonLane.straight, legId, intersectionId);
             }
 
 			legList[l] = new Leg(legId, legAngle, outputLanesCount, legCoordinates, laneList);

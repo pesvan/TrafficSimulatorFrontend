@@ -39,6 +39,34 @@ function postConfiguration()
     });
 }
 
+function addLane()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/laneOperation",
+        dataType: "json",
+        contentType: "application/json",
+
+        data:
+            {
+                legId: situation.selectedLane.legId,
+                intersectionId: situation.selectedLane.intersectionId,
+                paramLeft: addLaneLeft,
+                paramRight: addLaneRight,
+                paramStraight: addLaneStraight,
+                laneId: situation.selectedLane.id,
+                operation: "add"
+            }
+    })
+        .done(function(){
+            closeAddLaneForm();
+            loadAndDrawLayout();
+        })
+        .fail(function(msg){
+            console.log(msg);
+        });
+}
+
 function deleteIntersection()
 {
     $.ajax({

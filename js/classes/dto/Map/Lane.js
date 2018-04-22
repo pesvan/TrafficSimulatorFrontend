@@ -1,6 +1,6 @@
 class Lane
 {
-    constructor(id, left, right, straight)
+    constructor(id, left, right, straight, legId, intersectionId)
     {
         this.id = id;
         this.left = left;
@@ -8,6 +8,8 @@ class Lane
         this.straight = straight;
         this.semaphore = undefined;
         this.svg = undefined;
+        this.legId = legId;
+        this.intersectionId = intersectionId;
     }
 
     setSemaphore(semaphore)

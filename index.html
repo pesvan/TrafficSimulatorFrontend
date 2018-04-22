@@ -56,6 +56,10 @@
                 <div id="selectedLaneText">
 
                 </div>
+                <br>
+                <div id="addLaneButton">
+                    <button>ADD NEW INPUT LANE</button>
+                </div>
             </div>
 
 
@@ -127,6 +131,23 @@
         </div>
     </div>
 
+    <div id="modalAddLane" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Add lane</h3>
+            Set directions:
+            <label for="addLaneLeft">Left</label>
+            <input type="checkbox" id="addLaneLeft"/>
+            <label for="addLaneRight">Right</label>
+            <input type="checkbox" id="addLaneRight"/>
+            <label for="addLaneStraight">Straight</label>
+            <input type="checkbox" id="addLaneStraight"/>
+
+            <br>
+            <button id="addLaneFinalButton">Add lane</button>
+        </div>
+    </div>
+
 
     <div id="modalShowLastResponse" class="modal">
         <div class="modal-content">
@@ -143,5 +164,6 @@
     <script type="text/javascript" src="js/SimulationControl.js"></script>
     <script type="text/javascript" src="js/dialogs/CloseButton.js"></script>
     <script type="text/javascript" src="js/dialogs/AddIntersectionForm.js"></script>
+    <script type="text/javascript" src="js/dialogs/AddLaneForm.js"></script>
     <script type="text/javascript" src="js/dialogs/ShowLastResponse.js"></script>
 </html>
