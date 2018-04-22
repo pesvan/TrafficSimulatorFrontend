@@ -83,24 +83,26 @@ class Drawer
         coordinatesList[3] = moveCoordinatesByOffset(leg.coordinates, angle, offset * order);
 
 
-        let semaphoreWidth = 7;
 
-        //points which are on the lane outer border
-        let outside1 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 5);
-        let outside2 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 10);
-        let outside3 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 15);
-        let outside4 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 20);
-
-        //points inside the lane
-        let inner1 = moveCoordinatesByOffset(outside1, leg.angle - 90, semaphoreWidth);
-        let inner2 = moveCoordinatesByOffset(outside2, leg.angle - 90, semaphoreWidth);
-        let inner3 = moveCoordinatesByOffset(outside3, leg.angle - 90, semaphoreWidth);
-        let inner4 = moveCoordinatesByOffset(outside4, leg.angle - 90, semaphoreWidth);
 
         let laneSvg = this.__drawPolygon(coordinatesList, whiteColor, 1, blackColor, leg.id);
 
         if(lane !== undefined)
         {
+            let semaphoreWidth = 4;
+
+            //points which are on the lane outer border
+            let outside1 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 5);
+            let outside2 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 10);
+            let outside3 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 15);
+            let outside4 = moveCoordinatesByOffset(coordinatesList[1], leg.angle - 180, 20);
+
+            //points inside the lane
+            let inner1 = moveCoordinatesByOffset(outside1, leg.angle - 90, semaphoreWidth);
+            let inner2 = moveCoordinatesByOffset(outside2, leg.angle - 90, semaphoreWidth);
+            let inner3 = moveCoordinatesByOffset(outside3, leg.angle - 90, semaphoreWidth);
+            let inner4 = moveCoordinatesByOffset(outside4, leg.angle - 90, semaphoreWidth);
+
             let redSvg = this.__drawPolygon([outside1, outside2, inner2, inner1], whiteColor, 1, blackColor, leg.id);
             let yellowSvg = this.__drawPolygon([outside2, outside3, inner3, inner2], whiteColor, 1, blackColor, leg.id);
             let greenSvg = this.__drawPolygon([outside3, outside4, inner4, inner3], whiteColor, 1, blackColor, leg.id);
@@ -293,8 +295,6 @@ class Drawer
 
             if (vehicleState.vehicle.vehicleIsSet())
             {
-                console.log("vehicle", vehicleState.vehicle.id," moved to", vehicleState.polygonCoordinates.getPointsArray());
-
                 let coords = vehicleState.polygonCoordinates.getPointsArray();
 
                 let movedCoords = this.moveListToOffset(coords, true);
@@ -373,7 +373,7 @@ class Drawer
 
     drawIntersection(intersectionList)
     {
-        let offset = 20;
+        let offset = 16;
 
         for (let i = 0; i < intersectionList.length; i++)
         {
