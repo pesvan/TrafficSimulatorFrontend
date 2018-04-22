@@ -4,16 +4,31 @@ body {
     background: #555;
 }
 
-#header {
+.container
+{
+    overflow: hidden;
+}
+
+#canvas
+{
+    margin-left: 300px;
+}
+
+#sidebar {
     color: #f1f1f1;
-    height: 41px;
-    border-bottom: 1px black solid;
+    width: 300px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    background: #555;
+
 }
 
 .sticky {
-    position: fixed;
+    position: fixed!important;
     top: 0;
-    width: 100%;
+    bottom: 0;
+    width: 300px;
 }
 
 #title

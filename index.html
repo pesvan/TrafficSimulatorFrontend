@@ -28,8 +28,8 @@
 
     </head>
 	<body>
-	<div id="page">
-        <div id="header">
+	<div class="container">
+        <div id="sidebar">
             <div id="title">TRAFFIC SIMULATOR</div>
             <div id="selectedIntersection">no selected intersection</div>
             <div id="buttons">
@@ -73,43 +73,45 @@
             <div id="tooltip"></div>
         </div>
 
-        <div id="modalAddIntersection" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h3>Add intersection</h3>
-                <label>Set angle:</label>
-                <input type="text" id="angle-input" placeholder="Angle"/><br>
-                <label>Position relative to selected intersection: </label>
-                <select id="position-input">
-                    <option value="left">left</option>
-                    <option value="right">right</option>
-                    <option value="up">up</option>
-                    <option value="down">down</option>
-                </select><br>
-                <label>XML file with configuration: </label>
-                <input type="file" id="file-input" />
-                <br>
-                <button id="sendConfiguration">Upload configuration</button>
-            </div>
+
+
+
+
+
+
         </div>
 
 
-        <div id="modalShowLastResponse" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <pre id="response">
+
+    <div id="canvas"> </div>
+
+    <div id="modalAddIntersection" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Add intersection</h3>
+            <label>Set angle:</label>
+            <input type="text" id="angle-input" placeholder="Angle"/><br>
+            <label>Position relative to selected intersection: </label>
+            <select id="position-input">
+                <option value="left">left</option>
+                <option value="right">right</option>
+                <option value="up">up</option>
+                <option value="down">down</option>
+            </select><br>
+            <label>XML file with configuration: </label>
+            <input type="file" id="file-input" />
+            <br>
+            <button id="sendConfiguration">Upload configuration</button>
+        </div>
+    </div>
+
+
+    <div id="modalShowLastResponse" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <pre id="response">
                 </pre>
-            </div>
         </div>
-
-
-
-        <div id="canvas">
-
-        </div>
-
-
-
     </div>
 
 	</body>
