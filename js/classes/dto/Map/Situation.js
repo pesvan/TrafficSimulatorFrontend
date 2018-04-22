@@ -32,6 +32,7 @@ class Situation
         this.intersectionCount = intersectionCount;
         this.routesCount = routesCount;
         this.vehicleBase = vehicleBase;
+        updateSituationSidebar(this);
     }
 
     getOffsetX()
@@ -83,6 +84,8 @@ class Situation
         //set as selected new one
         intersection.svg.fill({color: redColor});
         this.selectedIntersection = intersection;
-        $('#selectedIntersection').html("selected intersection<br>" + intersection.id + " " + intersection.grid.toPolyString());
+
+
+        updateSituationSidebar(this);
     }
 }

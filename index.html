@@ -3,6 +3,7 @@
 		<title>TrafficSimulator</title>
 		<script type="text/javascript" src="./lib/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="./lib/svg.js"></script>
+        <script type="text/javascript" src="js/dialogs/Sidebar.js"></script>
 		<script type="text/javascript" src="js/classes/dto/Coords.js"></script>
 		<script type="text/javascript" src="js/classes/dto/Map/Intersection.js"></script>
 		<script type="text/javascript" src="js/classes/dto/Map/ConnectingLeg.js"></script>
@@ -31,55 +32,67 @@
 	<div class="container">
         <div id="sidebar">
             <div id="title">TRAFFIC SIMULATOR</div>
-            <div id="selectedIntersection">no selected intersection</div>
-            <div id="buttons">
-                <div id="addIntersectionButton">
-                    <img src="img/buttons/add.png" title="Add intersection"/>
+            <div id="situationMetadata">
+                <b>Intersections: </b><span id="intersectionCount"></span>,
+                <b>Routes: <span id="routesCount"></span></b>
+            </div>
+            <div id="addIntersectionButtonFirst" class="buttonDiv">
+                <button>ADD FIRST INTERSECTION</button>
+            </div>
+            <div id="selectedIntersection">
+                <div id="selectedIntersectionText"><b>SELECTED INTERSECTION: &nbsp;</b></div>
+                <div id="selectedIntersectionValue"></div>
+                <br>
+                <div id="addIntersectionButton" class="buttonDiv">
+                    <button>ADD NEIGHBOR INTERSECTION</button>
                 </div>
-                <div id="showLastResponseButton">
-                    <img src="img/buttons/json.png" title="Show last JSON response"/>
-                </div>
-                <div id="runSimulationButton">
-                    <img src="img/buttons/play.png" title="Run simulation"/>
-                </div>
-                <div id="pauseSimulationButton">
-                    <img src="img/buttons/pause.png" title="Pause simulation"/>
-                </div>
-                <div id="stopSimulationButton">
-                    <img src="img/buttons/stop.png" title="Stop simulation"/>
-                </div>
-                <div id="resetAllButton">
-                    <img src="img/buttons/reload.png" title="Reset all"/>
+                <br>
+                <div id="deleteIntersectionButton" class="buttonDiv">
+                    <button>DELETE INTERSECTION</button>
                 </div>
             </div>
-            <div id="stats">
-                <div>
-                    <b>SIMULATION</b><br>
-                    <span id="simState"></span>
-                </div>
-                <div>
-                    <b>SIMULATION TIME</b><br>
-                    <span id="simTime"></span>
-                </div>
-                <div>
-                    <b>VEHICLES COUNT</b><br>
-                    <span id="vehCount"></span>
-                </div>
-            </div>
-            <div id="sliderDiv">
-                <b>TRAFFIC DENSITY</b><br>
-                <input type="range" min="0" max="19" value="5" class="slider" id="myRange"/>
-            </div>
+
+
             <div id="tooltip"></div>
+            <div id="simulation">
+                <div id="buttons">
+
+
+                    <div id="runSimulationButton" class="button">
+                        <img src="img/buttons/play.png" title="Run simulation"/>
+                    </div>
+                    <div id="pauseSimulationButton" class="button">
+                        <img src="img/buttons/pause.png" title="Pause simulation"/>
+                    </div>
+                    <div id="stopSimulationButton" class="button">
+                        <img src="img/buttons/stop.png" title="Stop simulation"/>
+                    </div>
+
+                </div>
+                <br><br><br>
+                <div id="stats">
+                    <b>Simulation state: </b>
+                    <span id="simState"></span><br>
+
+                    <b>Simulation time: </b>
+                    <span id="simTime"></span><br>
+                    <b>Vehicles count: </b>
+                    <span id="vehCount"></span><br>
+                </div>
+                <div id="sliderDiv">
+                    <b>Traffic density: </b><br>
+                    <input type="range" min="0" max="19" value="5" class="slider" id="myRange"/>
+                </div>
+            </div>
+            <div id="showLastResponseButton" class="button">
+                <img src="img/buttons/json.png" title="Show last JSON response"/>
+            </div>
+            <div id="resetAllButton" class="button">
+                <img src="img/buttons/reload.png" title="Reset all"/>
+            </div>
+
         </div>
-
-
-
-
-
-
-
-        </div>
+    </div>
 
 
 
@@ -89,15 +102,18 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h3>Add intersection</h3>
-            <label>Set angle:</label>
+            <label>Rotate intersection by angle [0-360]:</label>
             <input type="text" id="angle-input" placeholder="Angle"/><br>
-            <label>Position relative to selected intersection: </label>
-            <select id="position-input">
-                <option value="left">left</option>
-                <option value="right">right</option>
-                <option value="up">up</option>
-                <option value="down">down</option>
-            </select><br>
+            <div id="modalAddIntersectionPosition">
+                <label>Intersection position: </label>
+                <select id="position-input">
+                    <option value="left">Left from selected intersection</option>
+                    <option value="right">Right from selected intersection</option>
+                    <option value="up">Above selected intersection</option>
+                    <option value="down">Below selected intersection</option>
+                </select><br>
+            </div>
+
             <label>XML file with configuration: </label>
             <input type="file" id="file-input" />
             <br>

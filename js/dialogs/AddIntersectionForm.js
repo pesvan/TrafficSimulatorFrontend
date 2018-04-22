@@ -17,14 +17,18 @@ let modalAddIntersection = document.getElementById('modalAddIntersection');
 
 // Get the button that opens the modal
 let addIntersectionButton = document.getElementById("addIntersectionButton");
+let addFirstIntersectionButton = document.getElementById("addIntersectionButtonFirst");
 
 
 
 // When the user clicks the button, open the modal
-addIntersectionButton.onclick = function() {
-    modalAddIntersection.style.display = "block";
-};
+addIntersectionButton.onclick = openAddIntersectionDialog;
+addFirstIntersectionButton.onclick = openAddIntersectionDialog;
 
+function openAddIntersectionDialog()
+{
+    modalAddIntersection.style.display = "block";
+}
 
 
 function readSingleFile(e) {

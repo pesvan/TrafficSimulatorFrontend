@@ -34,7 +34,7 @@ setInterval(visualization, 500);
 
 function visualization()
 {
-    simulation.updateStatsInfo();
+    updateSimulationSidebar(simulation);
 
     if(simulation.visualizationRunning)
     {

@@ -14,6 +14,28 @@ body {
     margin-left: 300px;
 }
 
+#situationMetadata
+{
+    font-size: smaller;
+    border-bottom: 1px black solid;
+    padding: 10px;
+}
+
+button
+{
+    text-align: center;
+    font-size: smaller;
+    border: 2px solid #AAAAAA;
+    background: #555555;
+    color: white;
+}
+
+button:hover
+{
+    background: #333333;
+    cursor: pointer;
+}
+
 #sidebar {
     color: #f1f1f1;
     width: 300px;
@@ -21,6 +43,7 @@ body {
     bottom: 0;
     position: absolute;
     background: #555;
+    border-right: solid black 1px;
 
 }
 
@@ -35,57 +58,54 @@ body {
 {
     padding: 12px 18px;
     font-weight: bolder;
-    float: left;
-    border-right: 1px black solid;
+    border-bottom: 1px black solid;
     overflow: hidden;
+    text-align: center;
 }
 
 #selectedIntersection {
-    padding: 5px 18px;
-    text-align: center;
+    padding: 10px;
     font-size: smaller;
+    border-bottom: 1px black solid;
+}
+
+#addIntersectionButtonFirst
+{
+    padding: 10px;
+    font-size: smaller;
+    border-bottom: 1px black solid;
+}
+
+#selectedIntersectionText {
     float: left;
 }
 
-#buttons
-{
-    padding-top: 1px;
-    float: left;
-}
 
-#buttons > div
+.button
 {
     float: left;
-    margin-left: 5px;
+    margin-right: 5px;
     cursor: pointer;
 }
 
-#buttons > div:hover
+.button:hover
 {
     background-color: #333;
 }
 
 #tooltip {
-    padding: 12px 18px;
+    padding: 10px;
     font-size: smaller;
-    float: left;
-    width: 250px;
-    border-right: 1px black solid;
-    height: 18px;
+    border-bottom: 1px black solid;
+    height: 50px;
 }
 
-#stats
+#simulation
 {
-    float: left;
-}
-
-#stats > div
-{
-    float: left;
-    height: 31px;
-    border-right: 1px black solid;
+    padding: 10px;
     font-size: smaller;
-    padding: 5px 18px;
+    border-bottom: 1px black solid;
+
 }
 
 svg
@@ -93,14 +113,7 @@ svg
     background: green;
 }
 
-#sliderDiv
-{
-    font-size: smaller;
-    padding: 5px 18px;
-    float: left;
-    border-right: 1px black solid;
-    height: 31px;
-}
+
 
 .slider {
     -webkit-appearance: none;

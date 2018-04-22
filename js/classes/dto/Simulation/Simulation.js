@@ -25,7 +25,7 @@ class Simulation
         this.removeAllVehicles();
         this.simulationStepsToDraw = [];
         this.firstToDrawSimTime = 0;
-        this.updateStatsInfo();
+        updateSimulationSidebar(this);
         stopSimulation();
     }
 
@@ -94,22 +94,6 @@ class Simulation
         this.activeVehicles = [];
     }
 
-    updateStatsInfo()
-    {
-        let simState = "";
-        if(!this.runningVisualisation() && this.firstToDrawSimTime === 0)
-        {
-            simState = "Stopped";
-        } else if (this.firstToDrawSimTime > 0)
-        {
-            simState = this.runningVisualisation() ? "Running" : "Paused";
-        }
 
-        $('#simState').html(simState);
-
-        $('#simTime').html(this.firstToDrawSimTime);
-
-        $('#vehCount').html(this.activeVehicles.length);
-    }
 
 }
