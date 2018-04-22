@@ -26,11 +26,13 @@ function closeAddLaneForm()
 $('#addLaneFinalButton')
     .on("click", function()
     {
+        simulation.stopVisualisation();
         addLane();
     });
 
 $('#deleteLaneButton')
     .on("click", function()
     {
+        simulation.stopVisualisation();
         deleteLane();
     });

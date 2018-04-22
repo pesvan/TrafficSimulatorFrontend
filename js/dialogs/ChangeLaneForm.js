@@ -25,5 +25,6 @@ function closeChangeLaneForm()
 $('#changeLaneFinalButton')
     .on("click", function()
     {
+        simulation.stopVisualisation();
         changeLane();
     });

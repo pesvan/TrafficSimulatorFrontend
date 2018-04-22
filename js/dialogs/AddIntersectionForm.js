@@ -61,12 +61,13 @@ function closeAddIntersectionForm()
 $('#sendConfiguration')
     .on("click", function()
     {
-        modalAddIntersection.style.display
+        simulation.stopVisualisation();
         postConfiguration();
     });
 
 $('#deleteIntersectionButton')
     .on("click", function()
     {
+        simulation.stopVisualisation();
         deleteIntersection();
     });

@@ -36,7 +36,7 @@ class Lane
 
     toSelectedString()
     {
-        return "Lane directions:<br>" +
+        return this.id + "<br>Lane directions:<br>" +
             "Left:"
             + (this.left ? "Yes" : "No")
             + "<br>Right: "
