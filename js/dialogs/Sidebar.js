@@ -18,7 +18,7 @@ function updateSituationSidebar(situation)
         $("#addIntersectionButtonFirst").hide();
     }
 
-    if(situation.selectedIntersection !== undefined)
+    if(situation.isSelectedIntersection())
     {
         $('#selectedIntersection').show();
         $('#selectedIntersectionValue').html(
@@ -29,6 +29,17 @@ function updateSituationSidebar(situation)
     {
         $('#selectedIntersection').hide();
         $('#modalAddIntersectionPosition').hide();
+    }
+
+    if(situation.isSelectedLane())
+    {
+        $('#selectedLane').show();
+        $('#selectedLaneText').html(
+            situation.selectedLane.toSelectedString());
+    }
+    else
+    {
+        $('#selectedLane').hide();
     }
 }
 

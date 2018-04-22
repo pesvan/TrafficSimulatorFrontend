@@ -7,6 +7,7 @@ class Lane
         this.right = right;
         this.straight = straight;
         this.semaphore = undefined;
+        this.svg = undefined;
     }
 
     setSemaphore(semaphore)
@@ -14,9 +15,33 @@ class Lane
         this.semaphore = semaphore;
     }
 
+    setSvg(svg)
+    {
+        this.svg = svg;
+    }
+
     toString()
     {
-        return "Lane "+this.id;
+       return "Input lane " + this.id + ", directions:" +
+        " Left: "
+        + (this.left ? "Yes" : "No")
+           + ", Right: "
+        + (this.right ? "Yes" : "No")
+            + ", Straight: "
+        + (this.straight ? "Yes" : "No");
+
+    }
+
+    toSelectedString()
+    {
+        return "Lane directions:<br>" +
+            "Left:"
+            + (this.left ? "Yes" : "No")
+            + "<br>Right: "
+            + (this.right ? "Yes" : "No")
+            + "<br>Straight: "
+            + (this.straight ? "Yes" : "No");
+
     }
 
 

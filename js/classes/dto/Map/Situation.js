@@ -12,6 +12,7 @@ class Situation
         this.intersectionList = [];
         this.connections = [];
         this.selectedIntersection = undefined;
+        this.selectedLane = undefined;
         this.canvas = undefined;
         this.vehicleBase = undefined;
     }
@@ -71,6 +72,25 @@ class Situation
     isSelectedIntersection()
     {
         return this.selectedIntersection !== null && this.selectedIntersection !== undefined;
+    }
+
+    isSelectedLane()
+    {
+        return this.selectedLane !== null && this.selectedLane !== undefined;
+    }
+
+    setSelectedLane(lane)
+    {
+        if(this.isSelectedLane())
+        {
+            this.selectedLane.svg.fill({color:blackColor});
+        }
+        this.selectedLane = lane;
+
+        //set as selected new one
+        lane.svg.fill({color: redColor});
+
+        updateSituationSidebar(this);
     }
 
     setSelectedIntersection(intersection)

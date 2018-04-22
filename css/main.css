@@ -80,6 +80,11 @@ button:hover
     float: left;
 }
 
+#selectedLane {
+    padding: 10px;
+    font-size: smaller;
+    border-bottom: 1px black solid;
+}
 
 .button
 {

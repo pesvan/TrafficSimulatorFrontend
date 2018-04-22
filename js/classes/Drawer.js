@@ -400,17 +400,43 @@ class Drawer
 
                 for(let k = 0; k < leg.laneList.length; k++)
                 {
-                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, leg.laneList[k]);
+                    let lane = leg.laneList[k];
 
-                    laneSvg.on("mouseover", function() {
-                        this.style("cursor", "pointer");
-                        $('#tooltip').html(leg.toString(leg.laneList[k]));
-                        this.fill({ color: selectedColor })
-                    });
-                    laneSvg.on("mouseout", function() {
-                        $('#tooltip').html("");
-                        this.fill({ color: '#000' })
-                    });
+                    let laneSvg = this.drawLane(movedIntersectionCoords, leg, offset, k, lane);
+
+                    let click = function()
+                    {
+                        this.situation.setSelectedLane(lane);
+                    };
+
+                    laneSvg.on("click", click, this);
+
+                    let mouseover = function()
+                    {
+                        if(!this.situation.isSelectedLane() || this.situation.selectedLane.id !== lane.id)
+                        {
+                            laneSvg.style("cursor", "pointer");
+                            $('#tooltip').html(lane.toString());
+                            laneSvg.fill({ color: selectedColor })
+                        }
+                    };
+
+                    let mouseout = function()
+                    {
+                        if(!this.situation.isSelectedLane() || this.situation.selectedLane.id !== lane.id)
+                        {
+                            $('#tooltip').html("");
+                            laneSvg.fill({ color: blackColor })
+                        }
+                    };
+
+                    laneSvg.on("mouseover", mouseover, this);
+
+                    laneSvg.on("mouseout", mouseout, this);
+
+
+
+                    lane.setSvg(laneSvg);
                 }
 
                 for(let k = leg.outputLanesCount * (-1); k < 0; k++)
@@ -419,7 +445,7 @@ class Drawer
 
                     laneSvg.on("mouseover", function() {
                         this.style("cursor", "pointer");
-                        $('#tooltip').html(leg.toString("Output" + (k+1)));
+                        $('#tooltip').html("Output lane");
                         this.fill({ color: selectedColor })
                     });
                     laneSvg.on("mouseout", function() {
