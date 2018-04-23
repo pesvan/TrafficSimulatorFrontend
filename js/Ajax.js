@@ -5,13 +5,14 @@ function loadSituationLayout() {
         dataType: "json",
         async: false
     })
-        .done(function (msg) {
-            $('#response').html(JSON.stringify(msg, null, 2));
-            jsonToMapDtos(msg);
-        })
-        .fail(function () {
-            $('#selectedIntersection').html("Cannot connect to the backend!")
-        });
+    .done(function (response) {
+        $('#response').html(JSON.stringify(response, null, 2));
+        showGeneralError("Loading simulation layout", response);
+        jsonToMapDtos(response);
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Loading simulation layout");
+    });
 }
 
 function postConfiguration()
@@ -30,12 +31,15 @@ function postConfiguration()
             position: position
         })
     })
-    .done(function(){
-        closeAddIntersectionForm();
-        loadAndDrawLayout();
+    .done(function(response){
+        showGeneralError("Adding intersection", response);
+        if(response.status===0) {
+            closeAddIntersectionForm();
+            loadAndDrawLayout();
+        }
     })
-    .fail(function(msg){
-        console.log(msg);
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Adding intersection");
     });
 }
 
@@ -58,13 +62,17 @@ function addLane()
                 operation: "add"
             }
     })
-        .done(function(){
+    .done(function(response){
+        showGeneralError("Adding lane", response);
+        if(response.status===0) {
             closeAddLaneForm();
             loadAndDrawLayout();
-        })
-        .fail(function(msg){
-            console.log(msg);
-        });
+        }
+
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Adding lane");
+    });
 }
 
 function changeLane()
@@ -86,13 +94,16 @@ function changeLane()
                 operation: "change"
             }
     })
-        .done(function(){
+    .done(function(response){
+        showGeneralError("Changing lane directions", response);
+        if(response.status===0) {
             closeChangeLaneForm();
             loadAndDrawLayout();
-        })
-        .fail(function(msg){
-            console.log(msg);
-        });
+        }
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Changing lane directions");
+    });
 }
 
 function deleteLane()
@@ -111,12 +122,13 @@ function deleteLane()
                 operation: "delete"
             }
     })
-        .done(function(){
-            loadAndDrawLayout();
-        })
-        .fail(function(msg){
-            console.log(msg);
-        });
+    .done(function(response){
+        showGeneralError("Deleting lane", response);
+        loadAndDrawLayout();
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Deleting lane");
+    });
 }
 
 function deleteIntersection()
@@ -126,12 +138,12 @@ function deleteIntersection()
         url: "http://localhost:8080/deleteIntersection?intersectionId=" + situation.selectedIntersection.id,
         dataType: "json",
     })
-    .done(function(){
+    .done(function(response){
+        showGeneralError("Deleting intersection", response);
         loadAndDrawLayout();
     })
-    .fail(function(msg)
-    {
-        console.log(msg);
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Deleting intersection");
     });
 }
 
@@ -142,12 +154,12 @@ function resetAll()
         url: "http://localhost:8080/resetSimulation",
         dataType: "json",
     })
-    .done(function( msg ) {
+    .done(function( response ) {
+        showGeneralError("Reseting everything", response)
         loadAndDrawLayout();
     })
-    .fail(function(msg)
-    {
-        console.log(msg);
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Reseting everything");
     });
 }
 
@@ -158,9 +170,11 @@ function setTrafficDensity(density)
         url: "http://localhost:8080/setTrafficDensity?density=" + density,
         dataType: "json",
     })
-    .fail(function(msg)
-    {
-        console.log(msg);
+    .done(function( response ) {
+        showGeneralError("Setting traffic density", response)
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Setting traffic density");
     });
 }
 
@@ -172,20 +186,18 @@ function runSimulation()
         dataType: "json",
         async: false
     })
-    .done(function( msg ) {
-        let status = msg.status;
+    .done(function( response ) {
+        let status = response.status;
+        showGeneralError("Initializing simulation", response)
 
         if (status===0)
         {
             doSimulationStep(5);
             simulation.startVisualisation();
         }
-
-
     })
-    .fail(function(msg)
-    {
-        console.log(msg);
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Initializing simulation");
     });
 }
 
@@ -196,12 +208,12 @@ function doSimulationStep(noOfSteps)
         url: "http://localhost:8080/getDataMultipleStep?noOfSteps=" + noOfSteps,
         dataType: "json",
     })
-    .done(function( msg ) {
-        jsonToSimulationDtos(msg);
+    .done(function( response ) {
+        showGeneralError("Getting simulation data", response)
+        jsonToSimulationDtos(response);
     })
-    .fail(function(msg)
-    {
-        console.log(msg);
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Getting simulation data");
     });
 }
 
@@ -212,8 +224,11 @@ function stopSimulation()
         url: "http://localhost:8080/stopSimulation",
         dataType: "json",
     })
-        .fail(function(msg)
-        {
-            console.log(msg);
-        });
+    .done(function( response ) {
+        showGeneralError("Stopping simulation", response)
+        jsonToSimulationDtos(response);
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Stopping simulation");
+    });
 }
