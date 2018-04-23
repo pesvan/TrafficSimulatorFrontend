@@ -1,13 +1,17 @@
 class Vehicle
 {
-    constructor(id)
+    constructor(id, originalColor, length, width)
     {
         this.id = id;
+        this.originalColor = originalColor;
+        this.length = length;
+        this.width = width;
         this.svg = null;
         this.leftBlinkerSvg = null;
         this.rightBlinkerSvg = null;
         this.leftBrakeSvg = null;
         this.rightBrakeSvg = null;
+
     }
 
     vehicleIsSet()
@@ -39,5 +43,12 @@ class Vehicle
         this.leftBrakeSvg.remove();
         this.rightBlinkerSvg.remove();
         this.rightBrakeSvg.remove();
+    }
+
+    toString()
+    {
+        return "<b>ID: </b>" + this.id + "<br>"
+        + "<b>Length: </b>" + this.length + " m<br>"
+        + "<b>Width: </b>" + this.width  + " m<br>";
     }
 }

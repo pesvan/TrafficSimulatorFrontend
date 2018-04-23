@@ -79,4 +79,17 @@ function updateSimulationSidebar(simulation, selectedIntersection)
     {
         $('#selectedIntersectionPhase').hide();
     }
+
+    if(simulation.isSelectedVehicle())
+    {
+        $('#selectedVehicle').show();
+    }
+    else {
+        $('#selectedVehicle').hide();
+    }
+}
+
+function updateVehicleInfo(vehicleState)
+{
+    $('#selectedVehicleValue').html(vehicleState.vehicle.toString() + vehicleState.toString());
 }

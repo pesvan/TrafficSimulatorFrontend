@@ -7,6 +7,7 @@ class Simulation
         this.simulationStepsToDraw = [];
         this.firstToDrawSimTime = undefined;
         this.density = undefined;
+        this.selectedVehicle = undefined;
     }
 
     startVisualisation()
@@ -78,8 +79,32 @@ class Simulation
                 {
                     this.activeVehicles.splice(index, 1);
                 }
+                if(this.isSelectedVehicle() && this.selectedVehicle.id === setVehicles[i].id){
+                    this.selectedVehicle = undefined;
+                }
             }
         }
+    }
+
+    isSelectedVehicle()
+    {
+        return this.selectedVehicle !== null && this.selectedVehicle !== undefined;
+    }
+
+    setSelectedVehicle(vehicle)
+    {
+        //graphically unselect previously selected intersection
+        if(this.isSelectedVehicle())
+        {
+            this.selectedVehicle.svg.fill({color:this.selectedVehicle.originalColor});
+        }
+
+        //set as selected new one
+        vehicle.svg.fill({color: redColor});
+        this.selectedVehicle = vehicle;
+
+
+        updateSimulationSidebar(this, null);
     }
 
     removeAllVehicles()

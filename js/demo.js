@@ -17,7 +17,7 @@ function loadAndDrawLayout()
 {
     situation = new Situation();
     simulation = new Simulation();
-    drawer = new Drawer(situation);
+    drawer = new Drawer(situation, simulation);
     loadSituationLayout();
     situation.initCanvas();
     drawer.setOffset();
@@ -87,12 +87,16 @@ function jsonToSimulationDtos(json)
             let width = jsonVehicleStateInTime.vehWidth;
             let color = jsonVehicleStateInTime.hexColor;
 
-            let vehicleState = new VehicleState(coords, angle, signaling, length, width, color);
+            let speed = jsonVehicleStateInTime.speed;
+            let distance = jsonVehicleStateInTime.distance;
+            let waitingTime = jsonVehicleStateInTime.waitingTime;
+
+            let vehicleState = new VehicleState(coords, angle, signaling, speed, distance, waitingTime);
 
 
             let existingVehicle = findVehicleById(simulation.activeVehicles, id);
             if (existingVehicle == null) {
-                let newVehicle = new Vehicle(id);
+                let newVehicle = new Vehicle(id, color, length, width);
                 vehicleState.setVehicle(newVehicle);
                 simulation.activeVehicles.push(newVehicle);
             }

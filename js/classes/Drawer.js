@@ -1,8 +1,9 @@
 class Drawer
 {
-    constructor(situation)
+    constructor(situation, simulation)
     {
         this.situation = situation;
+        this.simulation = simulation;
     }
 
     setOffset()
@@ -295,6 +296,10 @@ class Drawer
 
             if (vehicleState.vehicle.vehicleIsSet())
             {
+                if(context.simulation.isSelectedVehicle() && vehicleState.vehicle.id === context.simulation.selectedVehicle.id)
+                {
+                    updateVehicleInfo(vehicleState);
+                }
                 let coords = vehicleState.polygonCoordinates.getPointsArray();
 
                 let movedCoords = this.moveListToOffset(coords, true);
@@ -352,7 +357,14 @@ class Drawer
                 let coords = vehicleState.polygonCoordinates.getPointsArray();
 
                 console.log("init vehicle", vehicleState.vehicle.id, coords);
-                let svg = context.__drawPolygon(coords, vehicleState.color, 1, vehicleState.color, vehicleState.vehicle.id, true);
+                let svg = context.__drawPolygon(coords, vehicleState.vehicle.originalColor, 1, vehicleState.vehicle.originalColor, vehicleState.vehicle.id, true);
+
+                let click = function()
+                {
+                    context.simulation.setSelectedVehicle(vehicleState.vehicle);
+                };
+
+                svg.on("click", click, this);
 
                 vehicleState.vehicle.setSvg(svg);
 
