@@ -47,8 +47,6 @@ class Vehicle
 
     toString()
     {
-        return "<b>ID: </b>" + this.id + "<br>"
-        + "<b>Length: </b>" + this.length + " m<br>"
-        + "<b>Width: </b>" + this.width  + " m<br>";
+        return "<b>ID: </b>" + this.id + "<br>";
     }
 }

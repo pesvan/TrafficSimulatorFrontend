@@ -30,7 +30,7 @@ function drawSituationLayout()
     drawer.drawConnections(situation.connections);
 }
 
-setInterval(visualization, 500);
+setInterval(visualization, SIM_STEP);
 
 function visualization()
 {
@@ -44,8 +44,12 @@ function visualization()
         }
 
         let stepToDo = simulation.getFirstToDraw();
-        drawer.simulateSimulationStep(stepToDo, drawer);
-        simulation.removeInactiveVehicles();
+        if(stepToDo !== undefined)
+        {
+            drawer.simulateSimulationStep(stepToDo, drawer);
+            simulation.removeInactiveVehicles();
+        }
+
     }
     else{
         //do nothing

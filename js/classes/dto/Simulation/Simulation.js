@@ -8,6 +8,8 @@ class Simulation
         this.firstToDrawSimTime = undefined;
         this.density = undefined;
         this.selectedVehicle = undefined;
+
+        this.stepInProgress = undefined;
     }
 
     startVisualisation()
@@ -48,8 +50,13 @@ class Simulation
 
     getFirstToDraw()
     {
-        this.firstToDrawSimTime = this.simulationStepsToDraw[0].time;
-        return this.simulationStepsToDraw.shift();
+        this.stepInProgress = this.simulationStepsToDraw.shift();
+        if(this.stepInProgress !== undefined)
+        {
+            this.firstToDrawSimTime = this.stepInProgress.time;
+        }
+
+        return this.stepInProgress;
     }
 
     removeInactiveVehicles()
@@ -63,9 +70,9 @@ class Simulation
             }
         }
         let vehiclesInCurrentStep = [];
-        for(let i = 0; i < this.simulationStepsToDraw[0].vehicleStates.length; i++)
+        for(let i = 0; i < this.stepInProgress.vehicleStates.length; i++)
         {
-            vehiclesInCurrentStep.push(this.simulationStepsToDraw[0].vehicleStates[i].vehicle);
+            vehiclesInCurrentStep.push(this.stepInProgress.vehicleStates[i].vehicle);
         }
 
         for(let i = 0; i < setVehicles.length; i++)

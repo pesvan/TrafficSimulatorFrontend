@@ -12,12 +12,6 @@ class Drawer
         this.yOffset = this.situation.getOffsetY() - this.situation.distanceBetweenLegEnds * 5;
     }
 
-    _drawLine(coordinatesList){
-        let movedCoordinates = this.moveListToOffset(coordinatesList);
-        this.situation.canvas.line(movedCoordinates[0].__x, movedCoordinates[0].__y,
-            movedCoordinates[1].__x, movedCoordinates[1].__y).stroke({ width: 3, color: selectedColor });
-    }
-
     __drawPolygon(coordinatesList, borderColor, borderWidth, fillColor, id, isVehicle)
     {
         let movedCoordinates = this.moveListToOffset(coordinatesList, isVehicle);
@@ -248,29 +242,6 @@ class Drawer
         return this.__drawPolygon(intersectionBorders, redColor, 1, blackColor, id);
     }
 
-    drawVehicles(simulationStep)
-    {
-        this.timeout(simulationStep, this.simulateSimulationStep, this);
-    }
-
-    timeout(step, callback, context)
-    {
-        let i = 0;
-        callback(step, context);
-        loop();
-        function loop()
-        {
-            setTimeout(function ()
-            {
-                i++;
-                if (i < 1){
-                    callback(step, context);
-                    loop();
-                }
-            }, 500);
-        }
-    }
-
     simulateSimulationStep(step, context)
     {
         let tlStates = step.tlStates;
@@ -296,7 +267,7 @@ class Drawer
 
                 vehicleState.vehicle.svg.animate({
                     ease: '-',
-                    duration: 500
+                    duration: SIM_STEP
                 }).plot(
                     [
                         [movedCoords[0].__x, movedCoords[0].__y],
@@ -305,11 +276,11 @@ class Drawer
                         [movedCoords[3].__x, movedCoords[3].__y]
                     ]);
 
-                vehicleState.vehicle.leftBlinkerSvg.animate({ease: '-',duration: 500}).move(movedCoords[0].__x, movedCoords[0].__y);
-                vehicleState.vehicle.leftBrakeSvg.animate({ease: '-',duration: 500}).move(movedCoords[1].__x, movedCoords[1].__y);
+                vehicleState.vehicle.leftBlinkerSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[0].__x, movedCoords[0].__y);
+                vehicleState.vehicle.leftBrakeSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[1].__x, movedCoords[1].__y);
 
-                vehicleState.vehicle.rightBrakeSvg.animate({ease: '-',duration: 500}).move(movedCoords[2].__x, movedCoords[2].__y);
-                vehicleState.vehicle.rightBlinkerSvg.animate({ease: '-',duration: 500}).move(movedCoords[3].__x, movedCoords[3].__y);
+                vehicleState.vehicle.rightBrakeSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[2].__x, movedCoords[2].__y);
+                vehicleState.vehicle.rightBlinkerSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[3].__x, movedCoords[3].__y);
 
                 if(vehicleState.isBraking())
                 {

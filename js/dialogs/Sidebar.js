@@ -70,10 +70,11 @@ function updateSimulationSidebar(simulation, selectedIntersection)
 
     $('#vehCount').html(simulation.activeVehicles.length === 0 ? "" : simulation.activeVehicles.length);
 
-    if (simulation.firstToDrawSimTime > 0 && selectedIntersection !== undefined)
+    if (simulation.firstToDrawSimTime > 0 && selectedIntersection !== undefined &&
+        selectedIntersection !== null && simulation.stepInProgress !== undefined)
     {
         $('#selectedIntersectionPhase').show();
-        $('#selectedIntersectionPhaseValue').html(selectedIntersection.id + simulation.simulationStepsToDraw[0].phaseStates[selectedIntersection.id].toString());
+        $('#selectedIntersectionPhaseValue').html(selectedIntersection.id + simulation.stepInProgress.phaseStates[selectedIntersection.id].toString());
     }
     else
     {
