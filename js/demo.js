@@ -34,7 +34,7 @@ setInterval(visualization, 500);
 
 function visualization()
 {
-    updateSimulationSidebar(simulation);
+    updateSimulationSidebar(simulation, situation.selectedIntersection);
 
     if(simulation.visualizationRunning)
     {
@@ -116,6 +116,22 @@ function jsonToSimulationDtos(json)
             let tlState = new TlState(lane, state);
 
             simTimeDto.addTlState(tlState);
+        }
+
+        let jsonPhaseStates = json[i].phaseState;
+
+        for (let p = 0; p < jsonPhaseStates.length; p++)
+        {
+            let jsonPhaseState = jsonPhaseStates[p];
+            let programId = jsonPhaseState.programId;
+            let tlsId = jsonPhaseState.tlsId;
+            let nextSwitch = jsonPhaseState.nextSwitch;
+            let phaseId = jsonPhaseState.phaseId;
+            let remaining = jsonPhaseState.remaining;
+            let duration = jsonPhaseState.duration;
+            let phaseState = new PhaseState(duration, nextSwitch, phaseId, programId, remaining);
+
+            simTimeDto.addPhaseState(phaseState, tlsId);
         }
 
         simulation.addSimulationStep(simTimeDto);

@@ -53,7 +53,7 @@ function updateSituationSidebar(situation)
     }
 }
 
-function updateSimulationSidebar(simulation)
+function updateSimulationSidebar(simulation, selectedIntersection)
 {
     let simState = "Not initialized";
     if(!simulation.runningVisualisation() && simulation.firstToDrawSimTime === 0)
@@ -69,4 +69,14 @@ function updateSimulationSidebar(simulation)
     $('#simTime').html(simulation.firstToDrawSimTime);
 
     $('#vehCount').html(simulation.activeVehicles.length === 0 ? "" : simulation.activeVehicles.length);
+
+    if (simulation.firstToDrawSimTime > 0 && selectedIntersection !== undefined)
+    {
+        $('#selectedIntersectionPhase').show();
+        $('#selectedIntersectionPhaseValue').html(selectedIntersection.id + simulation.simulationStepsToDraw[0].phaseStates[selectedIntersection.id].toString());
+    }
+    else
+    {
+        $('#selectedIntersectionPhase').hide();
+    }
 }

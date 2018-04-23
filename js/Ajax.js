@@ -209,8 +209,15 @@ function doSimulationStep(noOfSteps)
         dataType: "json",
     })
     .done(function( response ) {
-        showGeneralError("Getting simulation data", response)
-        jsonToSimulationDtos(response);
+        showGeneralError("Getting simulation data", response);
+        if(response.status === 0)
+        {
+            jsonToSimulationDtos(response);
+        }
+        else
+        {
+            simulation.stopVisualisation();
+        }
     })
     .fail(function( jqXHR, textStatus, errorThrown ){
         showHttpError("Getting simulation data");
@@ -226,7 +233,6 @@ function stopSimulation()
     })
     .done(function( response ) {
         showGeneralError("Stopping simulation", response)
-        jsonToSimulationDtos(response);
     })
     .fail(function( jqXHR, textStatus, errorThrown ){
         showHttpError("Stopping simulation");

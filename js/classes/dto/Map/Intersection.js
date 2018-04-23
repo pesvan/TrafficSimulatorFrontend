@@ -3,7 +3,7 @@ class Intersection
 {
     constructor(id, coordinates, grid, legList, angle)
     {
-        this.id = id;
+        this.id = parseInt(id);
         this.coordinates = coordinates;
         this.grid = grid;
         this.legList = legList;

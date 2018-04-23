@@ -15,6 +15,7 @@
         <script type="text/javascript" src="js/classes/dto/Simulation/Simulation.js"></script>
         <script type="text/javascript" src="js/classes/dto/Simulation/Semaphore.js"></script>
         <script type="text/javascript" src="js/classes/dto/Simulation/VehicleState.js"></script>
+        <script type="text/javascript" src="js/classes/dto/Simulation/PhaseState.js"></script>
         <script type="text/javascript" src="js/classes/dto/Simulation/Vehicle.js"></script>
         <script type="text/javascript" src="js/classes/dto/Simulation/VehicleCoordinates.js"></script>
         <script type="text/javascript" src="js/classes/dto/Simulation/SimulationTime.js"></script>
@@ -101,6 +102,15 @@
                 <div id="sliderDiv">
                     <b>Traffic density: </b><br>
                     <input type="range" min="0" max="19" value="5" class="slider" id="myRange"/>
+                </div>
+                <br>
+                <div id="selectedIntersectionPhase">
+                    <div id="selectedIntersectionPhaseText">
+                        <b>SELECTED INTERSECTION ONLINE: &nbsp;</b>
+                    </div>
+                    <div id="selectedIntersectionPhaseValue">
+
+                    </div>
                 </div>
             </div>
             <div id="showLastResponseButton" class="button">

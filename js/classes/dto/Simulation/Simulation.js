@@ -25,7 +25,7 @@ class Simulation
         this.removeAllVehicles();
         this.simulationStepsToDraw = [];
         this.firstToDrawSimTime = 0;
-        updateSimulationSidebar(this);
+        updateSimulationSidebar(this, undefined);
         stopSimulation();
     }
 
