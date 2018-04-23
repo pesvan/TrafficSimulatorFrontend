@@ -2,7 +2,6 @@ let header = document.getElementById("sidebar");
 let sticky = header.offsetLeft;
 
 window.onscroll = function() {
-    console.log("scroll");
     stickToTheTop()
 };
 

@@ -29,7 +29,6 @@ class Situation
         this.ySize = (
             this.gridDimensions.getGridSizeY() * this.distanceBetweenLegEnds * 5 * 2)
             + ( (this.gridDimensions.getGridSizeY() - 1) * this.distanceBetweenIntersections);
-        console.log("Canvas size:", this.xSize, this.ySize);
         this.intersectionCount = intersectionCount;
         this.routesCount = routesCount;
         this.vehicleBase = vehicleBase;
@@ -63,7 +62,6 @@ class Situation
         $('#canvas').empty();
         if(this.intersectionCount > 0)
         {
-            console.log("Creating canvas:", this.xSize, this.ySize);
             this.canvas = SVG('canvas').size(this.xSize, this.ySize);
         }
 

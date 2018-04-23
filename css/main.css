@@ -121,6 +121,12 @@ button:hover
 
 }
 
+#reset
+{
+    font-size: smaller;
+    padding: 10px;
+}
+
 svg
 {
     background: green;

@@ -10,7 +10,6 @@ class Drawer
     {
         this.xOffset = this.situation.getOffsetX() - this.situation.distanceBetweenLegEnds * 5;
         this.yOffset = this.situation.getOffsetY() - this.situation.distanceBetweenLegEnds * 5;
-        console.log("Offset is set: ", this.xOffset, this.yOffset);
     }
 
     _drawLine(coordinatesList){
@@ -128,19 +127,12 @@ class Drawer
         }
         else if(index===1)
         {
-            if(closestPointToOtherLeg.equals(leg.leftEndPoint))
-            {
-                console.log("asasd");
-            }
             let legSize = getDistance2D(leg.leftEndPoint, leg.rightEndPoint);
 
             //angle between the
             let cosine = legSize / distanceBetweenClosestPoints;
             let angle = (cosine * 180/Math.PI) + 90   + leg.angle;
-            console.log(angle);
             let newPoint = moveCoordinatesByOffset(closestPointToOtherLeg, angle, legSize);
-            console.log(closestPointToOtherLeg);
-            console.log(newPoint);
             return newPoint;
         }
 
@@ -148,11 +140,9 @@ class Drawer
 
     drawConnectingLane(leg1, leg2, id)
     {
-        console.log(leg1.leftEndPoint, leg1.rightEndPoint, leg2.leftEndPoint, leg2.rightEndPoint);
 
         let closestPoints = this.getClosestPoints(leg1, leg2);
 
-        console.log(closestPoints);
 
         let distance = closestPoints[0];
         let point1 = closestPoints[1];
@@ -356,7 +346,6 @@ class Drawer
             {
                 let coords = vehicleState.polygonCoordinates.getPointsArray();
 
-                console.log("init vehicle", vehicleState.vehicle.id, coords);
                 let svg = context.__drawPolygon(coords, vehicleState.vehicle.originalColor, 1, vehicleState.vehicle.originalColor, vehicleState.vehicle.id, true);
 
                 let click = function()
