@@ -248,39 +248,31 @@ class Drawer
                         [movedCoords[3].__x, movedCoords[3].__y]
                     ]);
 
-                vehicleState.vehicle.leftBlinkerSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[0].__x, movedCoords[0].__y);
-                vehicleState.vehicle.leftBrakeSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[1].__x, movedCoords[1].__y);
-
-                vehicleState.vehicle.rightBrakeSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[2].__x, movedCoords[2].__y);
-                vehicleState.vehicle.rightBlinkerSvg.animate({ease: '-',duration: SIM_STEP}).move(movedCoords[3].__x, movedCoords[3].__y);
-
                 if(vehicleState.isBraking())
                 {
-                    vehicleState.vehicle.leftBrakeSvg.fill({color: redColor}).show();
-                    vehicleState.vehicle.rightBrakeSvg.fill({color: redColor}).show();
+                    vehicleState.vehicle.svg.stroke({color: redColor});
                 }
                 else
                 {
-                    vehicleState.vehicle.leftBrakeSvg.fill({color: whiteColor}).hide();
-                    vehicleState.vehicle.rightBrakeSvg.fill({color: whiteColor}).hide();
+                    vehicleState.vehicle.svg.stroke({color: vehicleState.vehicle.originalColor});
                 }
 
                 if(vehicleState.isSignallingLeft())
                 {
-                    vehicleState.vehicle.leftBlinkerSvg.fill({color: orangeColor}).show();
+
                 }
                 else
                 {
-                    vehicleState.vehicle.leftBlinkerSvg.fill({color: whiteColor}).hide();
+
                 }
 
                 if(vehicleState.isSignallingRight())
                 {
-                    vehicleState.vehicle.rightBlinkerSvg.fill({color: orangeColor}).show();
+
                 }
                 else
                 {
-                    vehicleState.vehicle.rightBlinkerSvg.fill({color: whiteColor}).hide();
+
                 }
 
 
@@ -299,16 +291,6 @@ class Drawer
                 svg.on("click", click, this);
 
                 vehicleState.vehicle.setSvg(svg);
-
-                vehicleState.vehicle.setBlinkers(
-                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.frontLeft), whiteColor, 3).hide(),
-                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.frontRight), whiteColor, 3).hide()
-                );
-
-                vehicleState.vehicle.setBrakes(
-                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.backLeft), whiteColor, 3).hide(),
-                    context._drawPoint(context.moveToVehicleOffset(vehicleState.polygonCoordinates.backRight), whiteColor, 3).hide()
-                );
             }
         }
 
