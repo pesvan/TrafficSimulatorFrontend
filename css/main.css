@@ -106,13 +106,6 @@ button:hover
     background-color: #333;
 }
 
-#tooltip {
-    padding: 10px;
-    font-size: smaller;
-    border-bottom: 1px black solid;
-    height: 50px;
-}
-
 #simulation
 {
     padding: 10px;

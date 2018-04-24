@@ -30,30 +30,6 @@ class Drawer
                 color: fillColor
             })
             .addClass(id)
-            .attr("data-tooltip", "")
-            .attr("title", "test");
-    }
-
-    __drawPolyline(coordinatesList, borderColor, borderWidth, fillColor, id)
-    {
-        let movedCoordinates = this.moveListToOffset(coordinatesList);
-
-        let polyString = "";
-        for ( let i = 0; i < movedCoordinates.length; i++)
-        {
-            polyString += movedCoordinates[i].toPolyString() + " ";
-        }
-        return this.situation.canvas.polyline(polyString)
-            .stroke({
-                color: borderColor,
-                width: borderWidth
-            })
-            .fill({
-                color: fillColor
-            })
-            .addClass(id)
-            .attr("data-tooltip", "")
-            .attr("title", "test");
     }
 
     _drawPoint(coordinates, color = redColor, size = 10)
@@ -192,11 +168,9 @@ class Drawer
 
         laneSvg1.on("mouseover", function() {
             this.style("cursor", "pointer");
-            $('#tooltip').html(index!==1 ? leg2.id + " -> " + leg1.id : leg1.id + " -> " + leg2.id);
             this.fill({ color: selectedColor })
         });
         laneSvg1.on("mouseout", function() {
-            $('#tooltip').html("");
             this.fill({ color: '#000' })
         });
 
@@ -211,11 +185,9 @@ class Drawer
 
         laneSvg2.on("mouseover", function() {
             this.style("cursor", "pointer");
-            $('#tooltip').html(index!==1 ? leg1.id + " -> " + leg2.id : leg2.id + " -> " + leg1.id);
             this.fill({ color: selectedColor })
         });
         laneSvg2.on("mouseout", function() {
-            $('#tooltip').html("");
             this.fill({ color: '#000' })
         });
 
@@ -388,7 +360,6 @@ class Drawer
                         if(!this.situation.isSelectedLane() || this.situation.selectedLane.id !== lane.id)
                         {
                             laneSvg.style("cursor", "pointer");
-                            $('#tooltip').html(lane.toString());
                             laneSvg.fill({ color: selectedColor })
                         }
                     };
@@ -397,7 +368,6 @@ class Drawer
                     {
                         if(!this.situation.isSelectedLane() || this.situation.selectedLane.id !== lane.id)
                         {
-                            $('#tooltip').html("");
                             laneSvg.fill({ color: blackColor })
                         }
                     };
@@ -417,11 +387,9 @@ class Drawer
 
                     laneSvg.on("mouseover", function() {
                         this.style("cursor", "pointer");
-                        $('#tooltip').html("Output lane");
                         this.fill({ color: selectedColor })
                     });
                     laneSvg.on("mouseout", function() {
-                        $('#tooltip').html("");
                         this.fill({ color: '#000' })
                     });
                 }
@@ -454,7 +422,6 @@ class Drawer
                 if(!this.situation.isSelectedIntersection() || this.situation.selectedIntersection.id !== intersection.id)
                 {
                     intersectionCenter.style("cursor", "pointer");
-                    $('#tooltip').html(intersection.toString());
                     intersectionCenter.fill({ color: selectedColor })
                 }
             };
@@ -463,7 +430,6 @@ class Drawer
             {
                 if(!this.situation.isSelectedIntersection() || this.situation.selectedIntersection.id !== intersection.id)
                 {
-                    $('#tooltip').html("");
                     intersectionCenter.fill({ color: blackColor })
                 }
             };

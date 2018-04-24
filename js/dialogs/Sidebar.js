@@ -6,7 +6,6 @@ function updateSituationSidebar(situation)
     if(situation.intersectionCount === 0)
     {
         $('#selectedIntersection').hide();
-        $("#tooltip").hide();
         $("#simulation").hide();
         $("#addIntersectionButtonFirst").show();
         $("#modalAddIntersectionVehicleTypes").show();
@@ -14,7 +13,6 @@ function updateSituationSidebar(situation)
     else
     {
         $('#selectedIntersection').show();
-        $("#tooltip").show();
         $("#simulation").show();
         $("#addIntersectionButtonFirst").hide();
         $("#modalAddIntersectionVehicleTypes").hide();
