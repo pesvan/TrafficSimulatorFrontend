@@ -2,6 +2,11 @@ let readFile;
 let angle;
 let position = "left";
 
+let allowCar = document.getElementById('allowCar');
+let allowVan = document.getElementById('allowVan');
+let allowBusPublic = document.getElementById('allowBusPublic');
+let allowBusPrivate = document.getElementById('allowBusPrivate');
+let allowTruck = document.getElementById('allowTruck');
 
 document.getElementById('file-input')
     .addEventListener('change', readSingleFile, false);

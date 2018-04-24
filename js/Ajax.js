@@ -28,7 +28,12 @@ function postConfiguration()
             selectedIntersectionId: situation.selectedIntersection !== undefined ? situation.selectedIntersection.id : undefined,
             conf:  readFile,
             angle: angle,
-            position: position
+            position: position,
+            carsAllowed: allowCar.checked,
+            vanAllowed: allowVan.checked,
+            busPublicAllowed: allowBusPublic.checked,
+            busPrivateAllowed: allowBusPrivate.checked,
+            trucksAllowed: allowTruck.checked
         })
     })
     .done(function(response){

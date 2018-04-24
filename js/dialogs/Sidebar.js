@@ -9,6 +9,7 @@ function updateSituationSidebar(situation)
         $("#tooltip").hide();
         $("#simulation").hide();
         $("#addIntersectionButtonFirst").show();
+        $("#modalAddIntersectionVehicleTypes").show();
     }
     else
     {
@@ -16,6 +17,7 @@ function updateSituationSidebar(situation)
         $("#tooltip").show();
         $("#simulation").show();
         $("#addIntersectionButtonFirst").hide();
+        $("#modalAddIntersectionVehicleTypes").hide();
     }
 
     if(situation.isSelectedIntersection())
