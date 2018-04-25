@@ -75,6 +75,12 @@ function updateSimulationSidebar(simulation, selectedIntersection)
     {
         $('#selectedIntersectionPhase').show();
         $('#selectedIntersectionPhaseValue').html(selectedIntersection.id + simulation.stepInProgress.phaseStates[selectedIntersection.id].toString());
+
+        if(selectedIntersection.selectedSignalProgram === undefined)
+        {
+            selectedIntersection.setSelectedSignalProgram(simulation.stepInProgress.phaseStates[selectedIntersection.id].programId);
+        }
+
     }
     else
     {
@@ -88,9 +94,32 @@ function updateSimulationSidebar(simulation, selectedIntersection)
     else {
         $('#selectedVehicle').hide();
     }
+
 }
 
 function updateVehicleInfo(vehicleState)
 {
     $('#selectedVehicleValue').html(vehicleState.vehicle.toString() + vehicleState.toString());
+}
+
+function updateSignalProgramSelection(selectedIntersection, actualSignalProgram)
+{
+    let select = $('#signalProgramSelection');
+    select.empty();
+
+    for(let i = 0; i < selectedIntersection.signalPrograms.length; i++)
+    {
+        let signalProgram = selectedIntersection.signalPrograms[i];
+
+        if(signalProgram === actualSignalProgram)
+        {
+            select.append($("<option></option>")
+                .attr("selected", "selected").attr("value",signalProgram).text(signalProgram));
+        }
+        else
+        {
+            select.append($("<option></option>")
+                .attr("value",signalProgram).text(signalProgram));
+        }
+    }
 }

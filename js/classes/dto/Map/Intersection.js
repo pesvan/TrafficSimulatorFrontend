@@ -1,7 +1,7 @@
 
 class Intersection
 {
-    constructor(id, coordinates, grid, legList, angle)
+    constructor(id, coordinates, grid, legList, angle, signalPrograms)
     {
         this.id = parseInt(id);
         this.coordinates = coordinates;
@@ -9,6 +9,15 @@ class Intersection
         this.legList = legList;
         this.angle = angle;
         this.svg = null;
+
+        this.signalPrograms = signalPrograms;
+        this.selectedSignalProgram = undefined;
+    }
+
+    setSelectedSignalProgram(signalProgram)
+    {
+        this.selectedSignalProgram = signalProgram;
+        updateSignalProgramSelection(this, signalProgram);
     }
 
     setSvg(svg)

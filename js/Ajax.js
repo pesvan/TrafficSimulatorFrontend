@@ -243,3 +243,23 @@ function stopSimulation()
         showHttpError("Stopping simulation");
     });
 }
+
+function setSignalProgram(programId)
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/setSignalProgram",
+        dataType: "json",
+        data:
+            {
+                intersectionNo: situation.selectedIntersection.id,
+                programId: programId
+            }
+    })
+    .done(function( response ) {
+        showGeneralError("Set signal program", response)
+    })
+    .fail(function( jqXHR, textStatus, errorThrown ){
+        showHttpError("Set signal program");
+    });
+}

@@ -197,6 +197,7 @@ function jsonToMapDtos(json)
         let intersectionGrid = new GridPos(
             jsonIntersection.gridPosition.x, jsonIntersection.gridPosition.y);
         let angle = jsonIntersection.angle;
+        let signalPrograms = jsonIntersection.signalProgramList;
 
         for(let l = 0; l < jsonIntersection.legList.length; l++)
         {
@@ -220,7 +221,7 @@ function jsonToMapDtos(json)
         }
 
         situation.addIntersection(
-            new Intersection(intersectionId, intersectionCoordinates, intersectionGrid, legList, angle));
+            new Intersection(intersectionId, intersectionCoordinates, intersectionGrid, legList, angle, signalPrograms));
     }
 
     for(let i = 0; i < json.connectionLegs.length; i++)

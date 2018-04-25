@@ -97,7 +97,7 @@
                     <span id="vehCount"></span><br>
                 </div>
                 <div id="sliderDiv">
-                    <b>Traffic density: </b><br>
+                    <label for="myRange"><b>Traffic density: </b></label> <br>
                     <input type="range" min="0" max="19" value="5" class="slider" id="myRange"/>
                 </div>
                 <br>
@@ -107,6 +107,12 @@
                     </div>
                     <div id="selectedIntersectionPhaseValue">
 
+                    </div>
+                    <div id="setSignalProgram">
+                        <label for="signalProgramSelection">Set Signal Program:</label>
+                        <select id="signalProgramSelection">
+
+                        </select>
                     </div>
                 </div>
 
@@ -142,7 +148,7 @@
             <label>Rotate intersection by angle [0-360]:</label>
             <input type="text" id="angle-input" placeholder="Angle"/><br>
             <div id="modalAddIntersectionPosition">
-                <label>Intersection position: </label>
+                <label for="position-input">Intersection position: </label>
                 <select id="position-input">
                     <option value="left">Left from selected intersection</option>
                     <option value="right">Right from selected intersection</option>
