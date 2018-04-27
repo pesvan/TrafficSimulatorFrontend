@@ -1,0 +1,111 @@
+{
+  "status": 0,
+  "statusMessage": "",
+  "payload": {
+    "metadata": {
+      "intersectionCount": 1,
+      "routesCount": 11,
+      "distanceBetweenLegEnds": 50,
+      "distanceBetweenIntersections": 125,
+      "gridDimensions": {
+        "minimumX": 0,
+        "minimumY": 0,
+        "maximumX": 0,
+        "maximumY": 0
+      },
+      "vehicleCoordinatesStart": {
+        "x": "-250",
+        "y": "-250"
+      }
+    },
+    "intersectionList": [
+      {
+        "id": "0",
+        "coordinates": {
+          "x": "0",
+          "y": "-0"
+        },
+        "gridPosition": {
+          "x": 0,
+          "y": 0
+        },
+        "legList": [
+          {
+            "id": "0-0",
+            "coordinates": {
+              "x": "0",
+              "y": "-250"
+            },
+            "outputLanesCount": 1,
+            "angle": 180,
+            "laneList": [
+              {
+                "id": "0-0si_0",
+                "left": true,
+                "right": true,
+                "straight": true
+              }
+            ]
+          },
+          {
+            "id": "0-1",
+            "coordinates": {
+              "x": "250",
+              "y": "-0"
+            },
+            "outputLanesCount": 1,
+            "angle": 270,
+            "laneList": [
+              {
+                "id": "0-1si_0",
+                "left": false,
+                "right": true,
+                "straight": true
+              }
+            ]
+          },
+          {
+            "id": "0-2",
+            "coordinates": {
+              "x": "0",
+              "y": "250"
+            },
+            "outputLanesCount": 1,
+            "angle": 0,
+            "laneList": [
+              {
+                "id": "0-2si_0",
+                "left": true,
+                "right": true,
+                "straight": true
+              }
+            ]
+          },
+          {
+            "id": "0-3",
+            "coordinates": {
+              "x": "-250",
+              "y": "-0"
+            },
+            "outputLanesCount": 1,
+            "angle": 90,
+            "laneList": [
+              {
+                "id": "0-3si_0",
+                "left": true,
+                "right": true,
+                "straight": true
+              }
+            ]
+          }
+        ],
+        "signalProgramList": [
+          "0-1program",
+          "0-2program"
+        ],
+        "angle": 0
+      }
+    ],
+    "connectionLegs": []
+  }
+}
