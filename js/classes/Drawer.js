@@ -93,7 +93,8 @@ class Drawer
                 {
                     updateVehicleInfo(vehicleState);
                 }
-                let coords = vehicleState.polygonCoordinates.getPointsArray();
+
+                vehicleState.vehicle.setLastTouchedSimStep(step.time);
 
                 vehicleState.vehicle.svg.animate({
                     ease: '-',

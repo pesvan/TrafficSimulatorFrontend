@@ -4,7 +4,6 @@ class Simulation
     {
         this.visualizationRunning = false;
         this.activeVehicles = [];
-        this.vehicleIdsToRemove = [];
         this.simulationStepsToDraw = [];
         this.firstToDrawSimTime = undefined;
         this.density = undefined;
@@ -15,11 +14,6 @@ class Simulation
     addActiveVehicle(vehicle)
     {
         this.activeVehicles.push(vehicle);
-    }
-
-    addVehicleIdToRemove(vehicleId)
-    {
-        this.vehicleIdsToRemove.push(vehicleId);
     }
 
     findActiveVehicle(vehId)
@@ -84,29 +78,24 @@ class Simulation
 
     removeInactiveVehicles()
     {
-        for (let i = 0; i < this.vehicleIdsToRemove.length; i++)
+        for (let i = 0; i < this.activeVehicles.length; i++)
         {
-            let vehicle = this.findActiveVehicle(this.vehicleIdsToRemove[i]);
-            let index = this.activeVehicles.indexOf(vehicle);
+            let vehicle = this.activeVehicles[i];
 
-
-            //remove from active vehicles
-            if(index > -1)
+            if(this.firstToDrawSimTime > vehicle.lastTouchedSimStep)
             {
-                this.activeVehicles.splice(index, 1);
+                //remove from active vehicles
+                this.activeVehicles.splice(i, 1);
+
+                //remove from selected
+                if(this.isSelectedVehicle() && this.selectedVehicle.id === vehicle.id){
+                    this.selectedVehicle = undefined;
+                }
+
+                //remove from map
+                vehicle.removeSvg();
             }
-
-            //remove from selected
-            if(this.isSelectedVehicle() && this.selectedVehicle.id === this.vehicleIdsToRemove[i]){
-                this.selectedVehicle = undefined;
-            }
-
-            //remove from map
-            vehicle.removeSvg();
-
         }
-
-        this.vehicleIdsToRemove = [];
     }
 
     isSelectedVehicle()

@@ -17,6 +17,11 @@ class VehicleCoordinates
         this.backLeft = moveCoordinatesByOffset(this.backCenter, angle - 90, width / 2);
     }
 
+    getFrontCenter()
+    {
+        return this.frontCenter;
+    }
+
     getPointsArray()
     {
         return [

@@ -7,7 +7,12 @@ class Vehicle
         this.length = length;
         this.width = width;
         this.svg = null;
+        this.lastTouchedSimStep = undefined;
+    }
 
+    setLastTouchedSimStep(simStep)
+    {
+        this.lastTouchedSimStep = simStep;
     }
 
     vehicleIsSet()

@@ -91,13 +91,6 @@ function jsonToSimulationDtos(json)
             simulation.addActiveVehicle(newVehicle);
         }
 
-        let jsonVehiclesToRemove = json[i].vehiclesToRemove;
-
-        for (let v = 0; v < jsonVehiclesToRemove.length; v++) {
-            let jsonVehicleToRemoveId = jsonVehiclesToRemove[v];
-            simulation.addVehicleIdToRemove(jsonVehicleToRemoveId);
-        }
-
         let jsonVehiclesInTime = json[i].vehicleState;
         for (let v = 0; v < jsonVehiclesInTime.length; v++) {
 
