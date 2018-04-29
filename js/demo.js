@@ -279,6 +279,21 @@ function jsonToMapDtos(json)
         situation.addConnectionPolygon(laneShape);
     }
 
+    let jsonVehiclesToAdd = json.alreadyExistingVehicles;
+
+    for (let v = 0; v < jsonVehiclesToAdd.length; v++) {
+        let jsonVehicleToAdd = jsonVehiclesToAdd[v];
+
+        let id = jsonVehicleToAdd.id;
+        let length = jsonVehicleToAdd.vehLength;
+        let width = jsonVehicleToAdd.vehWidth;
+        let color = jsonVehicleToAdd.hexColor;
+
+        let newVehicle = new Vehicle(id, color, length, width);
+
+        simulation.addActiveVehicle(newVehicle);
+    }
+
 }
 
 function getLegById(id, intersectionList)
