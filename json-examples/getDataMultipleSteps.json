@@ -1,0 +1,246 @@
+{
+  "status": 0,
+  "statusMessage": "",
+  "payload": [
+    {
+      "simulationStep": 500,
+      "vehicleState": [
+        {
+          "id": "car_1524688866602",
+          "coords": {
+            "x": "258.25",
+            "y": "0.25"
+          },
+          "angle": 0,
+          "signaling": "0",
+          "vehLength": 27.5,
+          "vehWidth": 9.0,
+          "hexColor": "#0000FF",
+          "speed": 0,
+          "distance": 0,
+          "waitingTime": 0.0
+        }
+      ],
+      "tlState": [
+        {
+          "laneId": "0-0si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-1si_0",
+          "laneState": "g"
+        },
+        {
+          "laneId": "0-2si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-3si_0",
+          "laneState": "g"
+        }
+      ],
+      "phaseState": [
+        {
+          "programId": "0-2program",
+          "tlsId": 0,
+          "phaseId": 0,
+          "duration": 1.0,
+          "nextSwitch": 4.0,
+          "remaining": 3.5
+        }
+      ]
+    },
+    {
+      "simulationStep": 1000,
+      "vehicleState": [
+        {
+          "id": "car_1524688866602",
+          "coords": {
+            "x": "258.25",
+            "y": "-5.6817"
+          },
+          "angle": 0,
+          "signaling": "1",
+          "vehLength": 27.5,
+          "vehWidth": 9.0,
+          "hexColor": "#0000FF",
+          "speed": 9,
+          "distance": 1,
+          "waitingTime": 0.0
+        }
+      ],
+      "tlState": [
+        {
+          "laneId": "0-0si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-1si_0",
+          "laneState": "g"
+        },
+        {
+          "laneId": "0-2si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-3si_0",
+          "laneState": "g"
+        }
+      ],
+      "phaseState": [
+        {
+          "programId": "0-2program",
+          "tlsId": 0,
+          "phaseId": 0,
+          "duration": 1.0,
+          "nextSwitch": 4.0,
+          "remaining": 3.0
+        }
+      ]
+    },
+    {
+      "simulationStep": 1500,
+      "vehicleState": [
+        {
+          "id": "car_1524688866602",
+          "coords": {
+            "x": "258.25",
+            "y": "-16.5904"
+          },
+          "angle": 0,
+          "signaling": "1",
+          "vehLength": 27.5,
+          "vehWidth": 9.0,
+          "hexColor": "#0000FF",
+          "speed": 16,
+          "distance": 3,
+          "waitingTime": 0.0
+        }
+      ],
+      "tlState": [
+        {
+          "laneId": "0-0si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-1si_0",
+          "laneState": "g"
+        },
+        {
+          "laneId": "0-2si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-3si_0",
+          "laneState": "g"
+        }
+      ],
+      "phaseState": [
+        {
+          "programId": "0-2program",
+          "tlsId": 0,
+          "phaseId": 0,
+          "duration": 1.0,
+          "nextSwitch": 4.0,
+          "remaining": 2.5
+        }
+      ]
+    },
+    {
+      "simulationStep": 2000,
+      "vehicleState": [
+        {
+          "id": "car_1524688866602",
+          "coords": {
+            "x": "258.25",
+            "y": "-31.9155"
+          },
+          "angle": 0,
+          "signaling": "1",
+          "vehLength": 27.5,
+          "vehWidth": 9.0,
+          "hexColor": "#0000FF",
+          "speed": 22,
+          "distance": 6,
+          "waitingTime": 0.0
+        }
+      ],
+      "tlState": [
+        {
+          "laneId": "0-0si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-1si_0",
+          "laneState": "g"
+        },
+        {
+          "laneId": "0-2si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-3si_0",
+          "laneState": "g"
+        }
+      ],
+      "phaseState": [
+        {
+          "programId": "0-2program",
+          "tlsId": 0,
+          "phaseId": 0,
+          "duration": 3.0,
+          "nextSwitch": 4.0,
+          "remaining": 2.0
+        }
+      ]
+    },
+    {
+      "simulationStep": 2500,
+      "vehicleState": [
+        {
+          "id": "car_1524688866602",
+          "coords": {
+            "x": "258.25",
+            "y": "-51.2135"
+          },
+          "angle": 0,
+          "signaling": "1",
+          "vehLength": 27.5,
+          "vehWidth": 9.0,
+          "hexColor": "#0000FF",
+          "speed": 28,
+          "distance": 10,
+          "waitingTime": 0.0
+        }
+      ],
+      "tlState": [
+        {
+          "laneId": "0-0si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-1si_0",
+          "laneState": "g"
+        },
+        {
+          "laneId": "0-2si_0",
+          "laneState": "r"
+        },
+        {
+          "laneId": "0-3si_0",
+          "laneState": "g"
+        }
+      ],
+      "phaseState": [
+        {
+          "programId": "0-2program",
+          "tlsId": 0,
+          "phaseId": 0,
+          "duration": 3.0,
+          "nextSwitch": 4.0,
+          "remaining": 1.5
+        }
+      ]
+    }
+  ]
+}

@@ -2,49 +2,24 @@ class Situation
 {
     constructor()
     {
-        this.distanceBetweenLegEnds = undefined;
-        this.distanceBetweenIntersections = undefined;
-        this.xSize = undefined;
-        this.ySize = undefined;
         this.intersectionCount = undefined;
         this.routesCount = undefined;
-        this.gridDimensions = undefined;
+        this.boundaryCoordinates = undefined;
         this.intersectionList = [];
         this.connections = [];
+        this.connectionPolygons = [];
         this.selectedIntersection = undefined;
         this.selectedLane = undefined;
         this.canvas = undefined;
-        this.vehicleBase = undefined;
     }
 
     setMetadata(
-        distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount, routesCount, gridDimensions, vehicleBase)
+        intersectionCount, routesCount, boundaryCoordinates)
     {
-        this.distanceBetweenLegEnds = distanceBetweenLegEnds;
-        this.distanceBetweenIntersections = distanceBetweenIntersections;
-        this.gridDimensions = gridDimensions;
-        this.xSize = (
-            this.gridDimensions.getGridSizeX() * this.distanceBetweenLegEnds * 5 * 2)
-            + ( (this.gridDimensions.getGridSizeX() - 1) * this.distanceBetweenIntersections);
-        this.ySize = (
-            this.gridDimensions.getGridSizeY() * this.distanceBetweenLegEnds * 5 * 2)
-            + ( (this.gridDimensions.getGridSizeY() - 1) * this.distanceBetweenIntersections);
         this.intersectionCount = intersectionCount;
         this.routesCount = routesCount;
-        this.vehicleBase = vehicleBase;
+        this.boundaryCoordinates = boundaryCoordinates;
         updateSituationSidebar(this);
-    }
-
-    getOffsetX()
-    {
-        return (this.gridDimensions.getGridOffsetX() * this.distanceBetweenLegEnds * 5 * 2)
-            + ( (this.gridDimensions.getGridOffsetX() - 1) * this.distanceBetweenIntersections);
-    }
-
-    getOffsetY()
-    {
-        return (this.gridDimensions.getGridOffsetY() * this.distanceBetweenLegEnds * 5 * 2)
-            + ( (this.gridDimensions.getGridOffsetY() - 1) * this.distanceBetweenIntersections);
     }
 
     addIntersection(intersection)
@@ -57,12 +32,17 @@ class Situation
         this.connections.push(connection);
     }
 
+    addConnectionPolygon(connectionPolygon)
+    {
+        this.connectionPolygons.push(connectionPolygon);
+    }
+
     initCanvas()
     {
         $('#canvas').empty();
         if(this.intersectionCount > 0)
         {
-            this.canvas = SVG('canvas').size(this.xSize, this.ySize);
+            this.canvas = SVG('canvas').size(this.boundaryCoordinates.x, this.boundaryCoordinates.y);
         }
 
     }

@@ -20,7 +20,6 @@ function loadAndDrawLayout()
     drawer = new Drawer(situation, simulation);
     loadSituationLayout();
     situation.initCanvas();
-    drawer.setOffset();
     drawSituationLayout();
 }
 
@@ -28,6 +27,7 @@ function drawSituationLayout()
 {
     drawer.drawIntersection(situation.intersectionList);
     drawer.drawConnections(situation.connections);
+    drawer.drawConnectionPolygons(situation.connectionPolygons);
 }
 
 setInterval(visualization, SIM_STEP);
@@ -101,12 +101,12 @@ function jsonToSimulationDtos(json)
             let existingVehicle = findVehicleById(simulation.activeVehicles, id);
             if (existingVehicle == null) {
                 let newVehicle = new Vehicle(id, color, length, width);
-                vehicleState.setVehicle(newVehicle);
+                vehicleState.setVehicle(newVehicle, situation.boundaryCoordinates.y);
                 simulation.activeVehicles.push(newVehicle);
             }
             else
             {
-                vehicleState.setVehicle(existingVehicle);
+                vehicleState.setVehicle(existingVehicle, situation.boundaryCoordinates.y);
             }
 
             simTimeDto.addVehicleState(vehicleState);
@@ -169,68 +169,118 @@ function jsonToMapDtos(json)
 
     let intersectionCount = jsonMetadata.intersectionCount;
     let routesCount = jsonMetadata.routesCount;
-    let distanceBetweenLegEnds = jsonMetadata.distanceBetweenLegEnds;
-    let distanceBetweenIntersections = jsonMetadata.distanceBetweenIntersections;
 
-    let gridDimensions = new GridDimensions(
-        jsonMetadata.gridDimensions.minimumX,
-        jsonMetadata.gridDimensions.minimumY,
-        jsonMetadata.gridDimensions.maximumX,
-        jsonMetadata.gridDimensions.maximumY,
-    );
-
-    let vehicleBase = new Coords(
-        jsonMetadata.vehicleCoordinatesStart.x,
-        jsonMetadata.vehicleCoordinatesStart.y);
+    let boundaryCoordinates = new Coords(jsonMetadata.networkBoundary.x, jsonMetadata.networkBoundary.y);
 
     situation.setMetadata(
-        distanceBetweenLegEnds, distanceBetweenIntersections, intersectionCount,
-        routesCount, gridDimensions, vehicleBase);
+        intersectionCount,
+        routesCount,
+        boundaryCoordinates);
 
     for(let i = 0; i < json.intersectionList.length; i++)
     {
         let jsonIntersection = json.intersectionList[i];
         let legList = [];
         let intersectionId = jsonIntersection.id;
-        let intersectionCoordinates = new Coords(
-			jsonIntersection.coordinates.x, jsonIntersection.coordinates.y);
         let intersectionGrid = new GridPos(
             jsonIntersection.gridPosition.x, jsonIntersection.gridPosition.y);
         let angle = jsonIntersection.angle;
         let signalPrograms = jsonIntersection.signalProgramList;
+
+        let shapeJson = jsonIntersection.shape.coords;
+        let coordinatesList = [];
+
+        for (let s = 0; s < shapeJson.length; s++)
+        {
+            coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+        }
+
+        let shape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, undefined, false);
 
         for(let l = 0; l < jsonIntersection.legList.length; l++)
         {
             let jsonLeg = jsonIntersection.legList[l];
             let legId = jsonLeg.id;
             let legAngle = jsonLeg.angle;
-            let legCoordinates = new Coords(
-                jsonLeg.coordinates.x, jsonLeg.coordinates.y);
-            let outputLanesCount = jsonLeg.outputLanesCount;
-            let laneList = [];
+            let inputLaneList = [];
+            let outputLaneList = [];
 
-            for(let k = 0; k < jsonLeg.laneList.length; k++)
+            for(let k = 0; k < jsonLeg.inputLaneList.length; k++)
             {
-                let jsonLane = jsonLeg.laneList[k];
+                let jsonLane = jsonLeg.inputLaneList[k];
                 let laneId = jsonLane.id;
-                laneList[k] = new Lane(laneId,
-                    jsonLane.left, jsonLane.right, jsonLane.straight, legId, intersectionId);
+
+                let shapeJson = jsonLane.shape.coords;
+                let coordinatesList = [];
+                for (let s = 0; s < shapeJson.length; s++)
+                {
+                    coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+                }
+
+                let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, legAngle);
+
+                inputLaneList[k] = new Lane(laneId, legId, intersectionId, laneShape);
+                inputLaneList[k].setDirections(jsonLane.left, jsonLane.right, jsonLane.straight);
+
+
             }
 
-			legList[l] = new Leg(legId, legAngle, outputLanesCount, legCoordinates, laneList);
+            for(let k = 0; k < jsonLeg.outputLaneList.length; k++)
+            {
+                let jsonLane = jsonLeg.outputLaneList[k];
+                let laneId = jsonLane.id;
+
+                let shapeJson = jsonLane.shape.coords;
+                let coordinatesList = [];
+                for (let s = 0; s < shapeJson.length; s++)
+                {
+                    coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+                }
+
+                let laneShape = new Shape(coordinatesList,jsonMetadata.networkBoundary.y, legAngle);
+
+                outputLaneList[k] = new Lane(laneId, legId, intersectionId, laneShape, true);
+            }
+
+			legList[l] = new Leg(legId, legAngle, inputLaneList, outputLaneList);
         }
 
         situation.addIntersection(
-            new Intersection(intersectionId, intersectionCoordinates, intersectionGrid, legList, angle, signalPrograms));
+            new Intersection(intersectionId, intersectionGrid, legList, angle, signalPrograms, shape));
     }
 
     for(let i = 0; i < json.connectionLegs.length; i++)
     {
         let jsonConnection = json.connectionLegs[i];
 
+        let shapeJson = jsonConnection.shape.coords;
+        let coordinatesList = [];
+        for (let s = 0; s < shapeJson.length; s++)
+        {
+            coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+        }
+
+        let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y);
+
         situation.addConnection(new ConnectingLeg(jsonConnection.id,
             getLegById(jsonConnection.leg1Id, situation.intersectionList),
-            getLegById(jsonConnection.leg2Id, situation.intersectionList)));
+            getLegById(jsonConnection.leg2Id, situation.intersectionList), laneShape));
+    }
+
+    for(let i = 0; i < json.connectionPolygons.length; i++)
+    {
+        let jsonConnection = json.connectionPolygons[i];
+
+        let shapeJson = jsonConnection.shape.coords;
+        let coordinatesList = [];
+        for (let s = 0; s < shapeJson.length; s++)
+        {
+            coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+        }
+
+        let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, undefined, false);
+
+        situation.addConnectionPolygon(laneShape);
     }
 
 }
@@ -260,11 +310,11 @@ function getLaneById(id, intersectionList)
         for (let l = 0; l < intersection.legList.length; l++)
         {
             let leg = intersection.legList[l];
-            for (let k = 0; k < leg.laneList.length; k++)
+            for (let k = 0; k < leg.inputLaneList.length; k++)
             {
-                if(id == leg.laneList[k].id)
+                if(id == leg.inputLaneList[k].id)
                 {
-                    return leg.laneList[k];
+                    return leg.inputLaneList[k];
                 }
             }
         }

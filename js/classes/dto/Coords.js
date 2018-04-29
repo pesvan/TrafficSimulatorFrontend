@@ -1,9 +1,18 @@
 class Coords
 {
-    constructor(x, y)
+    constructor(x, y, multiply = true)
     {
-        this.__x = parseFloat(x);
-        this.__y = parseFloat(y);
+        if(multiply)
+        {
+            this.__x = x * visualizationMultiplier;
+            this.__y = y * visualizationMultiplier;
+        }
+        else
+        {
+            this.__x = x;
+            this.__y = y;
+        }
+
     }
 
     toPolyString()

@@ -7,41 +7,7 @@ function moveCoordinatesByOffset(coordinates, angle, offset)
     let newX = coordinates.x + (sinus * offset);
     let newY = coordinates.y + (cosinus * offset);
 
-    return new Coords(newX, newY);
-}
-
-function getOffsetTest(coordinates, cosinus, newY)
-{
-    return (newY - coordinates.y) / cosinus;
-}
-
-function getDistance2D(point1, point2)
-{
-    return Math.sqrt(
-        Math.pow(
-            point1.x - point2.x, 2
-        ) +
-        Math.pow(
-            point1.y - point2.y, 2
-        )
-    );
-}
-
-function getDistance1D(point1, point2)
-{
-    return Math.sqrt(
-        Math.pow(
-            point1 - point2, 2
-        )
-    );
-}
-
-function findMiddlePoint(point1, point2)
-{
-    return new Coords(
-        ((point1.x + point2.x)/2),
-        ((point1.y + point2.y)/2)
-    );
+    return new Coords(newX, newY, false);
 }
 
 function degreesToRadians(degrees)
@@ -49,7 +15,14 @@ function degreesToRadians(degrees)
     return degrees * Math.PI / 180;
 }
 
-function radiansToDegrees(radians)
-{
-    return radians * 180 / Math.PI;
+function getLaneAngle(coordinates1, coordinates2) {
+    let dy = coordinates2.y - coordinates1.y;
+    let dx = coordinates2.x - coordinates1.x;
+    let theta = Math.atan2(dy, dx); // range (-PI, PI]
+    theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+    //if (theta < 0) theta = 360 + theta; // range [0, 360)
+
+
+
+    return theta;
 }

@@ -1,12 +1,11 @@
 class Leg
 {
-    constructor(id, angle, outputLanesCount, coordinates, laneList)
+    constructor(id, angle, inputLaneList, outputLaneList)
     {
         this.id = id;
         this.angle = angle;
-        this.outputLanesCount = outputLanesCount;
-        this.coordinates = coordinates;
-        this.laneList = laneList;
+        this.inputLaneList = inputLaneList;
+        this.outputLaneList = outputLaneList;
     }
 
     setIntersectionBorderCoords(left, right)
