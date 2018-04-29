@@ -4,12 +4,35 @@ class Simulation
     {
         this.visualizationRunning = false;
         this.activeVehicles = [];
+        this.vehicleIdsToRemove = [];
         this.simulationStepsToDraw = [];
         this.firstToDrawSimTime = undefined;
         this.density = undefined;
         this.selectedVehicle = undefined;
-
         this.stepInProgress = undefined;
+    }
+
+    addActiveVehicle(vehicle)
+    {
+        this.activeVehicles.push(vehicle);
+    }
+
+    addVehicleIdToRemove(vehicleId)
+    {
+        this.vehicleIdsToRemove.push(vehicleId);
+    }
+
+    findActiveVehicle(vehId)
+    {
+        for (let i = 0; i < this.activeVehicles.length; i++)
+        {
+            if(this.activeVehicles[i].id === vehId)
+            {
+                return this.activeVehicles[i];
+            }
+        }
+
+        return null;
     }
 
     startVisualisation()
@@ -61,36 +84,29 @@ class Simulation
 
     removeInactiveVehicles()
     {
-        let setVehicles = [];
-        for(let i = 0; i < this.activeVehicles.length; i++)
+        for (let i = 0; i < this.vehicleIdsToRemove.length; i++)
         {
-            if(this.activeVehicles[i].vehicleIsSet())
+            let vehicle = this.findActiveVehicle(this.vehicleIdsToRemove[i]);
+            let index = this.activeVehicles.indexOf(vehicle);
+
+
+            //remove from active vehicles
+            if(index > -1)
             {
-                setVehicles.push(this.activeVehicles[i]);
+                this.activeVehicles.splice(index, 1);
             }
-        }
-        let vehiclesInCurrentStep = [];
-        for(let i = 0; i < this.stepInProgress.vehicleStates.length; i++)
-        {
-            vehiclesInCurrentStep.push(this.stepInProgress.vehicleStates[i].vehicle);
+
+            //remove from selected
+            if(this.isSelectedVehicle() && this.selectedVehicle.id === this.vehicleIdsToRemove[i]){
+                this.selectedVehicle = undefined;
+            }
+
+            //remove from map
+            vehicle.removeSvg();
+
         }
 
-        for(let i = 0; i < setVehicles.length; i++)
-        {
-            let vehicle = findVehicleById(vehiclesInCurrentStep, setVehicles[i].id);
-            if(vehicle===null)
-            {
-                setVehicles[i].removeSvg();
-                let index = this.activeVehicles.indexOf(setVehicles[i]);
-                if(index > -1)
-                {
-                    this.activeVehicles.splice(index, 1);
-                }
-                if(this.isSelectedVehicle() && this.selectedVehicle.id === setVehicles[i].id){
-                    this.selectedVehicle = undefined;
-                }
-            }
-        }
+        this.vehicleIdsToRemove = [];
     }
 
     isSelectedVehicle()

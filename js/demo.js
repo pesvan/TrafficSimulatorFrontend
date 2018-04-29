@@ -46,6 +46,7 @@ function visualization()
         let stepToDo = simulation.getFirstToDraw();
         if(stepToDo !== undefined)
         {
+
             drawer.simulateSimulationStep(stepToDo, drawer);
             simulation.removeInactiveVehicles();
         }
@@ -75,6 +76,28 @@ function jsonToSimulationDtos(json)
 
         let simTimeDto = new SimulationTime(simulationStep);
 
+        let jsonVehiclesToAdd = json[i].vehiclesToAdd;
+
+        for (let v = 0; v < jsonVehiclesToAdd.length; v++) {
+            let jsonVehicleToAdd = jsonVehiclesToAdd[v];
+
+            let id = jsonVehicleToAdd.id;
+            let length = jsonVehicleToAdd.vehLength;
+            let width = jsonVehicleToAdd.vehWidth;
+            let color = jsonVehicleToAdd.hexColor;
+
+            let newVehicle = new Vehicle(id, color, length, width);
+
+            simulation.addActiveVehicle(newVehicle);
+        }
+
+        let jsonVehiclesToRemove = json[i].vehiclesToRemove;
+
+        for (let v = 0; v < jsonVehiclesToRemove.length; v++) {
+            let jsonVehicleToRemoveId = jsonVehiclesToRemove[v];
+            simulation.addVehicleIdToRemove(jsonVehicleToRemoveId);
+        }
+
         let jsonVehiclesInTime = json[i].vehicleState;
         for (let v = 0; v < jsonVehiclesInTime.length; v++) {
 
@@ -87,10 +110,6 @@ function jsonToSimulationDtos(json)
             let angle = jsonVehicleStateInTime.angle;
             let signaling = jsonVehicleStateInTime.signaling;
 
-            let length = jsonVehicleStateInTime.vehLength;
-            let width = jsonVehicleStateInTime.vehWidth;
-            let color = jsonVehicleStateInTime.hexColor;
-
             let speed = jsonVehicleStateInTime.speed;
             let distance = jsonVehicleStateInTime.distance;
             let waitingTime = jsonVehicleStateInTime.waitingTime;
@@ -98,11 +117,9 @@ function jsonToSimulationDtos(json)
             let vehicleState = new VehicleState(coords, angle, signaling, speed, distance, waitingTime);
 
 
-            let existingVehicle = findVehicleById(simulation.activeVehicles, id);
-            if (existingVehicle == null) {
-                let newVehicle = new Vehicle(id, color, length, width);
-                vehicleState.setVehicle(newVehicle, situation.boundaryCoordinates.y);
-                simulation.activeVehicles.push(newVehicle);
+            let existingVehicle = simulation.findActiveVehicle(id);
+            if (existingVehicle === null) {
+                console.log("vehicle not found");
             }
             else
             {
@@ -146,20 +163,6 @@ function jsonToSimulationDtos(json)
     }
 
 }
-
-function findVehicleById(vehicles, id)
-{
-    for(let i = 0; i < vehicles.length; i++)
-    {
-        if(id===vehicles[i].id)
-        {
-            return vehicles[i];
-        }
-    }
-    return null;
-}
-
-
 
 function jsonToMapDtos(json)
 {
