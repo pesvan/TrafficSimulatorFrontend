@@ -1,15 +1,29 @@
 class Lane
 {
-    constructor(id, left, right, straight, legId, intersectionId)
+    constructor(id, legId, intersectionId, shape, output = false)
     {
         this.id = id;
+        this.left = undefined;
+        this.right = undefined;
+        this.straight = undefined;
+        this.output = output;
+        this.semaphore = undefined;
+        this.svg = undefined;
+        this.shape = shape;
+        this.legId = legId;
+        this.intersectionId = intersectionId;
+    }
+
+    isInputLane()
+    {
+        return !this.output;
+    }
+
+    setDirections(left, right, straight)
+    {
         this.left = left;
         this.right = right;
         this.straight = straight;
-        this.semaphore = undefined;
-        this.svg = undefined;
-        this.legId = legId;
-        this.intersectionId = intersectionId;
     }
 
     setSemaphore(semaphore)

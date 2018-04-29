@@ -13,10 +13,10 @@ class VehicleState
         this.waitingTime = waitingTime;
     }
 
-    setVehicle(vehicle)
+    setVehicle(vehicle, situationHeight)
     {
         this.vehicle = vehicle;
-        this.polygonCoordinates = new VehicleCoordinates(this.coords, this.angle, this.vehicle.length, this.vehicle.width);
+        this.polygonCoordinates = new VehicleCoordinates(this.coords, this.angle, this.vehicle.length, this.vehicle.width, situationHeight);
     }
 
     isSignallingRight()

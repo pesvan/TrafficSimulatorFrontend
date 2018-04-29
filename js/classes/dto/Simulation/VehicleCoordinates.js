@@ -1,8 +1,10 @@
 class VehicleCoordinates
 {
-    constructor(initPoint, angle, length, width)
+    constructor(initPoint, angle, length, width, situationHeight)
     {
         this.frontCenter = initPoint;
+
+        this.frontCenter.__y = situationHeight - this.frontCenter.y;
 
         this.backCenter = moveCoordinatesByOffset(this.frontCenter, angle + 180, length);
 
