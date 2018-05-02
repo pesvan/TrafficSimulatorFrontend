@@ -1,0 +1,436 @@
+{
+	 "$schema": "http://json-schema.org/draft-04/schema#",
+	 "$ref": "#/definitions/GeneralResponse",
+	 "definitions": {
+		 "VehicleOnlineData": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "string"
+				},
+				 "coords": {
+					 "$ref": "#/definitions/Coordinates"
+				},
+				 "angle": {
+					 "type": "number"
+				},
+				 "signaling": {
+					 "type": "string"
+				},
+				 "speed": {
+					 "type": "number"
+				},
+				 "distance": {
+					 "type": "number"
+				},
+				 "waitingTime": {
+					 "type": "number"
+				}
+			},
+			 "required": [
+				"id",
+				"coords",
+				"angle",
+				"signaling",
+				"speed",
+				"distance",
+				"waitingTime"
+			],
+			 "additionalProperties": false
+		},
+		 "SimulationStepData": {
+			 "type": "object",
+			 "properties": {
+				 "simulationTime": {
+					 "type": "number"
+				},
+				 "vehicleStates": {
+					 "title": "vehicleState",
+					 "type": "array",
+					 "items": {
+						 "$ref": "#/definitions/VehicleOnlineData"
+					}
+				},
+				 "tlsStates": {
+					 "title": "tlState",
+					 "type": "array",
+					 "items": {
+						 "$ref": "#/definitions/TrafficLightsOnlineData"
+					}
+				},
+				 "phaseStates": {
+					 "title": "phaseState",
+					 "type": "array",
+					 "items": {
+						 "$ref": "#/definitions/IntersectionOnlineData"
+					}
+				},
+				 "vehiclesToAdd": {
+					 "type": "array",
+					 "items": {
+						 "$ref": "#/definitions/VehicleStaticData"
+					}
+				}
+			},
+			 "required": [
+				"simulationTime",
+				"vehicleStates",
+				"tlsStates",
+				"phaseStates",
+				"vehiclesToAdd"
+			],
+			 "additionalProperties": false
+		},
+		 "GeneralResponse": {
+			 "type": "object",
+			 "properties": {
+				 "status": {
+					 "type": "number"
+				},
+				 "statusMessage": {
+					 "type": "string"
+				},
+				 "payload": {
+				}
+			},
+			 "required": [
+				"status",
+				"statusMessage",
+				"payload"
+			],
+			 "additionalProperties": false
+		},
+		 "VehicleStaticData": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "string"
+				},
+				 "vehLength": {
+					 "type": "number"
+				},
+				 "vehWidth": {
+					 "type": "number"
+				},
+				 "hexColor": {
+					 "type": "string"
+				}
+			},
+			 "required": [
+				"id",
+				"vehLength",
+				"vehWidth",
+				"hexColor"
+			],
+			 "additionalProperties": false
+		},
+		 "IntersectionOnlineData": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "number"
+				},
+				 "programId": {
+					 "type": "string"
+				},
+				 "phaseId": {
+					 "type": "number"
+				},
+				 "nextSwitch": {
+					 "type": "number"
+				}
+			},
+			 "required": [
+				"id",
+				"programId",
+				"phaseId",
+				"nextSwitch"
+			],
+			 "additionalProperties": false
+		},
+		 "TrafficLightsOnlineData": {
+			 "type": "object",
+			 "properties": {
+				 "laneId": {
+					 "type": "string"
+				},
+				 "laneState": {
+					 "type": "string"
+				}
+			},
+			 "required": [
+				"laneId",
+				"laneState"
+			],
+			 "additionalProperties": false
+		},
+		 "SimulationStepList": {
+			 "title": "payload",
+			 "type": "array",
+			 "items": {
+				 "$ref": "#/definitions/SimulationStepData"
+			}
+		},
+		 "Coordinates": {
+			 "type": "object",
+			 "properties": {
+				 "x": {
+					 "type": "number"
+				},
+				 "y": {
+					 "type": "number"
+				}
+			},
+			 "required": [
+				"x",
+				"y"
+			],
+			 "additionalProperties": false
+		},
+		 "Metadata": {
+			 "title": "metadata",
+			 "type": "object",
+			 "properties": {
+				 "simulationStepLength": {
+					 "type": "number"
+				},
+				 "intersectionCount": {
+					 "type": "number"
+				},
+				 "routesCount": {
+					 "type": "number"
+				},
+				 "networkBoundary": {
+					 "$ref": "#/definitions/Coordinates"
+				}
+			},
+			 "required": [
+				"simulationStepLength",
+				"intersectionCount",
+				"routesCount",
+				"networkBoundary"
+			],
+			 "additionalProperties": false
+		},
+		 "Intersection": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "number"
+				},
+				 "shape": {
+					 "$ref": "#/definitions/Shape"
+				},
+				 "gridPosition": {
+					 "$ref": "#/definitions/Coordinates"
+				},
+				 "legList": {
+					 "$ref": "#/definitions/LegList"
+				},
+				 "signalProgramList": {
+					 "title": "signalProgramList",
+					 "type": "array",
+					 "items": {
+						 "type": "string"
+					}
+				},
+				 "angle": {
+					 "type": "number"
+				}
+			},
+			 "required": [
+				"id",
+				"shape",
+				"gridPosition",
+				"legList",
+				"signalProgramList",
+				"angle"
+			],
+			 "additionalProperties": false
+		},
+		 "MapData": {
+			 "title": "payload",
+			 "type": "object",
+			 "properties": {
+				 "metadata": {
+					 "$ref": "#/definitions/Metadata"
+				},
+				 "intersectionList": {
+					 "$ref": "#/definitions/IntersectionList"
+				},
+				 "connectionLegs": {
+					 "$ref": "#/definitions/ConnectionLegs"
+				},
+				 "connectionPolygons": {
+					 "$ref": "#/definitions/ConnectionPolygons"
+				},
+				 "alreadyExistingVehicles": {
+					 "$ref": "#/definitions/VehicleStaticDataList"
+				}
+			},
+			 "required": [
+				"metadata"
+			],
+			 "additionalProperties": false
+		},
+		 "IntersectionList": {
+			 "type": "array",
+			 "items": {
+				 "$ref": "#/definitions/Intersection"
+			}
+		},
+		 "ConnectionLegs": {
+			 "title": "connectionLegs",
+			 "type": "array",
+			 "items": {
+				 "$ref": "#/definitions/ConnectionLeg"
+			}
+		},
+		 "Shape": {
+			 "title": "shape",
+			 "type": "object",
+			 "properties": {
+				 "coords": {
+					 "type": "array",
+					 "items": {
+						 "$ref": "#/definitions/Coordinates"
+					}
+				}
+			},
+			 "additionalProperties": false
+		},
+		 "Lane": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "string"
+				},
+				 "isInputLane": {
+					 "type": "boolean"
+				},
+				 "directions": {
+					 "$ref": "#/definitions/LaneDirection"
+				},
+				 "laneLength": {
+					 "type": "number"
+				},
+				 "shape": {
+					 "$ref": "#/definitions/Shape"
+				}
+			},
+			 "required": [
+				"isInputLane",
+				"laneLength",
+				"shape"
+			],
+			 "dependencies": {
+				 "isInputLane": [
+					"directions"
+				]
+			},
+			 "additionalProperties": false
+		},
+		 "LaneDirection": {
+			 "type": "object",
+			 "properties": {
+				 "left": {
+					 "type": "boolean"
+				},
+				 "straight": {
+					 "type": "boolean"
+				},
+				 "right": {
+					 "type": "boolean"
+				}
+			},
+			 "required": [
+				"left",
+				"straight",
+				"right"
+			],
+			 "additionalProperties": false
+		},
+		 "ConnectionPolygons": {
+			 "type": "array",
+			 "items": {
+				 "$ref": "#/definitions/ConnectionPolygon"
+			}
+		},
+		 "VehicleStaticDataList": {
+			 "type": "array",
+			 "items": {
+				 "$ref": "#/definitions/VehicleStaticData"
+			}
+		},
+		 "ConnectionLeg": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "string"
+				},
+				 "leg1Id": {
+					 "type": "string"
+				},
+				 "leg2Id": {
+					 "type": "string"
+				},
+				 "shape": {
+					 "$ref": "#/definitions/Shape"
+				}
+			},
+			 "required": [
+				"id",
+				"leg1Id",
+				"leg2Id"
+			],
+			 "additionalProperties": false
+		},
+		 "ConnectionPolygon": {
+			 "type": "object",
+			 "properties": {
+				 "shape": {
+					 "$ref": "#/definitions/Shape"
+				}
+			},
+			 "required": [
+				"shape"
+			],
+			 "additionalProperties": false
+		},
+		 "LegList": {
+			 "items": {
+				 "$ref": "#/definitions/Leg"
+			},
+			 "additionalProperties": false
+		},
+		 "Leg": {
+			 "type": "object",
+			 "properties": {
+				 "id": {
+					 "type": "string"
+				},
+				 "angle": {
+					 "type": "number"
+				},
+				 "laneList": {
+					 "$ref": "#/definitions/LaneList"
+				}
+			},
+			 "required": [
+				"id",
+				"angle",
+				"laneList"
+			],
+			 "additionalProperties": false
+		},
+		 "LaneList": {
+			 "type": "array",
+			 "items": [
+				{
+					 "$ref": "#/definitions/Lane"
+				}
+			],
+			 "additionalItems": false
+		}
+	}
+}
