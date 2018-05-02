@@ -1,12 +1,10 @@
 class PhaseState
 {
-    constructor(duration, nextSwitch, phaseId, programId, remaining)
+    constructor(nextSwitch, phaseId, programId)
     {
-        this.duration = duration;
         this.nextSwitch = nextSwitch;
         this.phaseId = phaseId;
         this.programId = programId;
-        this.remaining = remaining;
     }
 
     toString()

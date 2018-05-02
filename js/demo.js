@@ -153,9 +153,7 @@ function jsonToSimulationDtos(json)
             let tlsId = jsonPhaseState.tlsId;
             let nextSwitch = jsonPhaseState.nextSwitch;
             let phaseId = jsonPhaseState.phaseId;
-            let remaining = jsonPhaseState.remaining;
-            let duration = jsonPhaseState.duration;
-            let phaseState = new PhaseState(duration, nextSwitch, phaseId, programId, remaining);
+            let phaseState = new PhaseState(nextSwitch, phaseId, programId);
 
             simTimeDto.addPhaseState(phaseState, tlsId);
         }
@@ -209,9 +207,9 @@ function jsonToMapDtos(json)
             let inputLaneList = [];
             let outputLaneList = [];
 
-            for(let k = 0; k < jsonLeg.inputLaneList.length; k++)
+            for(let k = 0; k < jsonLeg.laneList.length; k++)
             {
-                let jsonLane = jsonLeg.inputLaneList[k];
+                let jsonLane = jsonLeg.laneList[k];
                 let laneId = jsonLane.id;
 
                 let shapeJson = jsonLane.shape.coords;
@@ -223,27 +221,19 @@ function jsonToMapDtos(json)
 
                 let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, legAngle);
 
-                inputLaneList[k] = new Lane(laneId, legId, intersectionId, laneShape);
-                inputLaneList[k].setDirections(jsonLane.left, jsonLane.right, jsonLane.straight);
+                let isInputLane = jsonLane.inputLane;
 
-
-            }
-
-            for(let k = 0; k < jsonLeg.outputLaneList.length; k++)
-            {
-                let jsonLane = jsonLeg.outputLaneList[k];
-                let laneId = jsonLane.id;
-
-                let shapeJson = jsonLane.shape.coords;
-                let coordinatesList = [];
-                for (let s = 0; s < shapeJson.length; s++)
+                if(isInputLane)
                 {
-                    coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+                    let lane = new Lane(laneId, legId, intersectionId, laneShape);
+                    inputLaneList.push(lane);
+                    lane.setDirections(jsonLane.left, jsonLane.right, jsonLane.straight);
+                }
+                else
+                {
+                    outputLaneList[outputLaneList.length] = new Lane(laneId, legId, intersectionId, laneShape, true);
                 }
 
-                let laneShape = new Shape(coordinatesList,jsonMetadata.networkBoundary.y, legAngle);
-
-                outputLaneList[k] = new Lane(laneId, legId, intersectionId, laneShape, true);
             }
 
 			legList[l] = new Leg(legId, legAngle, inputLaneList, outputLaneList);
