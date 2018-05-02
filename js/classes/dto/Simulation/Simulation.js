@@ -1,7 +1,5 @@
-class Simulation
-{
-    constructor()
-    {
+class Simulation {
+    constructor() {
         this.visualizationRunning = false;
         this.activeVehicles = [];
         this.simulationStepsToDraw = [];
@@ -9,6 +7,12 @@ class Simulation
         this.density = undefined;
         this.selectedVehicle = undefined;
         this.stepInProgress = undefined;
+        this.requestForMoreSent = false;
+    }
+
+    setRequestForMoreSent(bool)
+    {
+        this.requestForMoreSent = bool;
     }
 
     addActiveVehicle(vehicle)

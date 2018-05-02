@@ -223,6 +223,7 @@ function doSimulationStep(noOfSteps)
         {
             simulation.stopVisualisation();
         }
+        simulation.setRequestForMoreSent(false);
     })
     .fail(function( jqXHR, textStatus, errorThrown ){
         showHttpError("Getting simulation data");

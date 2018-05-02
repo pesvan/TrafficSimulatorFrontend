@@ -34,13 +34,18 @@ setInterval(visualization, SIM_STEP);
 
 function visualization()
 {
+    let t0 = performance.now();
+
     updateSimulationSidebar(simulation, situation.selectedIntersection);
+
+    let t1 = performance.now();
 
     if(simulation.visualizationRunning)
     {
-        if(simulation.simulationStepsToDraw.length < 3)
+        if(simulation.simulationStepsToDraw.length < 3 && simulation.requestForMoreSent === false)
         {
-            doSimulationStep(5);
+            simulation.setRequestForMoreSent(true);
+            doSimulationStep(10);
         }
 
         let stepToDo = simulation.getFirstToDraw();
@@ -48,7 +53,10 @@ function visualization()
         {
 
             drawer.simulateSimulationStep(stepToDo, drawer);
+            let t2 = performance.now();
             simulation.removeInactiveVehicles();
+            let t3 = performance.now();
+            console.log("Simulation step ", stepToDo.time, " took ", (t3-t0), " ms (update sidebar ", (t1-t0), ", simulate step", (t2-t1), ", remove inactive", (t3-t2));
         }
 
     }
