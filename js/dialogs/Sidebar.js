@@ -3,6 +3,8 @@ function updateSituationSidebar(situation)
     $("#intersectionCount").html(situation.intersectionCount);
     $("#routesCount").html(situation.routesCount);
 
+    $("#getSimOutputButton").hide();
+
     if(situation.intersectionCount === 0)
     {
         $('#selectedIntersection').hide();
@@ -62,6 +64,7 @@ function updateSimulationSidebar(simulation, selectedIntersection)
     } else if (simulation.firstToDrawSimTime > 0)
     {
         simState = simulation.runningVisualisation() ? "Running" : "Paused";
+        $('#getSimOutputButton').show();
     }
 
     $('#simState').html(simState);

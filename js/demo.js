@@ -42,10 +42,10 @@ function visualization()
 
     if(simulation.visualizationRunning)
     {
-        if(simulation.simulationStepsToDraw.length < 3 && simulation.requestForMoreSent === false)
+        if(simulation.simulationStepsToDraw.length < 5 && simulation.requestForMoreSent === false)
         {
             simulation.setRequestForMoreSent(true);
-            doSimulationStep(10);
+            doSimulationStep(5);
         }
 
         let stepToDo = simulation.getFirstToDraw();

@@ -6,6 +6,6 @@ const greenColor = '#00bb00';
 const orangeColor = '#ff7000';
 const selectedColor = '#f06';
 
-const SIM_STEP = 500;
+const SIM_STEP = 750;
 
 const visualizationMultiplier = 5;
