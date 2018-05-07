@@ -8,6 +8,11 @@ $('#pauseSimulationButton').on("click", function () {
 $('#stopSimulationButton').on("click", function () {
     simulation.stopVisualisation();
 });
+$("#getSimOutputButton").on("click", function () {
+    simulation.pauseVisualisation();
+    getStatistics();
+});
+
 
 $('#myRange').on("change", readRange);
 

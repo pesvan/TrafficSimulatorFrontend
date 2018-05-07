@@ -264,3 +264,22 @@ function setSignalProgram(programId)
         showHttpError("Set signal program");
     });
 }
+
+function getStatistics()
+{
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/getStatistics",
+        dataType: "json",
+    })
+        .done(function( response ) {
+            showGeneralError("Getting simulation output", response);
+            if(response.status === 0)
+            {
+                jsonToSimulationDtos(response);
+            }
+        })
+        .fail(function( jqXHR, textStatus, errorThrown ){
+            showHttpError("Getting simulation output");
+        });
+}
