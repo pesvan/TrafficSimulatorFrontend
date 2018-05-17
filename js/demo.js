@@ -32,6 +32,40 @@ function drawSituationLayout()
 
 setInterval(visualization, SIM_STEP);
 
+function setStatistics(json)
+{
+    $("#placeholderSimTime").html(json.payload.simulationTime);
+    $("#placeholderSimStepLength").html(json.payload.simulationStepLength);
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: json.payload.simSteps,
+            datasets: [{
+                label: '# of vehicles',
+                data: json.payload.vehiclesInTime,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+    modalShowStatistics.style.display = "block";
+}
+
 function visualization()
 {
     let t0 = performance.now();

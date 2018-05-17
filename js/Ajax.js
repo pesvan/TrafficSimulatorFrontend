@@ -276,7 +276,7 @@ function getStatistics()
             showGeneralError("Getting simulation output", response);
             if(response.status === 0)
             {
-                jsonToSimulationDtos(response);
+                setStatistics(response);
             }
         })
         .fail(function( jqXHR, textStatus, errorThrown ){

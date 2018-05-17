@@ -3,6 +3,7 @@
 		<title>TrafficSimulator</title>
 		<script type="text/javascript" src="./lib/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="./lib/svg.js"></script>
+        <script type="text/javascript" src="./lib/Chart.js"></script>
         <script type="text/javascript" src="js/dialogs/Sidebar.js"></script>
 		<script type="text/javascript" src="js/classes/dto/Coords.js"></script>
         <script type="text/javascript" src="js/CoordinatesHelper.js"></script>
@@ -218,11 +219,21 @@
     </div>
 
 
-    <div id="modalShowLastResponse" class="modal">
+    <div id="modalShowStatistics" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <pre id="response">
-                </pre>
+            <table>
+                <tr>
+                    <th>Simulation time</th>
+                    <td><span id="placeholderSimTime"></span></td>
+                </tr>
+                <tr>
+                    <th>Simulation step length</th>
+                    <td><span id="placeholderSimStepLength"></span></td>
+                </tr>
+            </table>
+
+            <canvas id="myChart" width="400" height="400"></canvas>
         </div>
     </div>
 
