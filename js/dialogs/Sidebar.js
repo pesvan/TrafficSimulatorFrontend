@@ -1,7 +1,11 @@
+
+
 function updateSituationSidebar(situation)
 {
     $("#intersectionCount").html(situation.intersectionCount);
     $("#routesCount").html(situation.routesCount);
+
+    $("#getSimOutputButton").hide();
 
     if(situation.intersectionCount === 0)
     {
@@ -53,7 +57,7 @@ function updateSituationSidebar(situation)
     }
 }
 
-function updateSimulationSidebar(simulation, selectedIntersection)
+function updateSimulationSidebar(simulation, userSelectedIntersection)
 {
     let simState = "Not initialized";
     if(!simulation.runningVisualisation() && simulation.firstToDrawSimTime === 0)
@@ -62,6 +66,7 @@ function updateSimulationSidebar(simulation, selectedIntersection)
     } else if (simulation.firstToDrawSimTime > 0)
     {
         simState = simulation.runningVisualisation() ? "Running" : "Paused";
+        $('#getSimOutputButton').show();
     }
 
     $('#simState').html(simState);
@@ -70,15 +75,15 @@ function updateSimulationSidebar(simulation, selectedIntersection)
 
     $('#vehCount').html(simulation.activeVehicles.length === 0 ? "" : simulation.activeVehicles.length);
 
-    if (simulation.firstToDrawSimTime > 0 && selectedIntersection !== undefined &&
-        selectedIntersection !== null && simulation.stepInProgress !== undefined)
+    if (simulation.firstToDrawSimTime > 0 && userSelectedIntersection !== undefined &&
+        userSelectedIntersection !== null && simulation.stepInProgress !== undefined)
     {
         $('#selectedIntersectionPhase').show();
-        $('#selectedIntersectionPhaseValue').html(selectedIntersection.id + simulation.stepInProgress.phaseStates[selectedIntersection.id].toString());
+        $('#selectedIntersectionPhaseValue').html(userSelectedIntersection.id + simulation.stepInProgress.phaseStates[userSelectedIntersection.id].toString());
 
-        if(selectedIntersection.selectedSignalProgram === undefined)
+        if(userSelectedIntersection.selectedSignalProgram === undefined)
         {
-            selectedIntersection.setSelectedSignalProgram(simulation.stepInProgress.phaseStates[selectedIntersection.id].programId);
+            userSelectedIntersection.setSelectedSignalProgram(simulation.stepInProgress.phaseStates[userSelectedIntersection.id].programId);
         }
 
     }

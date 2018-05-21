@@ -1,6 +1,8 @@
 function showHttpError(msg, response)
 {
-    let error = msg + ": Could not reach backend (is it running ?)";
+    let error = msg + ": Could not reach backend (is it running on " + ipAddr + ":" + port + "?)";
+    localStorage.removeItem("connected");
+    connectDialog();
     alert(error);
     console.log(error);
 }

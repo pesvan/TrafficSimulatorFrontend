@@ -1,6 +1,8 @@
 // Get the <span> element that closes the modal
 let modalCloseButtons = document.getElementsByClassName("close");
 
+let modalShowStatistics = document.getElementById("modalShowStatistics");
+
 // When the user clicks on <span> (x), close the modal
 for (let i = 0; i < modalCloseButtons.length; i++)
 {
@@ -9,6 +11,8 @@ for (let i = 0; i < modalCloseButtons.length; i++)
         modalAddIntersection.style.display = "none";
         modalAddLane.style.display = "none";
         modalChangeLane.style.display = "none";
+        modalShowStatistics.style.display = "none";
+        modalConnect.style.display = "none";
     };
 }
 
@@ -20,7 +24,13 @@ window.onclick = function(event) {
     if (event.target === modalAddLane) {
         modalAddLane.style.display = "none";
     }
-    if (event.target === modalChangeLane) {
+    if (event.target === modalShowStatistics) {
         modalChangeLane.style.display = "none";
+    }
+    if (event.target === modalShowStatistics) {
+        modalChangeLane.style.display = "none";
+    }
+    if (event.target === modalConnect) {
+        modalConnect.style.display = "none";
     }
 };

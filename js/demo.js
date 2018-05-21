@@ -11,7 +11,7 @@ let simulation;
 
 // instance of a drawer
 let drawer;
-loadAndDrawLayout();
+
 
 function loadAndDrawLayout()
 {
@@ -30,16 +30,82 @@ function drawSituationLayout()
     drawer.drawConnectionPolygons(situation.connectionPolygons);
 }
 
-setInterval(visualization, SIM_STEP);
+let totalStepTime = 0;
+let totalSidebarTime = 0;
+let totalAnimationTime = 0;
+let totalRemoveTime = 0;
 
-function visualization()
+setInterval(visualization, SIM_STEP)
+
+function createChart(element, xAxis, values, label)
 {
+    new Chart(element, {
+        type: 'line',
+        data: {
+            labels: xAxis,
+            datasets: [{
+                label: label,
+                data: values,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+}
+
+function setStatistics(json) {
+    $("#placeholderSimTime").html(json.payload.simulationTime);
+    $("#placeholderSimStepLength").html(json.payload.simulationStepLength);
+    $("#averageVehicleTimeInSimulation").html(json.payload.averageVehicleTimeInSimulation);
+    $("#averageVehicleWaitingTime").html(json.payload.averageVehicleWaitingTime);
+    $("#totalCO").html(json.payload.totalCO);
+    $("#totalCO2").html(json.payload.totalCO2);
+    $("#totalFuelConsumption").html(json.payload.totalFuelConsumption);
+    $("#totalHC").html(json.payload.totalHC);
+    $("#totalNOx").html(json.payload.totalNOx);
+    $("#totalPMx").html(json.payload.totalPMx);
+    $("#totalVehiclesAdded").html(json.payload.totalVehiclesAdded);
+    createChart(document.getElementById("vehicles").getContext('2d'), json.payload.simSteps, json.payload.vehiclesInTime, "Vehicles over time");
+    createChart(document.getElementById("CO").getContext('2d'), json.payload.simSteps, json.payload.coinTime, "CO pollution over time");
+    createChart(document.getElementById("CO2").getContext('2d'), json.payload.simSteps, json.payload.co2InTime, "CO2 pollution over time");
+    createChart(document.getElementById("NOx").getContext('2d'), json.payload.simSteps, json.payload.noxInTime, "NOx pollution over time");
+    createChart(document.getElementById("PMx").getContext('2d'), json.payload.simSteps, json.payload.pmxInTime, "PMx pollution over time");
+    createChart(document.getElementById("HC").getContext('2d'), json.payload.simSteps, json.payload.hcinTime, "HC pollution over time");
+    createChart(document.getElementById("Fuel").getContext('2d'), json.payload.simSteps, json.payload.fuelInTime, "Fuel consumption over time");
+
+    modalShowStatistics.style.display = "block";
+
+}
+    function visualization()
+{
+
+
+
+    let t0 = performance.now();
+
     updateSimulationSidebar(simulation, situation.selectedIntersection);
+
+    let t1 = performance.now();
 
     if(simulation.visualizationRunning)
     {
-        if(simulation.simulationStepsToDraw.length < 3)
+        if(simulation.simulationStepsToDraw.length < 5 && simulation.requestForMoreSent === false)
         {
+            simulation.setRequestForMoreSent(true);
             doSimulationStep(5);
         }
 
@@ -48,7 +114,16 @@ function visualization()
         {
 
             drawer.simulateSimulationStep(stepToDo, drawer);
+            let t2 = performance.now();
             simulation.removeInactiveVehicles();
+            let t3 = performance.now();
+
+            totalStepTime +=  (t3-t0);
+            totalRemoveTime += (t3-t2);
+            totalSidebarTime += (t2-t1);
+            totalAnimationTime += (t1-t0);
+
+            console.log("Simulation step ", stepToDo.time, " took ", (t3-t0), " ms (update sidebar ", (t1-t0), ", simulate step", (t2-t1), ", remove inactive", (t3-t2));
         }
 
     }
@@ -142,12 +217,10 @@ function jsonToSimulationDtos(json)
         {
             let jsonPhaseState = jsonPhaseStates[p];
             let programId = jsonPhaseState.programId;
-            let tlsId = jsonPhaseState.tlsId;
+            let tlsId = jsonPhaseState.id;
             let nextSwitch = jsonPhaseState.nextSwitch;
             let phaseId = jsonPhaseState.phaseId;
-            let remaining = jsonPhaseState.remaining;
-            let duration = jsonPhaseState.duration;
-            let phaseState = new PhaseState(duration, nextSwitch, phaseId, programId, remaining);
+            let phaseState = new PhaseState(nextSwitch, phaseId, programId);
 
             simTimeDto.addPhaseState(phaseState, tlsId);
         }
@@ -201,9 +274,9 @@ function jsonToMapDtos(json)
             let inputLaneList = [];
             let outputLaneList = [];
 
-            for(let k = 0; k < jsonLeg.inputLaneList.length; k++)
+            for(let k = 0; k < jsonLeg.laneList.length; k++)
             {
-                let jsonLane = jsonLeg.inputLaneList[k];
+                let jsonLane = jsonLeg.laneList[k];
                 let laneId = jsonLane.id;
 
                 let shapeJson = jsonLane.shape.coords;
@@ -215,27 +288,19 @@ function jsonToMapDtos(json)
 
                 let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, legAngle);
 
-                inputLaneList[k] = new Lane(laneId, legId, intersectionId, laneShape);
-                inputLaneList[k].setDirections(jsonLane.left, jsonLane.right, jsonLane.straight);
+                let isInputLane = jsonLane.inputLane;
 
-
-            }
-
-            for(let k = 0; k < jsonLeg.outputLaneList.length; k++)
-            {
-                let jsonLane = jsonLeg.outputLaneList[k];
-                let laneId = jsonLane.id;
-
-                let shapeJson = jsonLane.shape.coords;
-                let coordinatesList = [];
-                for (let s = 0; s < shapeJson.length; s++)
+                if(isInputLane)
                 {
-                    coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+                    let lane = new Lane(laneId, legId, intersectionId, laneShape);
+                    inputLaneList.push(lane);
+                    lane.setDirections(jsonLane.directions.left, jsonLane.directions.right, jsonLane.directions.straight);
+                }
+                else
+                {
+                    outputLaneList[outputLaneList.length] = new Lane(laneId, legId, intersectionId, laneShape, true);
                 }
 
-                let laneShape = new Shape(coordinatesList,jsonMetadata.networkBoundary.y, legAngle);
-
-                outputLaneList[k] = new Lane(laneId, legId, intersectionId, laneShape, true);
             }
 
 			legList[l] = new Leg(legId, legAngle, inputLaneList, outputLaneList);

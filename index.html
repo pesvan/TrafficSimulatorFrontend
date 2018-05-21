@@ -3,6 +3,7 @@
 		<title>TrafficSimulator</title>
 		<script type="text/javascript" src="./lib/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="./lib/svg.js"></script>
+        <script type="text/javascript" src="./lib/Chart.js"></script>
         <script type="text/javascript" src="js/dialogs/Sidebar.js"></script>
 		<script type="text/javascript" src="js/classes/dto/Coords.js"></script>
         <script type="text/javascript" src="js/CoordinatesHelper.js"></script>
@@ -88,6 +89,10 @@
 
                 </div>
                 <br><br><br>
+                <div id="getSimOutputButton">
+                    <button>GET SIMULATION OUTPUT</button>
+                </div>
+                <br>
                 <div id="stats">
                     <b>Simulation state: </b>
                     <span id="simState"></span><br>
@@ -104,7 +109,7 @@
                 <br>
                 <div id="selectedIntersectionPhase">
                     <div id="selectedIntersectionPhaseText">
-                        <b>SELECTED INTERSECTION ONLINE: &nbsp;</b>
+                        <b>SELECTED INTERSECTION ONLINE: &nbsp;</b><br>
                     </div>
                     <div id="selectedIntersectionPhaseValue">
 
@@ -133,6 +138,7 @@
                     <button>RESTART ALL</button>
                 </div>
             </div>
+
 
 
         </div>
@@ -214,20 +220,90 @@
     </div>
 
 
-    <div id="modalShowLastResponse" class="modal">
+    <div id="modalShowStatistics" class="modal" style="height: 700px">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <pre id="response">
-                </pre>
+            <table>
+                <tr>
+                    <th>Simulation time</th>
+                    <td><span id="placeholderSimTime"></span></td>
+                </tr>
+                <tr>
+                    <th>Simulation step length</th>
+                    <td><span id="placeholderSimStepLength"></span></td>
+                </tr>
+                <tr>
+                    <th>Avg time vehicle spends in situation</th>
+                    <td><span id="averageVehicleTimeInSimulation"></span></td>
+                </tr>
+                <tr>
+                    <th>Avg time vehicle spends waiting</th>
+                    <td><span id="averageVehicleWaitingTime"></span></td>
+                </tr>
+                <tr>
+                    <th>Vehicles added</th>
+                    <td><span id="totalVehiclesAdded"></span></td>
+                </tr>
+                <tr>
+                    <th>Total fuel consumption</th>
+                    <td><span id="totalFuelConsumption"></span></td>
+                </tr>
+                <tr>
+                    <th>Pollution: total carbon monoxide</th>
+                    <td><span id="totalCO"></span></td>
+                </tr>
+                <tr>
+                    <th>Pollution: total carbon dioxide</th>
+                    <td><span id="totalCO2"></span></td>
+                </tr>
+                <tr>
+                    <th>Pollution: total nitrogen oxides</th>
+                    <td><span id="totalNOx"></span></td>
+                </tr>
+                <tr>
+                    <th>Pollution: total particles matter</th>
+                    <td><span id="totalPMx"></span></td>
+                </tr>
+                <tr>
+                    <th>Pollution: total hydrocarbon</th>
+                    <td><span id="totalHC"></span></td>
+                </tr>
+
+            </table>
+
+            <canvas id="vehicles" width="400" height="250"></canvas>
+            <canvas id="CO" width="400" height="250"></canvas>
+            <canvas id="CO2" width="400" height="250"></canvas>
+            <canvas id="NOx" width="400" height="250"></canvas>
+            <canvas id="PMx" width="400" height="250"></canvas>
+            <canvas id="HC" width="400" height="250"></canvas>
+            <canvas id="Fuel" width="400" height="250"></canvas>
+
+        </div>
+    </div>
+
+    <div id="modalConnect" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Connect to the simulation application</h3>
+            <label>IP: </label>
+            <input type="text" id="ipAddr" placeholder="" value=""/><br>
+            <label>Port: </label>
+            <input type="text" id="port" placeholder="" value=""/><br>
+            <br>
+            <button id="connectButton">Connect</button>
+
         </div>
     </div>
 
 	</body>
+
     <script type="text/javascript" src="js/dialogs/ErrorHandling.js"></script>
     <script type="text/javascript" src="js/ScrollingHeader.js"></script>
     <script type="text/javascript" src="js/Reload.js"></script>
     <script type="text/javascript" src="js/demo.js"></script>
     <script type="text/javascript" src="js/SimulationControl.js"></script>
+    <script type="text/javascript" src="js/dialogs/Connect.js"></script>
     <script type="text/javascript" src="js/dialogs/CloseButton.js"></script>
     <script type="text/javascript" src="js/dialogs/AddIntersectionForm.js"></script>
     <script type="text/javascript" src="js/dialogs/AddLaneForm.js"></script>

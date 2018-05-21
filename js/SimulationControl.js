@@ -8,6 +8,11 @@ $('#pauseSimulationButton').on("click", function () {
 $('#stopSimulationButton').on("click", function () {
     simulation.stopVisualisation();
 });
+$("#getSimOutputButton").on("click", function () {
+    simulation.pauseVisualisation();
+    getStatistics();
+});
+
 
 $('#myRange').on("change", readRange);
 
@@ -28,3 +33,19 @@ function readRange(e)
 {
     simulation.setDensity(e.target.value);
 }
+/*
+$(window).on("blur focus", function(e) {
+    let prevType = $(this).data("prevType");
+
+    if (prevType !== e.type) {   //  reduce double fire issues
+        switch (e.type) {
+            case "blur":
+                simulation.pauseVisualisation();
+                break;
+            case "focus":
+                break;
+        }
+    }
+
+    $(this).data("prevType", e.type);
+})*/
