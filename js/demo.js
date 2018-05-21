@@ -11,7 +11,7 @@ let simulation;
 
 // instance of a drawer
 let drawer;
-loadAndDrawLayout();
+
 
 function loadAndDrawLayout()
 {
@@ -29,6 +29,11 @@ function drawSituationLayout()
     drawer.drawConnections(situation.connections);
     drawer.drawConnectionPolygons(situation.connectionPolygons);
 }
+
+let totalStepTime = 0;
+let totalSidebarTime = 0;
+let totalAnimationTime = 0;
+let totalRemoveTime = 0;
 
 setInterval(visualization, SIM_STEP);
 
@@ -68,6 +73,9 @@ function setStatistics(json)
 
 function visualization()
 {
+
+
+
     let t0 = performance.now();
 
     updateSimulationSidebar(simulation, situation.selectedIntersection);
@@ -90,6 +98,12 @@ function visualization()
             let t2 = performance.now();
             simulation.removeInactiveVehicles();
             let t3 = performance.now();
+
+            totalStepTime +=  (t3-t0);
+            totalRemoveTime += (t3-t2);
+            totalSidebarTime += (t2-t1);
+            totalAnimationTime += (t1-t0);
+
             console.log("Simulation step ", stepToDo.time, " took ", (t3-t0), " ms (update sidebar ", (t1-t0), ", simulate step", (t2-t1), ", remove inactive", (t3-t2));
         }
 
@@ -184,7 +198,7 @@ function jsonToSimulationDtos(json)
         {
             let jsonPhaseState = jsonPhaseStates[p];
             let programId = jsonPhaseState.programId;
-            let tlsId = jsonPhaseState.tlsId;
+            let tlsId = jsonPhaseState.id;
             let nextSwitch = jsonPhaseState.nextSwitch;
             let phaseId = jsonPhaseState.phaseId;
             let phaseState = new PhaseState(nextSwitch, phaseId, programId);
@@ -261,7 +275,7 @@ function jsonToMapDtos(json)
                 {
                     let lane = new Lane(laneId, legId, intersectionId, laneShape);
                     inputLaneList.push(lane);
-                    lane.setDirections(jsonLane.left, jsonLane.right, jsonLane.straight);
+                    lane.setDirections(jsonLane.directions.left, jsonLane.directions.right, jsonLane.directions.straight);
                 }
                 else
                 {

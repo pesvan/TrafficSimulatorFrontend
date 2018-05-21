@@ -92,7 +92,7 @@
                 <div id="getSimOutputButton">
                     <button>GET SIMULATION OUTPUT</button>
                 </div>
-                <br><br>
+                <br>
                 <div id="stats">
                     <b>Simulation state: </b>
                     <span id="simState"></span><br>
@@ -109,7 +109,7 @@
                 <br>
                 <div id="selectedIntersectionPhase">
                     <div id="selectedIntersectionPhaseText">
-                        <b>SELECTED INTERSECTION ONLINE: &nbsp;</b>
+                        <b>SELECTED INTERSECTION ONLINE: &nbsp;</b><br>
                     </div>
                     <div id="selectedIntersectionPhaseValue">
 
@@ -138,6 +138,7 @@
                     <button>RESTART ALL</button>
                 </div>
             </div>
+
 
 
         </div>
@@ -237,12 +238,28 @@
         </div>
     </div>
 
+    <div id="modalConnect" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Connect to the simulation application</h3>
+            <label>IP: </label>
+            <input type="text" id="ipAddr" placeholder="" value=""/><br>
+            <label>Port: </label>
+            <input type="text" id="port" placeholder="" value=""/><br>
+            <br>
+            <button id="connectButton">Connect</button>
+
+        </div>
+    </div>
+
 	</body>
+
     <script type="text/javascript" src="js/dialogs/ErrorHandling.js"></script>
     <script type="text/javascript" src="js/ScrollingHeader.js"></script>
     <script type="text/javascript" src="js/Reload.js"></script>
     <script type="text/javascript" src="js/demo.js"></script>
     <script type="text/javascript" src="js/SimulationControl.js"></script>
+    <script type="text/javascript" src="js/dialogs/Connect.js"></script>
     <script type="text/javascript" src="js/dialogs/CloseButton.js"></script>
     <script type="text/javascript" src="js/dialogs/AddIntersectionForm.js"></script>
     <script type="text/javascript" src="js/dialogs/AddLaneForm.js"></script>

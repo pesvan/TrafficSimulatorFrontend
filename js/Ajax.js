@@ -1,7 +1,7 @@
 function loadSituationLayout() {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/getMap",
+        url: "http://" + ipAddr + ":" + port + "/getMap",
         dataType: "json",
         async: false
     })
@@ -9,6 +9,9 @@ function loadSituationLayout() {
         $('#response').html(JSON.stringify(response, null, 2));
         showGeneralError("Loading simulation layout", response);
         jsonToMapDtos(response);
+        localStorage.setItem("connected", "yes");
+        closeConnectDialog();
+        $("#sidebar").show();
     })
     .fail(function( jqXHR, textStatus, errorThrown ){
         showHttpError("Loading simulation layout");
@@ -19,7 +22,7 @@ function postConfiguration()
 {
     $.ajax({
         method: "POST",
-        url: "http://localhost:8080/sendConfiguration",
+        url: "http://" + ipAddr + ":" + port + "/sendConfiguration",
         dataType: "json",
         contentType: "application/json",
 
@@ -52,7 +55,7 @@ function addLane()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/laneOperation",
+        url: "http://" + ipAddr + ":" + port + "/laneOperation",
         dataType: "json",
         contentType: "application/json",
 
@@ -84,7 +87,7 @@ function changeLane()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/laneOperation",
+        url: "http://" + ipAddr + ":" + port + "/laneOperation",
         dataType: "json",
         contentType: "application/json",
 
@@ -115,7 +118,7 @@ function deleteLane()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/laneOperation",
+        url: "http://" + ipAddr + ":" + port + "/laneOperation",
         dataType: "json",
         contentType: "application/json",
 
@@ -140,7 +143,7 @@ function deleteIntersection()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/deleteIntersection?intersectionId=" + situation.selectedIntersection.id,
+        url: "http://" + ipAddr + ":" + port + "/deleteIntersection?intersectionId=" + situation.selectedIntersection.id,
         dataType: "json",
     })
     .done(function(response){
@@ -156,7 +159,7 @@ function resetAll()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/resetSimulation",
+        url: "http://" + ipAddr + ":" + port + "/resetSimulation",
         dataType: "json",
     })
     .done(function( response ) {
@@ -172,7 +175,7 @@ function setTrafficDensity(density)
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/setTrafficDensity?density=" + density,
+        url: "http://" + ipAddr + ":" + port + "/setTrafficDensity?density=" + density,
         dataType: "json",
     })
     .done(function( response ) {
@@ -187,7 +190,7 @@ function runSimulation()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/initSimulation",
+        url: "http://" + ipAddr + ":" + port + "/initSimulation",
         dataType: "json",
         async: false
     })
@@ -210,7 +213,7 @@ function doSimulationStep(noOfSteps)
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/getDataMultipleStep?noOfSteps=" + noOfSteps,
+        url: "http://" + ipAddr + ":" + port + "/getDataMultipleStep?noOfSteps=" + noOfSteps,
         dataType: "json",
     })
     .done(function( response ) {
@@ -234,7 +237,7 @@ function stopSimulation()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/stopSimulation",
+        url: "http://" + ipAddr + ":" + port + "/stopSimulation",
         dataType: "json",
     })
     .done(function( response ) {
@@ -249,7 +252,7 @@ function setSignalProgram(programId)
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/setSignalProgram",
+        url: "http://" + ipAddr + ":" + port + "/setSignalProgram",
         dataType: "json",
         data:
             {
@@ -269,7 +272,7 @@ function getStatistics()
 {
     $.ajax({
         method: "GET",
-        url: "http://localhost:8080/getStatistics",
+        url: "http://" + ipAddr + ":" + port + "/getStatistics",
         dataType: "json",
     })
         .done(function( response ) {

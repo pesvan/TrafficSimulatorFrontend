@@ -44,7 +44,7 @@ button:hover
     position: absolute;
     background: #555;
     border-right: solid black 1px;
-
+    display: none;
 }
 
 .sticky {
