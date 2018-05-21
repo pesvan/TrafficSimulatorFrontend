@@ -35,20 +35,17 @@ let totalSidebarTime = 0;
 let totalAnimationTime = 0;
 let totalRemoveTime = 0;
 
-setInterval(visualization, SIM_STEP);
+setInterval(visualization, SIM_STEP)
 
-function setStatistics(json)
+function createChart(element, xAxis, values, label)
 {
-    $("#placeholderSimTime").html(json.payload.simulationTime);
-    $("#placeholderSimStepLength").html(json.payload.simulationStepLength);
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
+    new Chart(element, {
         type: 'line',
         data: {
-            labels: json.payload.simSteps,
+            labels: xAxis,
             datasets: [{
-                label: '# of vehicles',
-                data: json.payload.vehiclesInTime,
+                label: label,
+                data: values,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)'
                 ],
@@ -68,10 +65,32 @@ function setStatistics(json)
             }
         }
     });
-    modalShowStatistics.style.display = "block";
 }
 
-function visualization()
+function setStatistics(json) {
+    $("#placeholderSimTime").html(json.payload.simulationTime);
+    $("#placeholderSimStepLength").html(json.payload.simulationStepLength);
+    $("#averageVehicleTimeInSimulation").html(json.payload.averageVehicleTimeInSimulation);
+    $("#averageVehicleWaitingTime").html(json.payload.averageVehicleWaitingTime);
+    $("#totalCO").html(json.payload.totalCO);
+    $("#totalCO2").html(json.payload.totalCO2);
+    $("#totalFuelConsumption").html(json.payload.totalFuelConsumption);
+    $("#totalHC").html(json.payload.totalHC);
+    $("#totalNOx").html(json.payload.totalNOx);
+    $("#totalPMx").html(json.payload.totalPMx);
+    $("#totalVehiclesAdded").html(json.payload.totalVehiclesAdded);
+    createChart(document.getElementById("vehicles").getContext('2d'), json.payload.simSteps, json.payload.vehiclesInTime, "Vehicles over time");
+    createChart(document.getElementById("CO").getContext('2d'), json.payload.simSteps, json.payload.coinTime, "CO pollution over time");
+    createChart(document.getElementById("CO2").getContext('2d'), json.payload.simSteps, json.payload.co2InTime, "CO2 pollution over time");
+    createChart(document.getElementById("NOx").getContext('2d'), json.payload.simSteps, json.payload.noxInTime, "NOx pollution over time");
+    createChart(document.getElementById("PMx").getContext('2d'), json.payload.simSteps, json.payload.pmxInTime, "PMx pollution over time");
+    createChart(document.getElementById("HC").getContext('2d'), json.payload.simSteps, json.payload.hcinTime, "HC pollution over time");
+    createChart(document.getElementById("Fuel").getContext('2d'), json.payload.simSteps, json.payload.fuelInTime, "Fuel consumption over time");
+
+    modalShowStatistics.style.display = "block";
+
+}
+    function visualization()
 {
 
 
