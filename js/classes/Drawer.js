@@ -104,29 +104,33 @@ class Drawer
 
                 if(vehicleState.isBraking())
                 {
-                    vehicleState.vehicle.svg.stroke({color: redColor});
+                    vehicleState.vehicle.svg.fill({color: redColor});
                 }
                 else
                 {
-                    vehicleState.vehicle.svg.stroke({color: vehicleState.vehicle.originalColor});
+                    vehicleState.vehicle.svg.fill({color: vehicleState.vehicle.originalColor});
                 }
 
                 if(vehicleState.isSignallingLeft())
                 {
-
+                    vehicleState.vehicle.svg.attr({
+                        'stroke-dasharray': vehicleState.polygonCoordinates.getSignalLeftCoords(),
+                        'stroke': orangeColor
+                    });
+                }
+                else if(vehicleState.isSignallingRight())
+                {
+                    vehicleState.vehicle.svg.attr({
+                        'stroke-dasharray': vehicleState.polygonCoordinates.getSignalRightCoords(),
+                        'stroke': orangeColor
+                    });
                 }
                 else
                 {
-
-                }
-
-                if(vehicleState.isSignallingRight())
-                {
-
-                }
-                else
-                {
-
+                    vehicleState.vehicle.svg.attr({
+                        'stroke-dasharray': null,
+                        'stroke': vehicleState.vehicle.originalColor
+                    });
                 }
 
 
