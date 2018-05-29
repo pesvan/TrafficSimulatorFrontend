@@ -30,10 +30,6 @@ function drawSituationLayout()
     drawer.drawConnectionPolygons(situation.connectionPolygons);
 }
 
-let totalStepTime = 0;
-let totalSidebarTime = 0;
-let totalAnimationTime = 0;
-let totalRemoveTime = 0;
 
 setInterval(visualization, SIM_STEP)
 
@@ -93,13 +89,7 @@ function setStatistics(json) {
     function visualization()
 {
 
-
-
-    let t0 = performance.now();
-
     updateSimulationSidebar(simulation, situation.selectedIntersection);
-
-    let t1 = performance.now();
 
     if(simulation.visualizationRunning)
     {
@@ -112,18 +102,8 @@ function setStatistics(json) {
         let stepToDo = simulation.getFirstToDraw();
         if(stepToDo !== undefined)
         {
-
             drawer.simulateSimulationStep(stepToDo, drawer);
-            let t2 = performance.now();
             simulation.removeInactiveVehicles();
-            let t3 = performance.now();
-
-            totalStepTime +=  (t3-t0);
-            totalRemoveTime += (t3-t2);
-            totalSidebarTime += (t2-t1);
-            totalAnimationTime += (t1-t0);
-
-            console.log("Simulation step ", stepToDo.time, " took ", (t3-t0), " ms (update sidebar ", (t1-t0), ", simulate step", (t2-t1), ", remove inactive", (t3-t2));
         }
 
     }
@@ -172,8 +152,8 @@ function jsonToSimulationDtos(json)
             let jsonVehicleStateInTime = jsonVehiclesInTime[v];
             let id = jsonVehicleStateInTime.id;
             let coords = new Coords(
-                jsonVehicleStateInTime.coords.x,
-                jsonVehicleStateInTime.coords.y
+                jsonVehicleStateInTime.coords.x+20,
+                jsonVehicleStateInTime.coords.y-20
             );
             let angle = jsonVehicleStateInTime.angle;
             let signaling = jsonVehicleStateInTime.signaling;
@@ -261,7 +241,7 @@ function jsonToMapDtos(json)
 
         for (let s = 0; s < shapeJson.length; s++)
         {
-            coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+            coordinatesList[s] = new Coords(shapeJson[s].x + 20, shapeJson[s].y - 20);
         }
 
         let shape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, undefined, false);
@@ -283,7 +263,7 @@ function jsonToMapDtos(json)
                 let coordinatesList = [];
                 for (let s = 0; s < shapeJson.length; s++)
                 {
-                    coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+                    coordinatesList[s] = new Coords(shapeJson[s].x+20, shapeJson[s].y-20);
                 }
 
                 let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, legAngle);
@@ -318,7 +298,7 @@ function jsonToMapDtos(json)
         let coordinatesList = [];
         for (let s = 0; s < shapeJson.length; s++)
         {
-            coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+            coordinatesList[s] = new Coords(shapeJson[s].x + 20, shapeJson[s].y - 20);
         }
 
         let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y);
@@ -336,7 +316,7 @@ function jsonToMapDtos(json)
         let coordinatesList = [];
         for (let s = 0; s < shapeJson.length; s++)
         {
-            coordinatesList[s] = new Coords(shapeJson[s].x, shapeJson[s].y);
+            coordinatesList[s] = new Coords(shapeJson[s].x+20, shapeJson[s].y-20);
         }
 
         let laneShape = new Shape(coordinatesList, jsonMetadata.networkBoundary.y, undefined, false);

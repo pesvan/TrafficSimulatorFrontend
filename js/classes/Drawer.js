@@ -93,6 +93,39 @@ class Drawer
                 {
                     updateVehicleInfo(vehicleState);
                 }
+                else
+                {
+                    if(vehicleState.isBraking())
+                    {
+                        vehicleState.vehicle.svg.fill({color: redColor});
+                    }
+                    else
+                    {
+                        vehicleState.vehicle.svg.fill({color: vehicleState.vehicle.originalColor});
+                    }
+
+                    if(vehicleState.isSignallingLeft())
+                    {
+                        vehicleState.vehicle.svg.attr({
+                            'stroke-dasharray': vehicleState.polygonCoordinates.getSignalLeftCoords(),
+                            'stroke': orangeColor
+                        });
+                    }
+                    else if(vehicleState.isSignallingRight())
+                    {
+                        vehicleState.vehicle.svg.attr({
+                            'stroke-dasharray': vehicleState.polygonCoordinates.getSignalRightCoords(),
+                            'stroke': orangeColor
+                        });
+                    }
+                    else
+                    {
+                        vehicleState.vehicle.svg.attr({
+                            'stroke-dasharray': null,
+                            'stroke': vehicleState.vehicle.originalColor
+                        });
+                    }
+                }
 
                 vehicleState.vehicle.setLastTouchedSimStep(step.time);
 
@@ -101,38 +134,6 @@ class Drawer
                     duration: SIM_STEP
                 }).plot(
                     vehicleState.polygonCoordinates.getPlotPointsArray());
-
-                if(vehicleState.isBraking())
-                {
-                    vehicleState.vehicle.svg.fill({color: redColor});
-                }
-                else
-                {
-                    vehicleState.vehicle.svg.fill({color: vehicleState.vehicle.originalColor});
-                }
-
-                if(vehicleState.isSignallingLeft())
-                {
-                    vehicleState.vehicle.svg.attr({
-                        'stroke-dasharray': vehicleState.polygonCoordinates.getSignalLeftCoords(),
-                        'stroke': orangeColor
-                    });
-                }
-                else if(vehicleState.isSignallingRight())
-                {
-                    vehicleState.vehicle.svg.attr({
-                        'stroke-dasharray': vehicleState.polygonCoordinates.getSignalRightCoords(),
-                        'stroke': orangeColor
-                    });
-                }
-                else
-                {
-                    vehicleState.vehicle.svg.attr({
-                        'stroke-dasharray': null,
-                        'stroke': vehicleState.vehicle.originalColor
-                    });
-                }
-
 
             }
             else
@@ -157,19 +158,13 @@ class Drawer
 
     drawIntersection(intersectionList)
     {
-        let offset = 16;
-
         for (let i = 0; i < intersectionList.length; i++)
         {
             let intersection = intersectionList[i];
-            let intersectionBorders = [];
 
             for(let l = 0, cnt = 0; l < intersection.legList.length; l++, cnt++)
             {
                 let leg = intersection.legList[l];
-
-                let angle = leg.angle;
-
 
                 for(let k = 0; k < leg.inputLaneList.length; k++)
                 {
@@ -288,7 +283,7 @@ class Drawer
         for (let i = 0; i < connectionList.length; i++)
         {
             let connection = connectionList[i];
-            let svg = this.drawConnectingLane(connection);
+            this.drawConnectingLane(connection);
         }
     }
 
@@ -297,7 +292,7 @@ class Drawer
         for (let i = 0; i < connectionPolygons.length; i++)
         {
             let polygon = connectionPolygons[i];
-            let svg = this.__drawPolygon(polygon.coordinateList, whiteColor, 1, blackColor, i);
+            this.__drawPolygon(polygon.coordinateList, whiteColor, 1, blackColor, i);
         }
     }
 

@@ -26,4 +26,9 @@ class TlState
         }
 
     }
+
+    turnOff()
+    {
+        this.lane.semaphore.turnOff();
+    }
 }

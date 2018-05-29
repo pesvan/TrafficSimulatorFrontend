@@ -45,12 +45,27 @@ class Simulation {
 
     stopVisualisation()
     {
+        if(this.visualizationRunning)
+        {
+            this.turnSemaphoresOff();
+        }
+
         this.visualizationRunning = false;
         this.removeAllVehicles();
+
         this.simulationStepsToDraw = [];
         this.firstToDrawSimTime = 0;
         updateSimulationSidebar(this, undefined);
         stopSimulation();
+    }
+
+    turnSemaphoresOff()
+    {
+        let tlStates = this.getFirstToDraw().tlStates;
+        for (let ts = 0; ts < tlStates.length; ts++)
+        {
+            tlStates[ts].turnOff();
+        }
     }
 
     runningVisualisation()
@@ -112,11 +127,11 @@ class Simulation {
         //graphically unselect previously selected intersection
         if(this.isSelectedVehicle())
         {
-            this.selectedVehicle.svg.fill({color:this.selectedVehicle.originalColor});
+            this.selectedVehicle.svg.stroke({color:this.selectedVehicle.originalColor});
         }
 
         //set as selected new one
-        vehicle.svg.fill({color: redColor});
+        vehicle.svg.stroke({color: redColor});
         this.selectedVehicle = vehicle;
 
 

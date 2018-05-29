@@ -2,17 +2,14 @@ class Coords
 {
     constructor(x, y, multiply = true)
     {
+        this.__x = x;
+        this.__y = y;
+
         if(multiply)
         {
-            this.__x = x * visualizationMultiplier;
-            this.__y = y * visualizationMultiplier;
+            this.__x = this.__x * visualizationMultiplier;
+            this.__y = this.__y * visualizationMultiplier;
         }
-        else
-        {
-            this.__x = x;
-            this.__y = y;
-        }
-
     }
 
     toPolyString()
@@ -34,6 +31,5 @@ class Coords
     {
         return this.__x === otherCoords.__x && this.__y === otherCoords.__y;
     }
-
 
 }

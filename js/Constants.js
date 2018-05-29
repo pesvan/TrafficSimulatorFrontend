@@ -8,4 +8,8 @@ const selectedColor = '#f06';
 
 const SIM_STEP = 750;
 
+// canvas offset
+const OFFSET = 200;
+
+
 const visualizationMultiplier = 5;

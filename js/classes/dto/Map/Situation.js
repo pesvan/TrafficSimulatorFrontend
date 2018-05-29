@@ -42,7 +42,7 @@ class Situation
         $('#canvas').empty();
         if(this.intersectionCount > 0)
         {
-            this.canvas = SVG('canvas').size(this.boundaryCoordinates.x, this.boundaryCoordinates.y);
+            this.canvas = SVG('canvas').size(this.boundaryCoordinates.x + OFFSET*2, this.boundaryCoordinates.y + OFFSET*2);
         }
 
     }
