@@ -9,11 +9,7 @@ function showHttpError(msg, response)
 
 function showGeneralError(msg, response) {
     if (response.status === 1) {
-        alert(msg + ": " + "Warning: " + response.statusMessage);
-        console.log(response.status, response.statusMessage);
-    }
-    else if (response.status === 2) {
-        alert(msg + ": " + "Error: " + response.statusMessage);
+        alert(msg + ": " + response.statusMessage);
         console.log(response.status, response.statusMessage);
     }
 }
