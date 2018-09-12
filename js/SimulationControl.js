@@ -1,5 +1,4 @@
 $('#runSimulationButton').on("click", function () {
-    runSimulation();
     simulation.startVisualisation();
 });
 $('#pauseSimulationButton').on("click", function () {

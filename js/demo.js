@@ -86,7 +86,8 @@ function setStatistics(json) {
     modalShowStatistics.style.display = "block";
 
 }
-    function visualization()
+
+function visualization()
 {
 
     updateSimulationSidebar(simulation, situation.selectedIntersection);

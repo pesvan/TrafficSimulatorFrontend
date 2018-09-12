@@ -186,29 +186,6 @@ function setTrafficDensity(density)
     });
 }
 
-function runSimulation()
-{
-    $.ajax({
-        method: "GET",
-        url: "http://" + ipAddr + ":" + port + "/initSimulation",
-        dataType: "json",
-        async: false
-    })
-    .done(function( response ) {
-        let status = response.status;
-        showGeneralError("Initializing simulation", response)
-
-        if (status===0)
-        {
-            doSimulationStep(5);
-            simulation.startVisualisation();
-        }
-    })
-    .fail(function( jqXHR, textStatus, errorThrown ){
-        showHttpError("Initializing simulation");
-    });
-}
-
 function doSimulationStep(noOfSteps)
 {
     $.ajax({
