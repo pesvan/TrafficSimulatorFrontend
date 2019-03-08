@@ -58,6 +58,7 @@ td {
     background: #555;
     border-right: solid black 1px;
     display: none;
+    overflow: auto;
 }
 
 .sticky {
